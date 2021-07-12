@@ -1,10 +1,14 @@
 <?php
 
-$is_test = true; 
+$is_test = true;
 
 // $config_test = config_test();
+include '../config.php';
 include 'PregaoStore.php';
 include '../domain/Pregoes.php';
+
+
+pr("--------- TESTE CRUD DE " . __FILE__ . " --------- ");
 
 $test = new PregaoStore();
 
@@ -16,20 +20,39 @@ $testPregoes->valor_solicitado = '20.000,00';
 $testPregoes->qtd_solicitada = 180;
 $testPregoes->qtd_disponivel = 820;
 
-pr($test->create($testPregoes));
-pr("FIND");
-$pregao = $test->read(1);
-pr($pregao);
-// atualiza
-$pregao['nome'] = "99/UPDATE/2020";
-pr($test->update($pregao));
-// busca todos;
-pr($test->findAll());
-// exclui
-pr($pregao);
-pr($test->delete($pregao['_id']));
-// busca todos;
-pr($test->findAll());
-$test->getStore()->deleteStore();
+$create = $test->create($testPregoes);
+pr($create);
+if ($create['nome'] != $testPregoes->nome) {
+    throw new Exception("Falha ao salvar registro");
+}
 
-?>
+$read = $test->read(1);
+pr($read);
+if ($read['nome'] != $testPregoes->nome) {
+    throw new Exception("Falha ao ler registro");
+}
+
+// atualiza
+$testPregoes->_id = $read['_id'];
+$testPregoes->nome = "99/UPDATE/2020";
+$update = $test->update($testPregoes);
+pr($update);
+if ($update['nome'] != $testPregoes->nome) {
+    throw new Exception("Falha ao atualizar registro");
+}
+
+// busca todos
+$findAll = $test->findAll();
+pr($findAll);
+if ($findAll[0]['nome'] != $testPregoes->nome) {
+    throw new Exception("Falha ao buscar todos os registros");
+}
+
+// exclui
+pr($test->delete(1));
+$delete = $test->delete(1);
+if ($delete != 1) {
+    throw new Exception("Falha ao excluir registro");
+}
+
+$test->getStore()->deleteStore();
