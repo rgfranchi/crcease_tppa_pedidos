@@ -31,9 +31,20 @@ class BasicView
 
     /**
      * Renderiza a tela.
+     * @param string $render nome da view que será carregada
+     * @param string/object $componentName nome do componente de /components ou objeto data.
      */
-    function render($render = "index")
+    function render($render = "index", $componentName = null)
     {
+        if($componentName != null) {
+            if(is_string($componentName)) {
+                $component = $componentName."Component";
+                include __ROOT__. "/components/" .$component.".php";
+                $this->data = new $component();
+            } else {
+                $this->data = $componentName;
+            }
+        }
         include $this->folder . "/" . $render . ".php";
     }
 

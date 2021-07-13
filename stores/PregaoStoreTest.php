@@ -5,7 +5,7 @@ $is_test = true;
 // $config_test = config_test();
 include '../config.php';
 include 'PregaoStore.php';
-include '../domain/Pregoes.php';
+// include '../domain/Pregoes.php';
 
 
 pr("--------- TESTE CRUD DE " . __FILE__ . " --------- ");
@@ -22,29 +22,29 @@ $testPregoes->qtd_disponivel = 820;
 
 $create = $test->create($testPregoes);
 pr($create);
-if ($create['nome'] != $testPregoes->nome) {
+if ($create->nome != $testPregoes->nome) {
     throw new Exception("Falha ao salvar registro");
 }
 
 $read = $test->read(1);
 pr($read);
-if ($read['nome'] != $testPregoes->nome) {
+if ($read->nome != $testPregoes->nome) {
     throw new Exception("Falha ao ler registro");
 }
 
 // atualiza
-$testPregoes->_id = $read['_id'];
+$testPregoes->_id = $read->_id;
 $testPregoes->nome = "99/UPDATE/2020";
 $update = $test->update($testPregoes);
 pr($update);
-if ($update['nome'] != $testPregoes->nome) {
+if ($update->nome != $testPregoes->nome) {
     throw new Exception("Falha ao atualizar registro");
 }
 
 // busca todos
 $findAll = $test->findAll();
 pr($findAll);
-if ($findAll[0]['nome'] != $testPregoes->nome) {
+if ($findAll[0]->nome != $testPregoes->nome) {
     throw new Exception("Falha ao buscar todos os registros");
 }
 

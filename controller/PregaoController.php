@@ -13,22 +13,28 @@ class PregaoController extends BasicController
 
     function index($params)
     {
-        pr($params);
-        // $newPregao = new PregaoStore();
-        // pr($newPregao->findAll());
         pr($this->pregao->findAll());
+
+        // $this->view->setData($this->pregao->findAll());
+
+        $this->view->render("index",$this->pregao->findAll());
+
     }
     function add()
     {
-        $this->view->render("form");
+        $this->view->render("form","PregoesForm");
     }
     function edit()
     {
+        $getId = $this->view->getData()['get']['id'];
+        $this->view->render("form",$this->pregao->findById($getId));
         pr("Carregar VIEW");
+        
     }
     function insert()
     {
-        $post =  $this->view->getData()['post'];
+verificar erro ao salvar.
+        $post = $this->view->getData()['post'];
         $this->pregao->create((object) $post);
         $this->view->redirect('Pregao', "index");
     }

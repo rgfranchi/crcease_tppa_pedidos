@@ -25,6 +25,11 @@ class BasicController
         }
     }
 
+    /**
+     * Carrega View.
+     * @param string $view_folder subpasta de view.
+     * @param string/Objeto $componentName nome do component ou objeto utilizado data.
+     */
     function loadView($view_folder)
     {
         include_once(__ROOT__ . "/view/BasicView.php");
