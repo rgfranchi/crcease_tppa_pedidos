@@ -2,13 +2,13 @@
 
 include 'BasicController.php';
 
-class PregaoController extends BasicController
+class PregaoItensController extends BasicController
 {
     function __construct()
     {
         parent::__construct();
-        $this->loadStores('Pregao');
-        $this->loadView('pregao');
+        $this->loadStores(array('Pregao','PregaoItens'));
+        $this->loadView('pregao_itens');
     }
 
     function index()

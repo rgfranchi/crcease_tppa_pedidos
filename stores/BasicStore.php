@@ -25,23 +25,37 @@ class BasicStore
             include __ROOT__. "/domain/" .$domainName.".php";
             $this->object = new $domainName();
         }
+
+carregar itens valores ... errro ... 
+
     }
 
     function create($object)
     {
         return $this->arrayToDomainObject($this->store->insert((array) $object));
     }
-    function findById($id)
-    {
-        return $this->arrayToDomainObject($this->store->findById($id));
-    }
     function update($object)
     {
         return $this->arrayToDomainObject($this->store->updateOrInsert((array) $object));
     }
-    function delete($object_id)
+
+    function save($array)
     {
-        return $this->arrayToDomainObject($this->store->deleteById($object_id));
+        $object = (object) $array;
+        if(isset($object->_id) && $object->_id > 0) {
+            return $this->update($object);
+        } else {
+            return $this->create($object);
+        }
+    }
+    
+    function findById($id)
+    {
+        return $this->arrayToDomainObject($this->store->findById($id));
+    }
+    function delete($id)
+    {
+        return $this->arrayToDomainObject($this->store->deleteById($id));
     }
     function findAll()
     {
@@ -54,28 +68,21 @@ class BasicStore
 
     function arrayToDomainObject($array)
     {
+        $ret = array();
         if(!is_array($array)) {
             return $array;
         }
         if($this->object == null) {
             return $array;
         }
+
         foreach($array as $key => $value) {
             if(is_int($key)) {
                 $ret[] = $this->arrayToDomainObject($value);
             } else {
-                return $this->convertArrayToObject($array);
+                return (object) $array;
             }
         }
         return $ret;
     }
-
-    function convertArrayToObject($array) {
-        foreach ($array as $key => $value)
-        {
-            $this->object->$key = $value;
-        }
-        return $this->object;
-    }
-
 }

@@ -23,13 +23,13 @@ $testPregoes->qtd_disponivel = 820;
 $create = $test->create($testPregoes);
 pr($create);
 if ($create->nome != $testPregoes->nome) {
-    throw new Exception("Falha ao salvar registro");
+    throw new Exception("Falha ao SALVAR registro");
 }
 
-$read = $test->read(1);
+$read = $test->findById(1);
 pr($read);
 if ($read->nome != $testPregoes->nome) {
-    throw new Exception("Falha ao ler registro");
+    throw new Exception("Falha ao LER registro");
 }
 
 // atualiza
@@ -38,21 +38,28 @@ $testPregoes->nome = "99/UPDATE/2020";
 $update = $test->update($testPregoes);
 pr($update);
 if ($update->nome != $testPregoes->nome) {
-    throw new Exception("Falha ao atualizar registro");
+    throw new Exception("Falha ao ATUALIZAR registro");
 }
 
 // busca todos
 $findAll = $test->findAll();
 pr($findAll);
 if ($findAll[0]->nome != $testPregoes->nome) {
-    throw new Exception("Falha ao buscar todos os registros");
+    throw new Exception("Falha ao BUSCAR TODOS os registros");
 }
 
 // exclui
 pr($test->delete(1));
 $delete = $test->delete(1);
 if ($delete != 1) {
-    throw new Exception("Falha ao excluir registro");
+    throw new Exception("Falha ao EXCLUIR registro");
+}
+
+// save
+$save = $test->save($testPregoes);
+pr($save);
+if ($save->nome != $testPregoes->nome) {
+    throw new Exception("Falha ao SALVAR registro");
 }
 
 $test->getStore()->deleteStore();

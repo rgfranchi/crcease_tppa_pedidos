@@ -8,7 +8,7 @@ class Pregoes {
     public $objeto;
     public $valor_total;
     public $valor_solicitado;
-    public $qtd_solicitada;    
+    public $qtd_total;    
     public $qtd_disponivel;
 }
 ?>
