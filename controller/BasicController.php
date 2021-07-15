@@ -21,7 +21,7 @@ class BasicController
         foreach ($loadStores as $value) {
             $className = $value . 'Store';
             include_once(__ROOT__ . "/stores/" . $className . ".php");
-            $this->{strtolower($value)} = new $className();
+            $this->{camelToSnakeCase($value)} = new $className();
         }
     }
 

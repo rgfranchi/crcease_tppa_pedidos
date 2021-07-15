@@ -7,23 +7,33 @@ class PregaoItensController extends BasicController
     function __construct()
     {
         parent::__construct();
-        $this->loadStores(array('Pregao','PregaoItens'));
+        $this->loadStores(array('Pregao', 'PregaoItens'));
         $this->loadView('pregao_itens');
     }
 
     function index()
     {
-        $this->view->render("index",$this->pregao->findAll());
+        $pregaoId = $this->view->getData()['get']['pregao_id'];
+        $res = $this->pregao->joinToObjectById($pregaoId, $this->pregao_itens, 'pregao_id');
 
+recuperar os itens junto com o pregão.
+
+        pr($res);
+        die;
+
+        $this->view->render("index", $res);
     }
     function add()
     {
-        $this->view->render("form","PregoesForm");
+        pr('add');
+        $pregao_id = $this->view->getData()['get']['pregao_id'];
+        $this->view->setData(array('pregao_id' => $pregao_id));
+        $this->view->render("form");
     }
     function edit()
     {
         $getId = $this->view->getData()['get']['id'];
-        $this->view->render("form",$this->pregao->findById($getId));
+        $this->view->render("form", $this->pregao->findById($getId));
     }
     function save()
     {

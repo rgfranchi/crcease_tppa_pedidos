@@ -6,7 +6,7 @@ class BasicView
 {
     private $folder;
     // Variavel de tramiação dos valores com o controller.
-    private $data;
+    private $data = array();
     function __construct($folder)
     {
         $this->folder = $folder;
@@ -18,6 +18,7 @@ class BasicView
     function setData($data)
     {
         $this->data = $data;
+        pr($this->data);
     }
 
     /**
@@ -32,24 +33,34 @@ class BasicView
 
     /**
      * Renderiza do controller para view.
+     * Carrega componente com o mesmo nome do 'folder' e 'render' em CamelCase.
      * @param string $render nome da view que será carregada
-     * @param string/object $componentName nome do componente de /components ou objeto data.
+     * @param string/object $component sobrescreve componente a ser carregado
      */
-    function render($render = "index", $componentName = null)
+    function render($render = "index", $component = null)
     {
-        $this->data = array();
-        if($componentName != null) {
-            if(is_string($componentName)) {
-                $component = $componentName."Component";
-                include __ROOT__. "/components/" .$component.".php";
-                $this->data = new $component();
-            } else {
-                $this->data = $componentName;
-            }
+        if (is_null($component)) {
+            $component = snakeToCamelCase($this->folder . '_' . $render . "_component");
+            include __ROOT__ . "/components/" . $component . ".php";
+            $new_data = new $component();
+            $this->data = $this->loadData($new_data);
+        } else {
+            $this->data = $component;
         }
         // Todo: criar classe para carrgar templates e incluir pagina render.... 
         include __ROOT__ . "/template/menu.php";
         include $this->folder . "/" . $render . ".php";
+    }
+
+    private function loadData($data)
+    {
+        if (empty($this->data)) {
+            return $data;
+        }
+        foreach ($this->data as $key => $value) {
+            $data->$key = $value;
+        }
+        return $data;
     }
 
     /**

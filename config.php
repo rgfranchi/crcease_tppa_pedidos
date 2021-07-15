@@ -33,6 +33,16 @@ function urlController($controller, $function, $param = array())
     return "index.php?" . http_build_query($param);
 }
 
+function camelToSnakeCase($string)
+{
+    return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
+}
+
+function snakeToCamelCase($string)
+{
+    return str_replace('_', '', ucwords($string, '_'));
+}
+
 
 /**
  * Exibe variável na tela (Debug)

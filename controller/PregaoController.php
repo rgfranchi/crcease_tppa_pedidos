@@ -10,20 +10,18 @@ class PregaoController extends BasicController
         $this->loadStores('Pregao');
         $this->loadView('pregao');
     }
-
     function index()
     {
-        $this->view->render("index",$this->pregao->findAll());
-
+        $this->view->render("index", $this->pregao->findAll());
     }
     function add()
     {
-        $this->view->render("form","PregoesForm");
+        $this->view->render("form");
     }
     function edit()
     {
         $getId = $this->view->getData()['get']['id'];
-        $this->view->render("form",$this->pregao->findById($getId));
+        $this->view->render("form", $this->pregao->findById($getId));
     }
     function save()
     {
@@ -34,7 +32,7 @@ class PregaoController extends BasicController
     function delete()
     {
         $get = $this->view->getData()['get'];
-        $data = $this->pregao->delete($get['id']);
+        $this->pregao->delete($get['id']);
         $this->view->redirect('Pregao', "index");
     }
 }

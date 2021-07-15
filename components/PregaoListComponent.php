@@ -4,6 +4,6 @@
 
 use Pregoes as PregoesDomain;
 
-class PregoesFormComponent extends PregoesDomain {
+class PregaoListComponent extends PregoesDomain
+{
 }
-?>
