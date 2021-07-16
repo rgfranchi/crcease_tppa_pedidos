@@ -11,4 +11,8 @@ class Pregoes
     public $valor_solicitado;
     public $qtd_total;
     public $qtd_disponivel;
+    /**  
+     * @param PregoesItens 
+     */
+    public $pregoes_itens = array(); 
 }

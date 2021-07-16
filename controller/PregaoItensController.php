@@ -14,18 +14,11 @@ class PregaoItensController extends BasicController
     function index()
     {
         $pregaoId = $this->view->getData()['get']['pregao_id'];
-        $res = $this->pregao->joinToObjectById($pregaoId, $this->pregao_itens, 'pregao_id');
-
-recuperar os itens junto com o pregão.
-
-        pr($res);
-        die;
-
+        $res = $this->pregao->findById($pregaoId);
         $this->view->render("index", $res);
     }
     function add()
     {
-        pr('add');
         $pregao_id = $this->view->getData()['get']['pregao_id'];
         $this->view->setData(array('pregao_id' => $pregao_id));
         $this->view->render("form");
@@ -38,13 +31,15 @@ recuperar os itens junto com o pregão.
     function save()
     {
         $post = $this->view->getData()['post'];
-        $this->pregao->save($post);
-        $this->view->redirect('Pregao', "index");
+        $load_pregao = $this->pregao->findById($post['pregao_id']);
+        $load_pregao->pregao_itens[] = $post;
+        $this->pregao->save($load_pregao);
+        $this->view->redirect('PregaoItens', "index");
     }
     function delete()
     {
         $get = $this->view->getData()['get'];
-        $data = $this->pregao->delete($get['id']);
+        $this->pregao->delete($get['id']);
         $this->view->redirect('Pregao', "index");
     }
 }

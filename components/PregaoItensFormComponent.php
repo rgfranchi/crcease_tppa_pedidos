@@ -1,4 +1,4 @@
-<?
+<?php
 
 use PregoesItens as PregoesItensDomain;
 

@@ -18,7 +18,6 @@ class BasicView
     function setData($data)
     {
         $this->data = $data;
-        pr($this->data);
     }
 
     /**
@@ -41,7 +40,7 @@ class BasicView
     {
         if (is_null($component)) {
             $component = snakeToCamelCase($this->folder . '_' . $render . "_component");
-            include __ROOT__ . "/components/" . $component . ".php";
+            include_once(__ROOT__ . "/components/". $component . ".php");
             $new_data = new $component();
             $this->data = $this->loadData($new_data);
         } else {
