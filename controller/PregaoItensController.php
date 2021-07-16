@@ -16,8 +16,6 @@ class PregaoItensController extends BasicController
         $pregaoId = $this->view->getData()['get']['pregao_id'];
         $res = $this->pregao->joinToObjectById($pregaoId, $this->pregao_itens, 'pregao_id');
 
-recuperar os itens junto com o pregão.
-
         pr($res);
         die;
 

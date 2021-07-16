@@ -76,7 +76,7 @@ class BasicView
 
 
     /**
-     * Direceiona ação da view para o controller.
+     * Direciona ação da view para o controller.
      */
     function action($controller, $action, $parameter = array())
     {
