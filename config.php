@@ -56,3 +56,8 @@ function pr($var, $die = false)
     echo "</pre>";
     $die ? die() : '';
 }
+
+function navbarActive($active = false)
+{
+    return $active ? 'active' : '';
+}

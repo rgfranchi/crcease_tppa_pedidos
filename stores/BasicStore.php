@@ -80,7 +80,12 @@ carregar itens valores ... errro ...
             if(is_int($key)) {
                 $ret[] = $this->arrayToDomainObject($value);
             } else {
-                return (object) $array;
+                $ret = (object) $array;
+                foreach ($ret as $key => $value) {
+                    if (is_array($array)) {
+                        $ret->$key = $this->arrayToDomainObject($value);
+                    }
+                }
             }
         }
         return $ret;

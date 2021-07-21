@@ -14,7 +14,11 @@ class PregaoItensController extends BasicController
     function index()
     {
         $pregaoId = $this->view->getData()['get']['pregao_id'];
-        $res = $this->pregao->findById($pregaoId);
+        $res = $this->pregao->joinToObjectById($pregaoId, $this->pregao_itens, 'pregao_id');
+
+        pr($res);
+        die;
+
         $this->view->render("index", $res);
     }
     function add()

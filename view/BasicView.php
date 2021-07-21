@@ -47,8 +47,12 @@ class BasicView
             $this->data = $component;
         }
         // Todo: criar classe para carrgar templates e incluir pagina render.... 
-        include __ROOT__ . "/template/menu.php";
+
+        include __ROOT__ . "/template/main_before.php";
         include $this->folder . "/" . $render . ".php";
+        include __ROOT__ . "/template/main_after.php";
+
+        // include $this->folder . "/" . $render . ".php";
     }
 
     private function loadData($data)
@@ -75,7 +79,7 @@ class BasicView
 
 
     /**
-     * Direceiona ação da view para o controller.
+     * Direciona ação da view para o controller.
      */
     function action($controller, $action, $parameter = array())
     {
