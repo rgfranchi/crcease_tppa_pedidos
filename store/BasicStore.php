@@ -25,9 +25,6 @@ class BasicStore
             include __ROOT__. "/domain/" .$domainName.".php";
             $this->object = new $domainName();
         }
-
-carregar itens valores ... errro ... 
-
     }
 
     function create($object)

@@ -40,7 +40,7 @@ class BasicView
     {
         if (is_null($component)) {
             $component = snakeToCamelCase($this->folder . '_' . $render . "_component");
-            include_once(__ROOT__ . "/components/". $component . ".php");
+            include_once(__ROOT__ . "/component/". $component . ".php");
             $new_data = new $component();
             $this->data = $this->loadData($new_data);
         } else {

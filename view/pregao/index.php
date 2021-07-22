@@ -51,7 +51,7 @@
         <tbody>
           <?php foreach ($this->data as $row) : ?>
             <tr>
-              <td><?= $row->_id ?></td>
+              <td><?= $row->_id  corrigir campos .... ?></td>
               <td><?= $row->nome ?></td>
               <td><?= $row->objeto ?></td>
               <td><?= $row->valor_total ?></td>

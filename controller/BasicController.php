@@ -20,7 +20,23 @@ class BasicController
         }
         foreach ($loadStores as $value) {
             $className = $value . 'Store';
-            include_once(__ROOT__ . "/stores/" . $className . ".php");
+            include_once(__ROOT__ . "/store/" . $className . ".php");
+            $this->{camelToSnakeCase($value)} = new $className();
+        }
+    }
+
+   
+    function loadMappper($mapper)
+    {
+        $loadMappers = array();
+        if (!is_array($mapper)) {
+            $loadMappers[] = $mapper;
+        } else {
+            $loadMappers = $mapper;
+        }
+        foreach ($loadMappers as $value) {
+            $className = $value . 'Mapper';
+            include_once(__ROOT__ . "/mapper/" . $className . ".php");
             $this->{camelToSnakeCase($value)} = new $className();
         }
     }

@@ -9,10 +9,12 @@ class PregaoController extends BasicController
         parent::__construct();
         $this->loadStores('Pregao');
         $this->loadView('pregao');
+        $this->loadMappper('PregaoToPregaoList');
     }
     function index()
     {
-        $this->view->render("index", $this->pregao->findAll());
+        $this->pregao_to_pregao_list->directComponent($this->pregao->findAll());
+        $this->view->render("index", $this->pregao_to_pregao_list->getComponent());
     }
     function add()
     {
