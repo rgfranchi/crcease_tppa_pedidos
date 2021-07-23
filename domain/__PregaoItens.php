@@ -2,7 +2,7 @@
 
 // namespace Domain;
 
-class PregoesItens
+class PregaoItens
 {
     public $_id;
     public $nome;

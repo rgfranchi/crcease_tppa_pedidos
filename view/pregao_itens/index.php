@@ -31,9 +31,9 @@
     <th>Quantidade Disponível</th>
     <th>Ação</th>
   </tr>
-  <?php foreach ($this->data as $row) : ?>
+  <?php foreach ($this->data as $key => $row) : ?>
     <tr>
-      <td><?= $row->_id ?></td>
+      <td><?= $key ?></td>
       <td><?= $row->nome ?></td>
       <td><?= $row->objeto ?></td>
       <td><?= $row->valor_total ?></td>
@@ -41,9 +41,9 @@
       <td><?= $row->qtd_total ?></td>
       <td><?= $row->qtd_disponivel ?></td>
       <td>
-        <a href="<?= $this->action("Pregao", "edit", array('id' => $row->_id)); ?>">EDIT</a>
-        <a href="<?= $this->action("Pregao", "delete", array('id' => $row->_id)); ?>">DELETE</a>
-        <a href="<?= $this->action("PregaoItens", "index", array('id' => $row->_id)); ?>">ITENS</a>
+        <a href="<?= $this->action("Pregao", "edit", array('id' => $key)); ?>">EDIT</a>
+        <a href="<?= $this->action("Pregao", "delete", array('id' => $key)); ?>">DELETE</a>
+        <a href="<?= $this->action("PregaoItens", "index", array('id' => $key)); ?>">ITENS</a>
       </td>
     </tr>
   <?php endforeach; ?>

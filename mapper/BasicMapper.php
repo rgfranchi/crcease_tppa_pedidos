@@ -42,16 +42,17 @@ class BasicMapper
     }    
 
     function mapper($object, $from, $to) {
+        $newObject = new $to();
         foreach(array_keys((array) $from) as $key) {
             if(property_exists($to,$key)) {
                 if(property_exists($object,$key)) {
-                    $to->$key = $object->$key;
+                    $newObject->$key = $object->$key;
                 } else {
-                    $to->$key = null;
+                    $newObject->$key = null;
                 }
             }
         }
-        return $to;
+        return $newObject;
     }
 
     function getDomain() {
