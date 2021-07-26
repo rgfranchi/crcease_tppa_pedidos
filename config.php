@@ -18,11 +18,6 @@ $config_store = array(
     "path_store" => __DIR__ . "/TPPA_STORE"
 );
 
-if (isset($is_test) && $is_test) {
-    $config_store["path_store"] = __DIR__ . "/TEST_TPPA_STORE";
-}
-
-
 define('CONFIG', array('config_store' => $config_store));
 
 

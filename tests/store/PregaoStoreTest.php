@@ -3,8 +3,8 @@
 $is_test = true;
 
 // $config_test = config_test();
-include '../config.php';
-include 'PregaoStore.php';
+include '../test_config.php';
+include $app_path . '/store/PregaoStore.php';
 // include '../domain/Pregoes.php';
 
 
