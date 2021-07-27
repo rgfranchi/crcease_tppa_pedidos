@@ -10,6 +10,8 @@ class PregaoController extends BasicController
         $this->loadStores('Pregao');
         $this->loadView('pregao');
         $this->loadMappper('PregaoToPregaoList');
+        $this->loadMappper('PregaoToPregaoForm');
+        $this->loadMappper('PregaoFormToPregao');
     }
     function index()
     {
@@ -18,17 +20,21 @@ class PregaoController extends BasicController
     }
     function add()
     {
-        $this->view->render("form");
+        $this->pregao_to_pregao_form->directComponent();
+        $this->view->render("form", $this->pregao_to_pregao_form->getComponent());
     }
     function edit()
     {
-        $getId = $this->view->getData()['get']['id'];
-        $this->view->render("form", $this->pregao->findById($getId));
+        $this->pregao_to_pregao_form->directComponent($this->pregao->findById($this->view->getData()['get']['id']));
+        $this->view->render("form", $this->pregao_to_pregao_form->getComponent());        
     }
     function save()
     {
         $post = $this->view->getData()['post'];
-        $this->pregao->save($post);
+
+        $this->pregao_form_to_pregao->directDomain($post);
+
+        // $this->pregao->save($post);
         $this->view->redirect('Pregao', "index");
     }
     function delete()

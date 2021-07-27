@@ -8,6 +8,9 @@ class BasicController
     public $view;
     function __construct()
     {
+
+carregar store e view com mesmo nome do controller. 
+
     }
 
     function loadStores($stores)

@@ -1,6 +1,6 @@
 <?php 
 
-include 'BasicMapper.php';
+include_once 'BasicMapper.php';
 
 class PregaoToPregaoItensListMapper extends BasicMapper
 {

@@ -48,9 +48,11 @@ class BasicView
         }
         // Todo: criar classe para carrgar templates e incluir pagina render.... 
 
-        include __ROOT__ . "/template/main_before.php";
+        include "template/config_template.php"; // array com menu da aplicação.
+        include "template/header.php";
+        include "template/body_start.php"; // importa sidebar.php (menu)
         include $this->folder . "/" . $render . ".php";
-        include __ROOT__ . "/template/main_after.php";
+        include "template/body_end.php"; // inclui scripts.
 
         // include $this->folder . "/" . $render . ".php";
     }
