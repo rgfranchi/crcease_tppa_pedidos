@@ -12,6 +12,5 @@ class PregaoToPregaoListMapper extends BasicMapper
     {
         parent::__construct("Pregoes", "PregaoList");
     }
-
 }
 ?>

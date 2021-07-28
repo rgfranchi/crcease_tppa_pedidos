@@ -32,6 +32,9 @@ class BasicMapper
      */
     function directDomain($loadComponent) {
         $this->verifyValue($loadComponent);
+        if(empty($loadComponent)) {
+            return $this->domain;
+        }        
         $ret = null;
         if(is_array($loadComponent)) {
             foreach($loadComponent as $key => $value) {
@@ -49,6 +52,9 @@ class BasicMapper
      */
     function directComponent($loadDomain = null) {
         $this->verifyValue($loadDomain);
+        if(empty($loadDomain)) {
+            return $this->component;
+        }
         $ret = null;
         if(is_array($loadDomain)) {
             foreach($loadDomain as $key => $value) {
@@ -59,6 +65,14 @@ class BasicMapper
         }
         $this->component = $ret;
     }    
+
+    function directComponentList($loadDomainList) {
+        if(empty($loadDomainList)) {
+            $this->component = array();
+        }
+        $this->directComponent($loadDomainList);
+    }
+
 
     /**
      * Verifica se o tipo tramitado é um array e se o pode ser convertido em objeto.

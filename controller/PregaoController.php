@@ -15,7 +15,7 @@ class PregaoController extends BasicController
     }
     function index()
     {
-        $this->pregao_to_pregao_list->directComponent($this->pregao->findAll());
+        $this->pregao_to_pregao_list->directComponentList($this->pregao->findAll());
         $this->view->render("index", $this->pregao_to_pregao_list->getComponent());
     }
     function add()
@@ -31,10 +31,8 @@ class PregaoController extends BasicController
     function save()
     {
         $post = $this->view->getData()['post'];
-
         $this->pregao_form_to_pregao->directDomain($post);
-
-        // $this->pregao->save($post);
+        $this->pregao->create($this->pregao_form_to_pregao->getDomain());
         $this->view->redirect('Pregao', "index");
     }
     function delete()

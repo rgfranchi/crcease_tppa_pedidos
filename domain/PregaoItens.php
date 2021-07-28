@@ -13,5 +13,5 @@ class PregaoItens
     public $qtd_solicitada;
     public $qtd_disponivel;
     // Objeto Pregoes.php
-    // public $pregao_id;
+    public $pregoes_id;
 }
