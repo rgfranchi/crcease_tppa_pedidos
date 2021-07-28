@@ -34,23 +34,16 @@ class BasicView
      * Renderiza do controller para view.
      * Carrega componente com o mesmo nome do 'folder' e 'render' em CamelCase.
      * @param string $render nome da view que será carregada
-     * @param string/object $component sobrescreve componente a ser carregado
+     * @param string/object $dataComponent sobrescreve componente a ser carregado
      */
-    function render($render = "index", $component = null)
+    function render($render = "index", $dataComponent = null)
     {
-        if (is_null($component)) {
-            $component = snakeToCamelCase($this->folder . '_' . $render . "_component");
-            include_once(__ROOT__ . "/component/". $component . ".php");
-            $new_data = new $component();
-            $this->data = $this->loadData($new_data);
-        } else {
-            $this->data = $component;
-        }
-        // Todo: criar classe para carrgar templates e incluir pagina render.... 
-
-        include __ROOT__ . "/template/main_before.php";
+        $this->data = $dataComponent;
+        include "template/config_template.php"; // array com menu da aplicação.
+        include "template/header.php";
+        include "template/body_start.php"; // importa sidebar.php (menu)
         include $this->folder . "/" . $render . ".php";
-        include __ROOT__ . "/template/main_after.php";
+        include "template/body_end.php"; // inclui scripts.
 
         // include $this->folder . "/" . $render . ".php";
     }
