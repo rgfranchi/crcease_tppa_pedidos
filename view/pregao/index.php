@@ -17,6 +17,7 @@
             <th>Objeto</th>
             <th>Valor Solicitado</th>
             <th>Quantidade Disponível</th>
+            <th>Data Homologação</th>
             <th>Ação</th>
           </tr>
         </thead>
@@ -27,17 +28,19 @@
             <th>Objeto</th>
             <th>Valor Solicitado</th>
             <th>Quantidade Disponível</th>
+            <th>Data Homologação</th>
             <th>Ação</th>
           </tr>
         </tfoot>
         <tbody>
           <?php foreach ($this->data as $row) : ?>
             <tr>
-              <td><?= $row->_id?></td>
+              <td><?= $row->_id ?></td>
               <td><?= $row->nome ?></td>
               <td><?= $row->objeto ?></td>
               <td><?= $row->valor_solicitado ?></td>
               <td><?= $row->qtd_disponivel ?></td>
+              <td><?= $row->data_homologacao ?></td>
               <td>
                 <a href="<?= $this->action("Pregao", "edit", array('id' => $row->_id)); ?>">EDIT</a>
                 <a href="<?= $this->action("Pregao", "delete", array('id' => $row->_id)); ?>">DELETE</a>

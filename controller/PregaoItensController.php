@@ -7,17 +7,18 @@ class PregaoItensController extends BasicController
     function __construct()
     {
         parent::__construct();
-        $this->loadStores(array('Pregao','PregaoItem'));
-        $this->loadView('pregao_itens');
-        $this->loadMappper('PregaoToPregaoItensList');
+        $this->loadStores(array('Pregao', 'PregaoItem'));
+        $this->loadView('pregao_item');
+        $this->loadMappper('PregaoItensToPregaoItemList');
     }
 
     function index()
     {
         $pregaoId = $this->view->getData()['get']['pregao_id'];
         $res = $this->pregao->findById($pregaoId);
-        $this->pregao_to_pregao_itens_list->getAllItens($res);
-        $this->view->render("index", $this->pregao_to_pregao_itens_list->getComponent());
+criar join de Pregão com Pregão Item ( realizar chamada de pregão em PregaoItens)
+        $this->pregao_itens_to_pregao_item_list->getAllItens($res);
+        $this->view->render("index", $this->pregao_itens_to_pregao_item_list->getComponent());
     }
     function add()
     {

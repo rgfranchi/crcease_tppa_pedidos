@@ -2,7 +2,7 @@
 
 // namespace Domain;
 
-class PregaoItensListComponent
+class PregaoItemListComponent
 {
     public $id;
     public $nome;

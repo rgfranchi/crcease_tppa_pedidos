@@ -13,6 +13,7 @@ class Pregoes
     public $valor_solicitado;
     public $qtd_total;
     public $qtd_disponivel;
+    public $data_homologacao;
     // /**  
     //  * @param PregoesItens 
     //  */

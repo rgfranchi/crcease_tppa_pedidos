@@ -5,7 +5,7 @@ include_once(__ROOT__ . "/config.php");
 class BasicView
 {
     private $folder;
-    // Variavel de tramiação dos valores com o controller.
+    // Variável de tramitação dos valores com o controller.
     private $data = array();
     function __construct($folder)
     {

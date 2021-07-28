@@ -52,12 +52,28 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
+                <label for="qtd_disponivel">URL Propostas:</label>
+                <input type="text" id="url_proposta" name="url_proposta" class="form-control" aria-describedby="url_propostaHelp" value="<?= $this->data->url_proposta ?>">
+                <small id="url_propostaHelp" class="form-text text-muted">URL de 'Anexo de Proposta' <a href="http://comprasnet.gov.br/acesso.asp?url=/livre/Pregao/ata0.asp" target="_blank">COMPRAS NET</a>.</small>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="qtd_disponivel">Data Homologação:</label>
+                <input type="text" id="url_proposta" name="data_homologacao" class="form-control" aria-describedby="data_homologacaoHelp" value="<?= $this->data->data_homologacao ?>">
+                <small id="data_homologacaoHelp" class="form-text text-muted">Data de homologação do Pregão</small>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-group">
                 <label for="objeto">Objeto:</label>
-                <textarea class="form-control" id="objeto" name="objeto" class="form-control" aria-describedby="objetoHelp" rows="5" value="<?= $this->data->objeto ?>"></textarea>
+                <textarea class="form-control" id="objeto" name="objeto" class="form-control" aria-describedby="objetoHelp" rows="5"><?= $this->data->objeto ?></textarea>
                 <small id="objetoHelp" class="form-text text-muted">Descrição do objeto inserida na ATA de Registro de Preço.</small>
             </div>
         </div>
     </div>
-
     <input type="submit" value="Enviar">
 </form>
+<?php pr($this->data); ?>
