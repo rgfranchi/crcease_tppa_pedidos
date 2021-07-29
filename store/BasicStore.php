@@ -1,7 +1,7 @@
 <?php
 
 require_once(__ROOT__ . '/config.php');
-include __ROOT__ . '/SleekDB/Store.php';
+include_once(__ROOT__ . '/SleekDB/Store.php');
 
 use SleekDB\Store;
 
@@ -10,8 +10,8 @@ use SleekDB\Store;
  */
 class BasicStore
 {
-    private $store = null;
-    private $object = null;
+    protected $store = null;
+    protected $object = null;
     /**
      * @param string nome da classe filha 
      * @param string domainName -> dominio do objeto 

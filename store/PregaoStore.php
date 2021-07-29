@@ -1,6 +1,6 @@
 <?php
 
-include 'BasicStore.php';
+include_once 'BasicStore.php';
 
 class PregaoStore extends BasicStore
 {

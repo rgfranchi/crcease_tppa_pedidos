@@ -14,8 +14,13 @@ class PregaoItensToPregaoItemListMapper extends BasicMapper
     }
 
 
-    function getAllItens($pregao)
+    function listItens($pregaoItens)
     {
+
+        pr($pregaoItens);
+        die;
+
+
         $ret = null;
         if (is_array($pregao)) {
 

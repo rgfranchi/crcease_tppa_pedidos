@@ -21,13 +21,27 @@ class BasicView
     }
 
     /**
-     * Recebe dados da view
+     * retorna array com chave get e post.
      */
     function getData()
     {
         $this->data['get'] = $_GET;
         $this->data['post'] = $_POST;
         return $this->data;
+    }
+
+    /**
+     * Retorna get
+     */
+    function dataGet() {
+        return $_GET;
+    }
+
+    /**
+     * Retorna post
+     */
+    function dataPost() {
+        return $_POST;
     }
 
     /**

@@ -44,7 +44,7 @@
               <td>
                 <a href="<?= $this->action("Pregao", "edit", array('id' => $row->_id)); ?>">EDIT</a>
                 <a href="<?= $this->action("Pregao", "delete", array('id' => $row->_id)); ?>">DELETE</a>
-                <a href="<?= $this->action("PregaoItens", "index", array('pregao_id' => $row->_id)); ?>">ITENS</a>
+                <a href="<?= $this->action("PregaoItem", "index", array('pregao_id' => $row->_id)); ?>">ITENS</a>
               </td>
             </tr>
           <?php endforeach; ?>

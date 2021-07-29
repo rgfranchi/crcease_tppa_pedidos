@@ -1,5 +1,5 @@
-<?
-$app_path = str_replace('tests/bootstrap', "", __DIR__);
+<?php
+$app_path = str_replace('tests'.DIRECTORY_SEPARATOR.'bootstrap', "", __DIR__);
 
 include_once $app_path . '/config.php';
 
