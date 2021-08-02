@@ -2,8 +2,8 @@
 
 // namespace Domain;
 
-use Pregoes as PregoesDomain;
+// use PregaoDomain as PregoesDomain;
 
-class PregaoFormComponent extends PregoesDomain
+class PregaoFormComponent extends PregaoDomain
 {
 }

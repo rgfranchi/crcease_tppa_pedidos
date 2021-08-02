@@ -7,42 +7,67 @@ class PregaoItemController extends BasicController
     function __construct()
     {
         parent::__construct();
-        $this->loadStores('PregaoItem');
+        $this->loadStores(array('Pregao', 'PregaoItem'));
         $this->loadView('pregao_item');
-        $this->loadMappper('PregaoItensToPregaoItemList');
+        $this->loadMapper('PregaoItemToPregaoItemList');
+        $this->loadMapper('PregaoToPregaoItem');
+        $this->loadMapper('PregaoItemToPregaoItemForm');
     }
 
     function index()
     {
+
+verificar -> não atualiza lista após novo item.
+
         $pregaoId = $this->view->dataGet()['pregao_id'];
-        $res = $this->pregao_item->joinPregaoAndfindById($pregaoId);
-        $this->pregao_itens_to_pregao_item_list->listItens($res);
-        die;
-        $this->view->render("index", $this->pregao_itens_to_pregao_item_list->getComponent());
+        $res = $this->pregao_item->joinPregaoAndFindById($pregaoId);
+
+        $this->pregao_to_pregao_item->directComponent($res);
+        $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
+
+        $this->pregao_item_to_pregao_item_list->directComponentList($res->itens);
+        $data['itens'] = $this->pregao_item_to_pregao_item_list->getComponent();
+
+        $this->view->render("index", $data);
     }
     function add()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $this->view->setData(array('pregao_id' => $pregao_id));
-        $this->view->render("form");
+
+        $resp = $this->pregao->findById($pregao_id);
+
+        $this->pregao_item_to_pregao_item_form->directComponent();
+        $data['item'] = $this->pregao_item_to_pregao_item_form->getComponent();
+
+        $this->pregao_to_pregao_item->directComponent($resp);
+        $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
+
+        $this->view->render("form", $data);
     }
     function edit()
     {
-        $getId = $this->view->dataGet()['id'];
-        $this->view->render("form", $this->pregao->findById($getId));
+        $item_id = $this->view->dataGet()['item_id'];
+        $resp = $this->pregao_item->findPregaoByItemId($item_id);
+
+        $this->pregao_item_to_pregao_item_form->directComponent($resp);
+        $data['item'] = $this->pregao_item_to_pregao_item_form->getComponent();
+
+        $this->pregao_to_pregao_item->directComponent($resp->pregao);
+        $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
+
+        $this->view->render("form", $data);
     }
     function save()
     {
         $post = $this->view->dataPost();
-        $load_pregao = $this->pregao->findById($post['pregao_id']);
-        $load_pregao->pregao_itens[] = $post;
-        $this->pregao->save($load_pregao);
-        $this->view->redirect('PregaoItens', "index");
+        $this->pregao_item->save($post);
+        $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
     }
     function delete()
     {
-        $id = $this->view->dataGet()['id'];
-        $this->pregao->delete($id);
-        $this->view->redirect('Pregao', "index");
+        $id = $this->view->dataGet()['item_id'];
+        $this->pregao_item->delete($id);
+        $this->view->redirect('PregaoItem', "index");
     }
 }

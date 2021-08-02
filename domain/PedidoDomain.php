@@ -1,6 +1,7 @@
 <?php
 
-class Pedidos {
+class PedidoDomain
+{
     public $_id;
     public $projeto;
     public $requisitante;

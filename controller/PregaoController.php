@@ -9,9 +9,9 @@ class PregaoController extends BasicController
         parent::__construct();
         $this->loadStores('Pregao');
         $this->loadView('pregao');
-        $this->loadMappper('PregaoToPregaoList');
-        $this->loadMappper('PregaoToPregaoForm');
-        $this->loadMappper('PregaoFormToPregao');
+        $this->loadMapper('PregaoToPregaoList');
+        $this->loadMapper('PregaoToPregaoForm');
+        $this->loadMapper('PregaoFormToPregao');
     }
     function index()
     {
@@ -26,7 +26,7 @@ class PregaoController extends BasicController
     function edit()
     {
         $this->pregao_to_pregao_form->directComponent($this->pregao->findById($this->view->getData()['get']['id']));
-        $this->view->render("form", $this->pregao_to_pregao_form->getComponent());        
+        $this->view->render("form", $this->pregao_to_pregao_form->getComponent());
     }
     function save()
     {

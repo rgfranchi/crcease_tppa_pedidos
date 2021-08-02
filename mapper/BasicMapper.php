@@ -15,29 +15,31 @@ class BasicMapper
      */
     function __construct($domain = null, $component = null)
     {
-        if(!is_null($domain)) {
-            include_once __ROOT__. "/domain/" .$domain.".php";
-            $this->domain = new $domain();
+        if (!is_null($domain)) {
+            $className = $domain . "Domain";
+            include_once __ROOT__ . "/domain/" . $className . ".php";
+            $this->domain = new $className();
         }
-        if(!is_null($component)) {
-            $className = $component."Component";
-            include_once __ROOT__. "/component/" .$className.".php";
+        if (!is_null($component)) {
+            $className = $component . "Component";
+            include_once __ROOT__ . "/component/" . $className . ".php";
             $this->component = new $className();
         }
     }
 
     /**
-     * Carrega intancia do componente e reponde com intancia do dominio
+     * Carrega instancia do componente e reponde com instancia do domínio
      * @param object $loadComponent instancia a ser mapeada
      */
-    function directDomain($loadComponent) {
+    function directDomain($loadComponent)
+    {
         $this->verifyValue($loadComponent);
-        if(empty($loadComponent)) {
+        if (empty($loadComponent)) {
             return $this->domain;
-        }        
+        }
         $ret = null;
-        if(is_array($loadComponent)) {
-            foreach($loadComponent as $key => $value) {
+        if (is_array($loadComponent)) {
+            foreach ($loadComponent as $key => $value) {
                 $ret[$key] = $this->mapper($value, $this->component, $this->domain);
             }
         } else {
@@ -47,27 +49,29 @@ class BasicMapper
     }
 
     /**
-     * Carrega intancia do dominio e reponde com intancia do componente
+     * Carrega instancia do domínio e reponde com instancia do componente
      * @param object $loadDomain instancia a ser mapeada
      */
-    function directComponent($loadDomain = null) {
+    function directComponent($loadDomain = null)
+    {
         $this->verifyValue($loadDomain);
-        if(empty($loadDomain)) {
+        if (empty($loadDomain)) {
             return $this->component;
         }
         $ret = null;
-        if(is_array($loadDomain)) {
-            foreach($loadDomain as $key => $value) {
+        if (is_array($loadDomain)) {
+            foreach ($loadDomain as $key => $value) {
                 $ret[$key] = $this->mapper($value, $this->domain, $this->component);
             }
         } else {
             $ret = $this->mapper($loadDomain, $this->domain, $this->component);
         }
         $this->component = $ret;
-    }    
+    }
 
-    function directComponentList($loadDomainList) {
-        if(empty($loadDomainList)) {
+    function directComponentList($loadDomainList)
+    {
+        if (empty($loadDomainList)) {
             $this->component = array();
         }
         $this->directComponent($loadDomainList);
@@ -78,11 +82,12 @@ class BasicMapper
      * Verifica se o tipo tramitado é um array e se o pode ser convertido em objeto.
      * @param object/array *retorna na mesma variável enviada.
      */
-    function verifyValue(&$value) {
-        if(is_array($value)) {
+    function verifyValue(&$value)
+    {
+        if (is_array($value)) {
             $firstKey = key($value);
-            if(is_string($firstKey)) {
-                $value = (object) $value; 
+            if (is_string($firstKey)) {
+                $value = (object) $value;
             }
         }
     }
@@ -94,11 +99,12 @@ class BasicMapper
      * @param objeto $to de destino
      * @return objeto destino "to"
      */
-    function mapper($object, $from, $to) {
+    function mapper($object, $from, $to)
+    {
         $newObject = new $to();
-        foreach(array_keys((array) $from) as $key) {
-            if(property_exists($to,$key)) {
-                if(!is_null($object) && property_exists($object,$key)) {
+        foreach (array_keys((array) $from) as $key) {
+            if (property_exists($to, $key)) {
+                if (!is_null($object) && property_exists($object, $key)) {
                     $newObject->$key = $object->$key;
                 } else {
                     $newObject->$key = null;
@@ -111,14 +117,16 @@ class BasicMapper
     /**
      * Lê dominio processado
      */
-    function getDomain() {
+    function getDomain()
+    {
         return $this->domain;
     }
 
     /**
      * Lê component processado
      */
-    function getComponent() {
+    function getComponent()
+    {
         return $this->component;
     }
 }

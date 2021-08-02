@@ -21,9 +21,10 @@ class BasicStore
         $config_store = CONFIG['config_store'];
         $this->store = new Store($store_name, $config_store["path_store"]);
 
-        if($domainName != null) {
-            include __ROOT__. "/domain/" .$domainName.".php";
-            $this->object = new $domainName();
+        if ($domainName != null) {
+            $className = $domainName . "Domain";
+            include_once __ROOT__ . "/domain/" . $className . ".php";
+            $this->object = new $className();
         }
     }
 
@@ -39,13 +40,13 @@ class BasicStore
     function save($array)
     {
         $object = (object) $array;
-        if(isset($object->_id) && $object->_id > 0) {
+        if (isset($object->_id) && $object->_id > 0) {
             return $this->update($object);
         } else {
             return $this->create($object);
         }
     }
-    
+
     function findById($id)
     {
         return $this->arrayToDomainObject($this->store->findById($id));
@@ -66,15 +67,15 @@ class BasicStore
     function arrayToDomainObject($array)
     {
         $ret = array();
-        if(!is_array($array)) {
+        if (!is_array($array)) {
             return $array;
         }
-        if($this->object == null) {
+        if ($this->object == null) {
             return $array;
         }
 
-        foreach($array as $key => $value) {
-            if(is_int($key)) {
+        foreach ($array as $key => $value) {
+            if (is_int($key)) {
                 $ret[] = $this->arrayToDomainObject($value);
             } else {
                 $ret = (object) $array;

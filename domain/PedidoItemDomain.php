@@ -1,6 +1,7 @@
 <?php
 
-class PedidosItens {
+class PedidosItemDomain
+{
     public $_id;
     public $quantidade;
 

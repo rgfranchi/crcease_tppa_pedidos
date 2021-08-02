@@ -1,8 +1,8 @@
-<?php 
+<?php
 
-include 'BasicMapper.php';
+include_once 'BasicMapper.php';
 
-class PregaoToPregaoListMapper extends BasicMapper
+class PregaoItemToPregaoItemFormMapper extends BasicMapper
 {
     /**
      * @param string nome da classe filha 
@@ -10,6 +10,6 @@ class PregaoToPregaoListMapper extends BasicMapper
      */
     function __construct()
     {
-        parent::__construct("Pregao", "PregaoList");
+        parent::__construct("PregaoItem", "PregaoItemForm");
     }
 }

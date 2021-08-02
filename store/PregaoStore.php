@@ -6,6 +6,6 @@ class PregaoStore extends BasicStore
 {
     function __construct()
     {
-        parent::__construct(__CLASS__, 'Pregoes');
+        parent::__construct(__CLASS__, 'Pregao');
     }
 }

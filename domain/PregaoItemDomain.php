@@ -2,7 +2,7 @@
 
 // namespace Domain;
 
-class PregaoItens
+class PregaoItemDomain
 {
     public $_id;
     public $nome;
@@ -13,5 +13,5 @@ class PregaoItens
     public $qtd_solicitada;
     public $qtd_disponivel;
     // Objeto Pregoes.php
-    public $pregoes_id;
+    public $pregao_id;
 }

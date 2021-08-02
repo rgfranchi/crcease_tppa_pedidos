@@ -10,8 +10,7 @@ class PregaoToPregaoFormMapper extends BasicMapper
      */
     function __construct()
     {
-        parent::__construct("Pregoes", "PregaoForm");
+        parent::__construct("Pregao", "PregaoForm");
     }
 
 }
-?>

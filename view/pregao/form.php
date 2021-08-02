@@ -1,4 +1,3 @@
-<h1>PREGAO</h1>
 <form action="<?= $this->action("Pregao", "save"); ?>" method="post">
     <?php if ($this->data->_id > 0) : ?>
         <input type="hidden" id="_id" name="_id" value="<?= $this->data->_id ?>"><br>

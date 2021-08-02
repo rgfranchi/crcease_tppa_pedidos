@@ -25,8 +25,8 @@ class BasicController
         }
     }
 
-   
-    function loadMappper($mapper)
+
+    function loadMapper($mapper)
     {
         $loadMappers = array();
         if (!is_array($mapper)) {

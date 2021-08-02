@@ -4,7 +4,7 @@ include_once $app_path . '/store/PregaoStore.php';
 $id = 1;
 $pregao_store = new PregaoStore();
 
-$pregoes_1 = new Pregoes();
+$pregoes_1 = new PregaoDomain();
 $pregoes_1->_id = ++$id;
 $pregoes_1->nome = "85/GAPSP/2020";
 $pregoes_1->objeto = "Aquisição com instalação de Ar condicionado para o CRCEA-SE.";
@@ -20,7 +20,7 @@ $pregoes_1->data_homologacao = '2020-10-30';
 pr($pregoes_1);
 $pregao_store->update($pregoes_1);
 
-$pregoes_2 = new Pregoes();
+$pregoes_2 = new PregaoDomain();
 $pregoes_2->_id = ++$id;
 $pregoes_2->nome = "25/GAPSP/2020";
 $pregoes_2->objeto = "Aquisição com instalação de Ar condicionado para o CRCEA-SE.";
