@@ -18,9 +18,10 @@ class PregaoItemStore extends BasicStore
         $itens = $this->store;
         $join = $pregao->createQueryBuilder()->join(function ($value) use ($itens) {
             // returns result
-            return $itens->findBy(["pregao_id", "=", $value["_id"]]);
+            return $itens->findBy(["pregao_id", "==", $value["_id"]]);
         }, "itens")
             ->where(['_id', '==', $pregao_id])
+            ->disableCache()
             ->getQuery()
             ->first();
         return $this->arrayToDomainObject($join);
@@ -32,8 +33,6 @@ class PregaoItemStore extends BasicStore
         $pregoes = $pregaoStore->getStore();
         $itens = $this->store;
         $join = $itens->createQueryBuilder()->join(function ($pregao) use ($pregoes) {
-            // returns result
-            pr($pregao);
             return $pregoes->findById($pregao['pregao_id']);
         }, "pregao")
             ->where(['_id', '==', $item_id])

@@ -7,6 +7,8 @@ class BasicView
     private $folder;
     // Variável de tramitação dos valores com o controller.
     private $data = array();
+    // titilo utilizado no body_start.php
+    private $title = null;
     function __construct($folder)
     {
         $this->folder = $folder;
@@ -33,14 +35,16 @@ class BasicView
     /**
      * Retorna get
      */
-    function dataGet() {
+    function dataGet()
+    {
         return $_GET;
     }
 
     /**
      * Retorna post
      */
-    function dataPost() {
+    function dataPost()
+    {
         return $_POST;
     }
 
@@ -58,19 +62,13 @@ class BasicView
         include "template/body_start.php"; // importa sidebar.php (menu)
         include $this->folder . "/" . $render . ".php";
         include "template/body_end.php"; // inclui scripts.
-
+        pr($this->data);
         // include $this->folder . "/" . $render . ".php";
     }
 
-    private function loadData($data)
+    function setTitle($title)
     {
-        if (empty($this->data)) {
-            return $data;
-        }
-        foreach ($this->data as $key => $value) {
-            $data->$key = $value;
-        }
-        return $data;
+        $this->title = $title;
     }
 
     /**

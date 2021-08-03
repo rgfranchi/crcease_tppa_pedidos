@@ -16,9 +16,6 @@ class PregaoItemController extends BasicController
 
     function index()
     {
-
-verificar -> não atualiza lista após novo item.
-
         $pregaoId = $this->view->dataGet()['pregao_id'];
         $res = $this->pregao_item->joinPregaoAndFindById($pregaoId);
 
@@ -27,6 +24,8 @@ verificar -> não atualiza lista após novo item.
 
         $this->pregao_item_to_pregao_item_list->directComponentList($res->itens);
         $data['itens'] = $this->pregao_item_to_pregao_item_list->getComponent();
+
+        $this->view->setTitle("Lista Itens Pregões");
 
         $this->view->render("index", $data);
     }
@@ -43,6 +42,8 @@ verificar -> não atualiza lista após novo item.
         $this->pregao_to_pregao_item->directComponent($resp);
         $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
 
+        $this->view->setTitle("Cadastra Item para o pregão");
+
         $this->view->render("form", $data);
     }
     function edit()
@@ -56,6 +57,8 @@ verificar -> não atualiza lista após novo item.
         $this->pregao_to_pregao_item->directComponent($resp->pregao);
         $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
 
+        $this->view->setTitle("Atualiza Item para o pregão");
+
         $this->view->render("form", $data);
     }
     function save()
@@ -67,7 +70,8 @@ verificar -> não atualiza lista após novo item.
     function delete()
     {
         $id = $this->view->dataGet()['item_id'];
+        $item = $this->pregao_item->findById($id);
         $this->pregao_item->delete($id);
-        $this->view->redirect('PregaoItem', "index");
+        $this->view->redirect('PregaoItem', "index", array('pregao_id' => $item->pregao_id));
     }
 }

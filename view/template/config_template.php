@@ -5,7 +5,7 @@ $navbar = array(
         'type' => 'brand',
         'text' => 'TPPA CRCEA',
         'href' => urlController("Pregao", 'index'),
-        'icon' => 'fas fa-laugh-wink', // opcional.
+        'icon' => 'fas fa-fighter-jet', // opcional.
     ),
     array( // link de acesso direto
         'type' => 'link',
@@ -19,9 +19,15 @@ $navbar = array(
     ),
     array( // link de acesso direto
         'type' => 'link',
-        'text' => 'Pregão',
+        'text' => 'Cadastro',
         'href' => urlController("Pregao", 'index'),
-        'icon' => 'fas fa-clipboard-list fa-2x text-gray-300', // opcional
+        'icon' => 'fas fa-folder-plus text-gray-300', // opcional
+    ),
+    array( // link de acesso direto
+        'type' => 'link',
+        'text' => 'Solicitação',
+        'href' => urlController("Pregao", 'index'),
+        'icon' => 'fas fa-truck-moving text-gray-300', // opcional
     ),
 
 );
@@ -50,7 +56,7 @@ $navbar = array(
 //         'type' => 'heading',
 //         'text' => 'Interface'
 //     ),
-//     array( // link em sub itens obs: tem 'S' 
+//     array( // link em sub itens obs: 'linkS' com 'S' 
 //         'type' => 'links',
 //         'icon' => 'fas fa-fw fa-cog', // opcional
 //         'text' => 'Components',

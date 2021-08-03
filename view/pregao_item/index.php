@@ -30,8 +30,8 @@
             <td><?= $row->valor_unitario ?></td>
             <td><?= $row->qtd_disponivel ?></td>
             <td>
-              <a href="<?= $this->action("PregaoItem", "edit", array('item_id' => $row->_id)); ?>">EDIT</a>
-              <a href="<?= $this->action("PregaoItem", "delete", array('item_id' => $row->_id)); ?>">DELETE</a>
+              <a href="<?= $this->action("PregaoItem", "edit", array('item_id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
+              <a href="<?= $this->action("PregaoItem", "delete", array('item_id' => $row->_id)); ?>" class="btn-sm btn-danger btn-circle delete" title="EXCLUIR"><i class="fas fa-trash"></i></a>
             </td>
           </tr>
         <?php endforeach; ?>
@@ -39,4 +39,3 @@
     </div>
   </div>
 </div>
-<?php pr($this->data) ?>

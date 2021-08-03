@@ -13,14 +13,14 @@
         <div class="col">
             <div class="form-group">
                 <label for="valor_total">Valor Total:</label>
-                <input type="text" id="valor_total" name="valor_total" class="form-control" aria-describedby="valor_totalHelp" value="<?= $this->data->valor_total ?>">
+                <input type="text" id="valor_total" name="valor_total" class="form-control money" aria-describedby="valor_totalHelp" value="<?= $this->data->valor_total ?>">
                 <small id="valor_totalHelp" class="form-text text-muted">Soma Valores dos itens ofertados, calculado ao inserir itens.</small>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label for="qtd_total">Quantidade Total:</label>
-                <input type="text" id="qtd_total" name="qtd_total" class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data->qtd_total ?>">
+                <input type="number" id="qtd_total" name="qtd_total" class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data->qtd_total ?>">
                 <small id="qtd_totalHelp" class="form-text text-muted">Quantidade total de itens do pregão, calculado ao inserir itens.</small>
             </div>
         </div>
@@ -36,14 +36,14 @@
         <div class="col">
             <div class="form-group">
                 <label for="valor_solicitado">Valor Solicitado:</label>
-                <input type="text" id="valor_solicitado" name="valor_solicitado" class="form-control" aria-describedby="valor_solicitadoHelp" value="<?= $this->data->valor_solicitado ?>">
+                <input type="text" id="valor_solicitado" name="valor_solicitado" class="form-control money" aria-describedby="valor_solicitadoHelp" value="<?= $this->data->valor_solicitado ?>">
                 <small id="valor_solicitadoHelp" class="form-text text-muted">Valor Total dos pedidos realizados, é calculado a cada pedido encerrado.</small>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label for="qtd_disponivel">Quantidade Disponível:</label>
-                <input type="text" id="qtd_disponivel" name="qtd_disponivel" class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data->qtd_disponivel ?>">
+                <input type="number" id="qtd_disponivel" name="qtd_disponivel" class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data->qtd_disponivel ?>">
                 <small id="qtd_disponivelHelp" class="form-text text-muted">Quantidade de itens disponíveis.</small>
             </div>
         </div>
@@ -58,9 +58,9 @@
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="qtd_disponivel">Data Homologação:</label>
-                <input type="text" id="url_proposta" name="data_homologacao" class="form-control" aria-describedby="data_homologacaoHelp" value="<?= $this->data->data_homologacao ?>">
-                <small id="data_homologacaoHelp" class="form-text text-muted">Data de homologação do Pregão</small>
+                <label for="data_homologacao">Data Homologação:</label>
+                <input type="date" id="data_homologacao" name="data_homologacao" class="form-control" aria-describedby="data_homologacaoHelp" value="<?= $this->data->data_homologacao ?>">
+                <small id="data_homologacaoHelp" class="form-text text-muted">Data de homologação do Pregão, vencimento após um ano.</small>
             </div>
         </div>
     </div>
@@ -73,6 +73,9 @@
             </div>
         </div>
     </div>
-    <input type="submit" value="Enviar">
+    <button type="submit" class="btn btn-success btn-icon-split" value="Enviar"><span class="icon text-white-50">
+            <i class="fas fa-check"></i>
+        </span>
+        <span class="text">Salvar</span>
+    </button>
 </form>
-<?php pr($this->data); ?>

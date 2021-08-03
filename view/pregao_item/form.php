@@ -15,14 +15,14 @@
         <div class="col">
             <div class="form-group">
                 <label for="valor_unitario">Valor Unitário:</label>
-                <input type="text" id="valor_unitario" name="valor_unitario" class="form-control" aria-describedby="valor_unitarioHelp" value="<?= $this->data['item']->valor_unitario ?>">
+                <input type="text" id="valor_unitario" name="valor_unitario" class="form-control money" aria-describedby="valor_unitarioHelp" value="<?= $this->data['item']->valor_unitario ?>">
                 <small id="valor_unitarioHelp" class="form-text text-muted">Valor unitário vencedor.</small>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label for="valor_solicitado">Valor Solicitado:</label>
-                <input type="text" id="valor_solicitado" name="valor_solicitado" class="form-control" aria-describedby="valor_solicitadoHelp" value="<?= $this->data['item']->valor_solicitado ?>">
+                <input type="text" id="valor_solicitado" name="valor_solicitado" class="form-control money" aria-describedby="valor_solicitadoHelp" value="<?= $this->data['item']->valor_solicitado ?>">
                 <small id="valor_solicitadoHelp" class="form-text text-muted">Valor total já solicitado do item (calculado a cada pedido).</small>
             </div>
         </div>
@@ -31,21 +31,21 @@
         <div class="col">
             <div class="form-group">
                 <label for="termo_referência_origem">Quantidade Total:</label>
-                <input type="text" id="termo_referência_origem" name="qtd_total" class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data['item']->qtd_total ?>">
+                <input type="number" placeholder="0" id="termo_referência_origem" name="qtd_total" class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data['item']->qtd_total ?>">
                 <small id="qtd_totalHelp" class="form-text text-muted">Quantidade total disponibilizada.</small>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label for="qtd_disponivel">Quantidade Disponível:</label>
-                <input type="text" id="qtd_disponivel" name="qtd_disponivel" class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data['item']->qtd_disponivel ?>">
+                <input type="number" placeholder="0" id="qtd_disponivel" name="qtd_disponivel" class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data['item']->qtd_disponivel ?>">
                 <small id="qtd_disponivelHelp" class="form-text text-muted">Quantidade do itens disponíveis (calculado a cada pedido).</small>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
                 <label for="valor_solicitado">Quantidade Solicitada:</label>
-                <input type="text" id="qtd_solicitada" name="qtd_solicitada" class="form-control" aria-describedby="qtd_solicitadaHelp" value="<?= $this->data['item']->qtd_solicitada ?>">
+                <input type="number" placeholder="0" id="qtd_solicitada" name="qtd_solicitada" class="form-control" aria-describedby="qtd_solicitadaHelp" value="<?= $this->data['item']->qtd_solicitada ?>">
                 <small id="qtd_solicitadaHelp" class="form-text text-muted">Quantidade solicitada do item (calculado a cada pedido)</small>
             </div>
         </div>
@@ -59,6 +59,9 @@
             </div>
         </div>
     </div>
-    <input type="submit" value="Enviar">
+    <button type="submit" class="btn btn-success btn-icon-split" value="Enviar"><span class="icon text-white-50">
+            <i class="fas fa-check"></i>
+        </span>
+        <span class="text">Salvar</span>
+    </button>
 </form>
-<?php pr($this->data['item']); ?>

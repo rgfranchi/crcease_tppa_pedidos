@@ -1,46 +1,52 @@
                     </div>
                     <!-- End of Page Content /.container-fluid -->
-                </div>
-                <!-- End of Main Content -->
-
-                <!-- Footer -->
-                <footer class="sticky-footer bg-white">
-                    <div class="container my-auto">
-                        <div class="copyright text-center my-auto">
-                            <span>Copyright &copy; CRCEA-SE TPPA</span>
-                        </div>
                     </div>
-                </footer>
-                <!-- End of Footer --> 
+                    <!-- End of Main Content -->
 
-            </div>
-            <!-- End of Content Wrapper -->
+                    <!-- Footer -->
+                    <footer class="sticky-footer bg-white">
+                        <div class="container my-auto">
+                            <div class="copyright text-center my-auto">
+                                <span>Copyright &copy; CRCEA-SE TPPA</span>
+                            </div>
+                        </div>
+                    </footer>
+                    <!-- End of Footer -->
 
-        </div>  
-        <!-- End of Page Wrapper -->
+                    </div>
+                    <!-- End of Content Wrapper -->
 
-        <!-- Scroll to Top Button-->
-        <a class="scroll-to-top rounded" href="#page-top">
-            <i class="fas fa-angle-up"></i>
-        </a>
+                    </div>
+                    <!-- End of Page Wrapper -->
 
-        <!-- Bootstrap core JavaScript-->
-        <script src="view/template/vendor/jquery/jquery.min.js"></script>
-        <script src="view/template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
+                    <!-- Scroll to Top Button-->
+                    <a class="scroll-to-top rounded" href="#page-top">
+                        <i class="fas fa-angle-up"></i>
+                    </a>
 
-        <!-- Core plugin JavaScript-->
-        <script src="view/template/vendor/jquery-easing/jquery.easing.min.js"></script>
+                    <!-- Bootstrap core JavaScript-->
+                    <script src="view/template/vendor/jquery/jquery.min.js"></script>
+                    <script src="view/template/vendor/bootstrap/js/bootstrap.bundle.min.js"></script>
 
-        <!-- Custom scripts for all pages-->
-        <script src="view/template/js/sb-admin-2.min.js"></script>
+                    <!-- Core plugin JavaScript-->
+                    <script src="view/template/vendor/jquery-easing/jquery.easing.min.js"></script>
 
-        <!-- Page level plugins -->
-        <script src="view/template/vendor/chart.js/Chart.min.js"></script>
+                    <!-- Custom scripts for all pages-->
+                    <script src="view/template/js/sb-admin-2.min.js"></script>
+                    <!-- Script para a aplicação -->
+                    <script src="view/template/js/tppa.js"></script>
 
-        <!-- Page level custom scripts -->
-        <script src="view/template/js/demo/chart-area-demo.js"></script>
-        <script src="view/template/js/demo/chart-pie-demo.js"></script>
+                    <!-- Page level plugins -->
+                    <script src="view/template/vendor/chart.js/Chart.min.js"></script>
 
-    </body>
+                    <!-- Mascara -->
+                    <script src="view/template/vendor/jquery-inputmask/jquery.inputmask.min.js"></script>
+                    <!-- <script src="view/template/vendor/jquery-inputmask/bindings/inputmask.binding.js"></script> -->
 
-</html>
+                    <!-- Page level custom scripts -->
+                    <!-- <script src="view/template/js/demo/chart-area-demo.js"></script>
+        <script src="view/template/js/demo/chart-pie-demo.js"></script> -->
+
+                    </body>
+
+                    </html>
