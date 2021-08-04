@@ -7,11 +7,27 @@
     <div class="row">
         <div class="col">
             <div class="form-group">
+                <label for="cod_item_pregao">Código Item:</label>
+                <input type="number" id="cod_item_pregao" name="cod_item_pregao" class="form-control" aria-describedby="cod_item_pregaoHelp" value="<?= $this->data['item']->cod_item_pregao ?>">
+                <small id="cod_item_pregaoHelp" class="form-text text-muted">Numero do item.</small>
+            </div>
+        </div>         
+        <div class="col">
+            <div class="form-group">
                 <label for="nome">Nome:</label>
                 <input type="text" id="nome" name="nome" class="form-control" aria-describedby="nomeHelp" value="<?= $this->data['item']->nome ?>">
                 <small id="nomeHelp" class="form-text text-muted">Nome do Item.</small>
             </div>
         </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="fornecedor">Fornecedor:</label>
+                <input type="text" id="fornecedor" name="fornecedor" class="form-control" aria-describedby="fornecedorHelp" value="<?= $this->data['item']->fornecedor ?>">
+                <small id="fornecedorHelp" class="form-text text-muted">CNPJ e Nome.</small>
+            </div>
+        </div>
+    </div>
+    <div class="row">             
         <div class="col">
             <div class="form-group">
                 <label for="valor_unitario">Valor Unitário:</label>
@@ -26,27 +42,54 @@
                 <small id="valor_solicitadoHelp" class="form-text text-muted">Valor total já solicitado do item (calculado a cada pedido).</small>
             </div>
         </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="natureza_despesa">Natureza de Despesa (ND):</label>
+                <select id="natureza_despesa" name="natureza_despesa" class="form-control" aria-describedby="natureza_despesaHelp">
+                    <option value="33.90.30" <?= $this->data['item']->natureza_despesa == '33.90.30' ? "selected" : "" ?>>Material de Consumo</option>
+                    <option value="33.90.39" <?= $this->data['item']->natureza_despesa == '33.90.39' ? "selected" : "" ?>>Serviços de Terceiros Pessoa Jurídica</option>
+                    <option value="44.90.52" <?= $this->data['item']->natureza_despesa == '44.90.52' ? "selected" : "" ?>>Material Permanente</option>
+                    <option value="44.90.40" <?= $this->data['item']->natureza_despesa == '44.90.40' ? "selected" : "" ?>>Serviços de Tecnologia da Informação e Comunicação</option>
+                    <option value="33.90.40" <?= $this->data['item']->natureza_despesa == '33.90.40' ? "selected" : "" ?>>Comunicação de Dados</option>
+                </select>
+                <small id="natureza_despesaHelp" class="form-text text-muted">Classificação</small>
+            </div>
+        </div>
     </div>
     <div class="row">
         <div class="col">
             <div class="form-group">
-                <label for="termo_referência_origem">Quantidade Total:</label>
-                <input type="number" placeholder="0" id="termo_referência_origem" name="qtd_total" class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data['item']->qtd_total ?>">
+                <label for="unidade">Unidade:</label>
+                <input type="text" id="unidade" name="unidade" class="form-control" aria-describedby="unidadeHelp" value="<?= $this->data['item']->unidade ?>">
+                <small id="unidadeHelp" class="form-text text-muted">Unidade (Metro, Litro, Unidade, etc).</small>
+            </div>
+        </div>
+        <div class="col">
+            <div class="form-group">
+                <label for="qtd_total">Quantidade Total:</label>
+                <input type="number" placeholder="0" id="qtd_total" name="qtd_total" class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data['item']->qtd_total ?>">
                 <small id="qtd_totalHelp" class="form-text text-muted">Quantidade total disponibilizada.</small>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
+                <label for="qtd_solicitada">Quantidade Solicitada:</label>
+                <input type="number" placeholder="0" id="qtd_solicitada" name="qtd_solicitada" class="form-control" aria-describedby="qtd_solicitadaHelp" value="<?= $this->data['item']->qtd_solicitada ?>">
+                <small id="qtd_solicitadaHelp" class="form-text text-muted">Calculado a cada pedido</small>
+            </div>
+        </div>        
+        <div class="col">
+            <div class="form-group">
                 <label for="qtd_disponivel">Quantidade Disponível:</label>
                 <input type="number" placeholder="0" id="qtd_disponivel" name="qtd_disponivel" class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data['item']->qtd_disponivel ?>">
-                <small id="qtd_disponivelHelp" class="form-text text-muted">Quantidade do itens disponíveis (calculado a cada pedido).</small>
+                <small id="qtd_disponivelHelp" class="form-text text-muted">Calculado a cada pedido.</small>
             </div>
         </div>
         <div class="col">
             <div class="form-group">
-                <label for="valor_solicitado">Quantidade Solicitada:</label>
-                <input type="number" placeholder="0" id="qtd_solicitada" name="qtd_solicitada" class="form-control" aria-describedby="qtd_solicitadaHelp" value="<?= $this->data['item']->qtd_solicitada ?>">
-                <small id="qtd_solicitadaHelp" class="form-text text-muted">Quantidade solicitada do item (calculado a cada pedido)</small>
+                <label for="qtd_minima">Quantidade minima:</label>
+                <input type="number" placeholder="0" id="qtd_minima" name="qtd_minima" class="form-control" aria-describedby="qtd_minimaHelp" value="<?= $this->data['item']->qtd_minima ?>">
+                <small id="qtd_minimaHelp" class="form-text text-muted">Se não possuir inserir Zero.</small>
             </div>
         </div>
     </div>
