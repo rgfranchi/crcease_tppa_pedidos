@@ -74,4 +74,19 @@ class PregaoItemController extends BasicController
         $this->pregao_item->delete($id);
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $item->pregao_id));
     }
+
+
+    function upload_file() {
+        $pregao_id = $this->view->dataGet()['pregao_id'];
+        $data['pregao'] = $this->pregao->findById($pregao_id);
+
+        include __ROOT__ . '/service/PhpSpreadsheetService.php';
+
+        $loadFile = new PhpSpreadsheetService();
+        $path = __ROOT__ . '/tests/arquivos/PE 13GAPSP2021.xls';
+        $data['load_file'] = $loadFile->loadfile($path);
+
+        $this->view->render("upload_file", $data);
+    }
+
 }

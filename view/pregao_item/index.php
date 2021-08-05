@@ -1,7 +1,10 @@
 <?php include_once 'pregao_item.php'; ?>
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary"><a href="<?= $this->action("PregaoItem", "add", array('pregao_id' => $this->data['pregao']->_id)); ?>">Adicionar</a></h6>
+    <h6 class="m-0 font-weight-bold text-primary">
+      <a href="<?= $this->action("PregaoItem", "add", array('pregao_id' => $this->data['pregao']->_id)); ?>">Adicionar</a> |
+      <a href="<?= $this->action("PregaoItem", "upload_file", array('pregao_id' => $this->data['pregao']->_id)); ?>">Carregar Arquivo</a>
+    </h6>
   </div>
   <div class="card-body">
     <div class="table-responsive">

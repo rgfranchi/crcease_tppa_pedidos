@@ -1,7 +1,7 @@
 <?php
 
 require_once(__ROOT__ . '/config.php');
-include_once(__ROOT__ . '/SleekDB/Store.php');
+include_once(__ROOT__ . '/vendor/SleekDB/Store.php');
 
 use SleekDB\Store;
 
