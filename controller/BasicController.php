@@ -41,6 +41,23 @@ class BasicController
         }
     }
 
+    function loadService($service)
+    {
+        $loadServices = array();
+        if (!is_array($service)) {
+            $loadServices[] = $service;
+        } else {
+            $loadServices = $service;
+        }
+        foreach ($loadServices as $value) {
+            $className = $value . 'Service';
+            include_once(__ROOT__ . "/service/" . $className . ".php");
+            $this->{camelToSnakeCase($value)} = new $className();
+        }
+    }
+
+
+
     /**
      * Carrega View.
      * @param string $view_folder subpasta de view.

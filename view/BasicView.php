@@ -8,7 +8,9 @@ class BasicView
     // Variável de tramitação dos valores com o controller.
     private $data = array();
     // titilo utilizado no body_start.php
-    private $title = null;
+    public $title = null;
+    public $template_js = null;
+
     function __construct($folder)
     {
         $this->folder = $folder;
