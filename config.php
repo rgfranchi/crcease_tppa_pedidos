@@ -39,6 +39,11 @@ function snakeToCamelCase($string)
 }
 
 
+function snakeToTextCase($string)
+{
+    return str_replace('_', ' ', ucwords($string, '_'));
+}
+
 /**
  * Exibe variável na tela (Debug)
  * @param type $var -> a ser exibida;

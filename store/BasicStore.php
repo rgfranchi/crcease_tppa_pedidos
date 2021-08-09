@@ -47,6 +47,17 @@ class BasicStore
         }
     }
 
+    function saveAll($arrayObjects)
+    {
+        $toArray = $this->domainObjectToArray($arrayObjects);
+        foreach($toArray as &$value) {
+            if(empty($value['_id'])) {
+                unset($value["_id"]);
+            }
+        }
+        return $this->arrayToDomainObject($this->store->updateOrInsertMany($toArray));
+    }
+
     function findById($id)
     {
         return $this->arrayToDomainObject($this->store->findById($id));
@@ -64,16 +75,18 @@ class BasicStore
         return $this->arrayToDomainObject($this->store);
     }
 
+    /**
+     * Converte Array em objeto.
+     */
     function arrayToDomainObject($array)
     {
-        $ret = array();
         if (!is_array($array)) {
             return $array;
         }
         if ($this->object == null) {
             return $array;
         }
-
+        $ret = array();
         foreach ($array as $key => $value) {
             if (is_int($key)) {
                 $ret[] = $this->arrayToDomainObject($value);
@@ -88,4 +101,33 @@ class BasicStore
         }
         return $ret;
     }
+
+    /**
+     * Converte Objeto em array.
+     * @todo Não testado objeto com sub-objeto.
+     */
+    function domainObjectToArray($domain)
+    {
+        
+        if (!is_array($domain)) {
+            return (array) $domain;
+        }
+        $ret = array();
+        foreach ($domain as $key => $value) {
+            if (is_int($key)) {
+                $ret[] = $this->domainObjectToArray($value);
+            } else {
+                $ret = (array) $domain;
+                foreach ($ret as $key => $value) {
+                    if (!is_array($domain)) {
+                        $ret[$key] = $this->domainObjectToArray($value);
+                    }
+                }                
+                
+            }
+        }
+
+        return $ret;
+    }
+
 }
