@@ -32,9 +32,9 @@ class PregaoItemFileToPregaoItemMapper extends BasicMapper
                         break;
                     case 'valor_unitario':  
                     case 'valor_solicitado':  
-                        is_numeric($value) ? $pregaoItem->{$type} = number_format($value,2,',','.') : "";
+                        is_numeric($value) ? $pregaoItem->{$type} = str_replace(',','',$value) : "";
                         break;
-                    default :
+                    default:
                         $pregaoItem->{$type} = $value;
                 }
             }

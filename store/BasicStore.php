@@ -1,14 +1,15 @@
 <?php
 
 require_once(__ROOT__ . '/config.php');
+require_once(__ROOT__ . '/BasicSystem.php');
 include_once(__ROOT__ . '/vendor/SleekDB/Store.php');
 
 use SleekDB\Store;
 
 /**
- * Operações CRUD e buscas padroes no banco de dados.
+ * Operações CRUD e buscas padrões no banco de dados.
  */
-class BasicStore
+class BasicStore extends BasicSystem
 {
     protected $store = null;
     protected $object = null;
@@ -20,12 +21,7 @@ class BasicStore
     {
         $config_store = CONFIG['config_store'];
         $this->store = new Store($store_name, $config_store["path_store"]);
-
-        if ($domainName != null) {
-            $className = $domainName . "Domain";
-            include_once __ROOT__ . "/domain/" . $className . ".php";
-            $this->object = new $className();
-        }
+        $this->object = $this->loadDomain($domainName);
     }
 
     function create($object)
@@ -37,9 +33,12 @@ class BasicStore
         return $this->arrayToDomainObject($this->store->updateOrInsert((array) $object));
     }
 
-    function save($array)
+    /**
+     * Objeto com _id executa update.
+     * Objecto sem _id executa insert.
+     */
+    function save($object)
     {
-        $object = (object) $array;
         if (isset($object->_id) && $object->_id > 0) {
             return $this->update($object);
         } else {

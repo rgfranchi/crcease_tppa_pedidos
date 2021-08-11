@@ -17,6 +17,9 @@ biilog_tmp/
 TEST_TPPA_STORE/
 TPPA_STORE/
 
+# ARQUIVO LIBREOFFICE TEMPORARIO.
+.~*
+
 ######################
 # ReactJS
 ######################

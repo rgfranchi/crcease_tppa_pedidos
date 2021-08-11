@@ -1,5 +1,7 @@
 <?php
+setlocale(LC_ALL, 'pt_BR');
 
+include "BasicSystem.php";
 
 define('__ROOT__', dirname(__FILE__));
 
@@ -43,6 +45,24 @@ function snakeToTextCase($string)
 {
     return str_replace('_', ' ', ucwords($string, '_'));
 }
+
+/**
+ * Retira ',' do valor para conversão em float.
+ */
+function convertCommaToDot($value) {
+    $value = str_replace(',','_',$value);
+    $value = str_replace('.','',$value);
+    $value = str_replace('_','.',$value);
+    return number_format($value, 2,'.','');
+}
+
+/**
+ * Retira ',' do valor para conversão em float.
+ */
+function convertToMoneyBR($value) {
+    return number_format($value, 2,',','.');
+}
+
 
 /**
  * Exibe variável na tela (Debug)

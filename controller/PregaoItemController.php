@@ -17,7 +17,10 @@ class PregaoItemController extends BasicController
             'PregaoItemToPregaoItemFile',
             'PregaoItemFileToPregaoItem',
         ));
-        $this->loadService('PhpSpreadsheet');
+        $this->loadService(array(
+            'PhpSpreadsheet',
+            'PregaoCalculation'
+        ));
     }
 
     function index()
@@ -91,7 +94,6 @@ class PregaoItemController extends BasicController
             $pregao_id = $dataPost['pregao_id'];
             $path = $_FILES['spreadsheet']['tmp_name'];
             $data['load_file'] = $this->php_spreadsheet->loadfile($path);
-            
         }
         // teste 
         $path = __ROOT__ . '/tests/arquivos/PE 13GAPSP2021.xls';
@@ -105,8 +107,26 @@ class PregaoItemController extends BasicController
 
     function file_save() {
         $post = $this->view->dataPost();
-        $this->pregao_item->saveAll($this->pregao_item_file_to_pregao_item->dataPregaoItem($post));
+        $savedItens = $this->pregao_item->saveAll($this->pregao_item_file_to_pregao_item->dataPregaoItem($post));
+        pr($savedItens);
+        pr(json_encode($savedItens));
+        
+        die;
+
+        $pregao = $this->pregao->findById($post['pregao_id']);
+
+        // $savedItens = json_decode('');
+
+        $this->pregao_calculation->setObjectPregao($pregao);
+        $updatePregao = $this->pregao_calculation->sumListItemPregao($savedItens);
+
+        pr($updatePregao);
+        die;
+
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
     }
 
+
+
+    
 }

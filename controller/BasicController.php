@@ -2,7 +2,7 @@
 
 require_once(__ROOT__ . '/config.php');
 
-class BasicController
+class BasicController extends BasicSystem
 {
     public $stores = array();
     public $view;
@@ -10,53 +10,20 @@ class BasicController
     {
     }
 
-    function loadStores($stores)
+    function loadStores($store)
     {
-        $loadStores = array();
-        if (!is_array($stores)) {
-            $loadStores[] = $stores;
-        } else {
-            $loadStores = $stores;
-        }
-        foreach ($loadStores as $value) {
-            $className = $value . 'Store';
-            include_once(__ROOT__ . "/store/" . $className . ".php");
-            $this->{camelToSnakeCase($value)} = new $className();
-        }
+        $this->instantiateClass('Store', $store);
     }
-
 
     function loadMapper($mapper)
     {
-        $loadMappers = array();
-        if (!is_array($mapper)) {
-            $loadMappers[] = $mapper;
-        } else {
-            $loadMappers = $mapper;
-        }
-        foreach ($loadMappers as $value) {
-            $className = $value . 'Mapper';
-            include_once(__ROOT__ . "/mapper/" . $className . ".php");
-            $this->{camelToSnakeCase($value)} = new $className();
-        }
+        $this->instantiateClass('Mapper', $mapper);
     }
 
     function loadService($service)
     {
-        $loadServices = array();
-        if (!is_array($service)) {
-            $loadServices[] = $service;
-        } else {
-            $loadServices = $service;
-        }
-        foreach ($loadServices as $value) {
-            $className = $value . 'Service';
-            include_once(__ROOT__ . "/service/" . $className . ".php");
-            $this->{camelToSnakeCase($value)} = new $className();
-        }
+        $this->instantiateClass('Service', $service);
     }
-
-
 
     /**
      * Carrega View.
