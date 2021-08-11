@@ -3,7 +3,7 @@
 /**
  * Operações de transição entre domain e componet.
  */
-class BasicMapper
+class BasicMapper extends BasicSystem
 {
     public $domain = null;
     public $component = null;
@@ -15,16 +15,8 @@ class BasicMapper
      */
     function __construct($domain = null, $component = null)
     {
-        if (!is_null($domain)) {
-            $className = $domain . "Domain";
-            include_once __ROOT__ . "/domain/" . $className . ".php";
-            $this->domain = new $className();
-        }
-        if (!is_null($component)) {
-            $className = $component . "Component";
-            include_once __ROOT__ . "/component/" . $className . ".php";
-            $this->component = new $className();
-        }
+        $this->domain = $this->loadDomain($domain);
+        $this->component = $this->loadComponent($component);
     }
 
     /**
@@ -115,7 +107,7 @@ class BasicMapper
     }
 
     /**
-     * Lê dominio processado
+     * Lê domínio processado
      */
     function getDomain()
     {

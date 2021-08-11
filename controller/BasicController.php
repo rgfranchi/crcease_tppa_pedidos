@@ -10,9 +10,30 @@ class BasicController extends BasicSystem
     {
     }
 
+    /**
+     * Utiliza classe BasicStores carregar ou criar um novo store SleekDB.
+     * Retorna instancia em snake_case separado do store.
+     */
+    function loadBasicStores($storeName)
+    {
+        $store = $storeName . 'Store';
+        $domain = $storeName;
+        $this->{camelToSnakeCase($storeName)} = $this->instantiateClass('Store', 'Basic', array($store, $domain));
+    }
+
     function loadStores($store)
     {
-        $this->instantiateClass('Store', $store);
+        $store = $this->instantiateClass('Store', $store);
+    }
+
+    /**
+     * Utiliza classe BasicMapper para montar o mapeamento direto entre as classes.
+     * Retorna instanciar em snake_case separado por 'map' ex: classe_domain_map_classe_component
+     */
+    function loadBasicMapper($domain, $component)
+    {
+        $name = camelToSnakeCase($domain) . '_map_' . camelToSnakeCase($component);
+        $this->{$name} = $this->instantiateClass('Mapper', 'Basic', array($domain, $component));
     }
 
     function loadMapper($mapper)
@@ -28,11 +49,9 @@ class BasicController extends BasicSystem
     /**
      * Carrega View.
      * @param string $view_folder subpasta de view.
-     * @param string/Objeto $componentName nome do component ou objeto utilizado data.
      */
     function loadView($view_folder)
     {
-        include_once(__ROOT__ . "/view/BasicView.php");
-        $this->view = new BasicView($view_folder);
+        $this->view = $this->instantiateClass('View', 'Basic', array($view_folder));
     }
 }

@@ -1,8 +1,8 @@
 <?php
 
-// namespace Domain;
+include 'BasicDomain.php';
 
-class PregaoDomain
+class PregaoDomain extends BasicDomain
 {
     public $_id;
     public $nome;
@@ -16,7 +16,7 @@ class PregaoDomain
     public $numero_processo_PAG;
     public $url_proposta;
     public $url_anexo;
-    public $url_siasg_net;    
+    public $url_siasg_net;
 
     // /**  
     //  * @param PregoesItens 

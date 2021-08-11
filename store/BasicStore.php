@@ -15,9 +15,9 @@ class BasicStore extends BasicSystem
     protected $object = null;
     /**
      * @param string nome da classe filha 
-     * @param string domainName -> dominio do objeto 
+     * @param string domainName -> domínio do objeto 
      */
-    function __construct($store_name, $domainName = null)
+    function __construct($store_name, $domainName)
     {
         $config_store = CONFIG['config_store'];
         $this->store = new Store($store_name, $config_store["path_store"]);
@@ -49,8 +49,8 @@ class BasicStore extends BasicSystem
     function saveAll($arrayObjects)
     {
         $toArray = $this->domainObjectToArray($arrayObjects);
-        foreach($toArray as &$value) {
-            if(empty($value['_id'])) {
+        foreach ($toArray as &$value) {
+            if (empty($value['_id'])) {
                 unset($value["_id"]);
             }
         }
@@ -67,6 +67,8 @@ class BasicStore extends BasicSystem
     }
     function findAll()
     {
+        pr($this->object->getObject());
+        pr($this->store->findAll());
         return $this->arrayToDomainObject($this->store->findAll());
     }
     function getStore()
@@ -107,7 +109,7 @@ class BasicStore extends BasicSystem
      */
     function domainObjectToArray($domain)
     {
-        
+
         if (!is_array($domain)) {
             return (array) $domain;
         }
@@ -121,12 +123,10 @@ class BasicStore extends BasicSystem
                     if (!is_array($domain)) {
                         $ret[$key] = $this->domainObjectToArray($value);
                     }
-                }                
-                
+                }
             }
         }
 
         return $ret;
     }
-
 }
