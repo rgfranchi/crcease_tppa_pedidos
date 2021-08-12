@@ -1,16 +1,17 @@
 <?php
 
-include_once $app_path . '/store/PregaoStore.php';
 $id = 0;
-$pregao_store = new PregaoStore();
+$pregao_store = new BasicStore('PregaoStore','Pregao');
+
+pr($pregao_store);
 
 $pregoes_1 = new PregaoDomain();
 $pregoes_1->_id = ++$id;
 $pregoes_1->nome = "51/GAPSP/2020";
 $pregoes_1->objeto = "Aquisição de Material de Pintura.";
 $pregoes_1->termo_referencia_origem = "21/TPPA/2020";
-$pregoes_1->valor_total = '100.000,00';
-$pregoes_1->valor_solicitado = '20.000,00';
+$pregoes_1->valor_total = 100000.78;
+$pregoes_1->valor_solicitado = 20000.55;
 $pregoes_1->qtd_total = 9999;
 $pregoes_1->qtd_disponivel = 999;
 $pregoes_1->data_homologacao = '2020-11-23';
@@ -27,8 +28,8 @@ $pregoes_2->_id = ++$id;
 $pregoes_2->nome = "82/GAPSP/2020";
 $pregoes_2->objeto = "Aquisição de Material Permanente de Climatização com Instalação para o Serviço Regional de Proteção ao Voo de São Paulo e Destacamentos Subordinados, conforme condições, quantidades e exigências estabelecidas neste instrumento.";
 $pregoes_2->termo_referencia_origem = "21/TPPA/2021";
-$pregoes_2->valor_total = '3.635.806,82';
-$pregoes_2->valor_solicitado = '990,99';
+$pregoes_2->valor_total = 3635806.82;
+$pregoes_2->valor_solicitado = 990.99;
 $pregoes_2->qtd_total = 9999;
 $pregoes_2->qtd_disponivel = 9999;
 $pregoes_2->data_homologacao = '2020-10-30';

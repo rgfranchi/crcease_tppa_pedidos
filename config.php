@@ -60,6 +60,7 @@ function convertCommaToDot($value) {
  * Retira ',' do valor para conversão em float.
  */
 function convertToMoneyBR($value) {
+    $value = empty($value) ? 0.00 : $value;
     return number_format($value, 2,',','.');
 }
 

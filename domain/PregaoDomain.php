@@ -1,6 +1,6 @@
 <?php
 
-include 'BasicDomain.php';
+include_once('BasicDomain.php');
 
 class PregaoDomain extends BasicDomain
 {
@@ -22,4 +22,21 @@ class PregaoDomain extends BasicDomain
     //  * @param PregoesItens 
     //  */
     // public $pregoes_itens = array(); 
+
+    function getObject()
+    {
+        $ret = parent::getObject();
+        $ret->valor_total = convertToMoneyBR($ret->valor_total);
+        $ret->valor_solicitado = convertToMoneyBR($ret->valor_solicitado);
+        return $ret;
+    }
+
+    function getObjectArray()
+    {
+        $ret = parent::getObjectArray();
+        $ret['valor_total'] = convertCommaToDot($ret['valor_total']);
+        $ret['valor_solicitado'] = convertCommaToDot($ret['valor_solicitado']);
+        return $ret;
+    }    
+
 }

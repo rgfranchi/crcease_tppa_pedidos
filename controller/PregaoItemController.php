@@ -7,16 +7,21 @@ class PregaoItemController extends BasicController
     function __construct()
     {
         parent::__construct();
-        $this->loadStores(array('Pregao', 'PregaoItem'));
+        $this->loadBasicStores('Pregao');
+        $this->loadStores('PregaoItem');
         $this->loadView('pregao_item');
-        $this->loadMapper(array(
-            'PregaoItemToPregaoItemList',
-            'PregaoToPregaoItem',
-            'PregaoItemToPregaoItemForm',
-            'PregaoItemFormToPregaoItem',
-            'PregaoItemToPregaoItemFile',
-            'PregaoItemFileToPregaoItem',
-        ));
+
+        $this->loadBasicMapper('Pregao','PregaoItem');
+        $this->loadBasicMapper('PregaoItem','PregaoItemList');
+        
+        // $this->loadMapper(array(
+        //     'PregaoItemToPregaoItemList',
+        //     'PregaoToPregaoItem',
+        //     'PregaoItemToPregaoItemForm',
+        //     'PregaoItemFormToPregaoItem',
+        //     'PregaoItemToPregaoItemFile',
+        //     'PregaoItemFileToPregaoItem',
+        // ));
         $this->loadService(array(
             'PhpSpreadsheet',
             'PregaoCalculation'
@@ -26,13 +31,14 @@ class PregaoItemController extends BasicController
     function index()
     {
         $pregaoId = $this->view->dataGet()['pregao_id'];
-        $res = $this->pregao_item->joinPregaoAndFindById($pregaoId);
 
-        $this->pregao_to_pregao_item->directComponent($res);
-        $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
+        $res = $this->pregao_item->joinPregaoAndFindById($this->pregao, $pregaoId);
 
-        $this->pregao_item_to_pregao_item_list->directComponentList($res->itens);
-        $data['itens'] = $this->pregao_item_to_pregao_item_list->getComponent();
+        $this->pregao_map_pregao_item->directComponent($res);
+        $data['pregao'] = $this->pregao_map_pregao_item->getComponent();
+
+        $this->pregao_item_map_pregao_item_list->directComponentList($res->itens);
+        $data['itens'] = $this->pregao_item_map_pregao_item_list->getComponent();
 
         $this->view->setTitle("Lista Itens Pregões");
 
@@ -40,6 +46,9 @@ class PregaoItemController extends BasicController
     }
     function add()
     {
+
+continuar ajustes ..... 
+
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $this->view->setData(array('pregao_id' => $pregao_id));
 

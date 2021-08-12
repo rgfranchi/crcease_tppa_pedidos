@@ -1,8 +1,8 @@
 <?php
 
-// namespace Domain;
+include_once('BasicDomain.php');
 
-class PregaoItemDomain
+class PregaoItemDomain extends BasicDomain
 {
     public $_id;
     public $cod_item_pregao; // codigo do item no PE.

@@ -13,6 +13,9 @@ class BasicStore extends BasicSystem
 {
     protected $store = null;
     protected $object = null;
+
+    protected $domainName = null;
+
     /**
      * @param string nome da classe filha 
      * @param string domainName -> domínio do objeto 
@@ -21,6 +24,7 @@ class BasicStore extends BasicSystem
     {
         $config_store = CONFIG['config_store'];
         $this->store = new Store($store_name, $config_store["path_store"]);
+        $this->domainName = $domainName;
         $this->object = $this->loadDomain($domainName);
     }
 
@@ -39,6 +43,11 @@ class BasicStore extends BasicSystem
      */
     function save($object)
     {
+
+        pr($this->domainObjectToArray($object));
+        die;
+
+
         if (isset($object->_id) && $object->_id > 0) {
             return $this->update($object);
         } else {
@@ -67,8 +76,6 @@ class BasicStore extends BasicSystem
     }
     function findAll()
     {
-        pr($this->object->getObject());
-        pr($this->store->findAll());
         return $this->arrayToDomainObject($this->store->findAll());
     }
     function getStore()
@@ -78,27 +85,30 @@ class BasicStore extends BasicSystem
 
     /**
      * Converte Array em objeto.
+     * @param array $array - array do banco de dados.
+     * @param array $appendFields - campos realizar join
      */
-    function arrayToDomainObject($array)
+    function arrayToDomainObject($array, $joinFields = array())
     {
         if (!is_array($array)) {
             return $array;
         }
-        if ($this->object == null) {
-            return $array;
-        }
         $ret = array();
+        // cria novo objeto para inserção na lista ou retorno.
+        $newObject = new $this->object;
         foreach ($array as $key => $value) {
             if (is_int($key)) {
                 $ret[] = $this->arrayToDomainObject($value);
             } else {
-                $ret = (object) $array;
-                foreach ($ret as $key => $value) {
-                    if (is_array($array)) {
-                        $ret->$key = $this->arrayToDomainObject($value);
-                    }
-                }
+                if(property_exists($newObject,$key) || in_array($key, $joinFields)) {
+                    $newObject->{$key} = $this->arrayToDomainObject($value);
+                } 
             }
+        }
+        
+        if($this->object != $newObject) {
+            // recebe configuração dos campos do objeto.
+            $ret = $newObject->getObject();
         }
         return $ret;
     }
@@ -111,20 +121,21 @@ class BasicStore extends BasicSystem
     {
 
         if (!is_array($domain)) {
-            return (array) $domain;
+            return $domain->getObjectArray();
         }
         $ret = array();
         foreach ($domain as $key => $value) {
             if (is_int($key)) {
                 $ret[] = $this->domainObjectToArray($value);
-            } else {
-                $ret = (array) $domain;
-                foreach ($ret as $key => $value) {
-                    if (!is_array($domain)) {
-                        $ret[$key] = $this->domainObjectToArray($value);
-                    }
-                }
-            }
+            } 
+            // else {
+            //     $ret = (array) $domain;
+            //     foreach ($ret as $key => $value) {
+            //         if (!is_array($domain)) {
+            //             $ret[$key] = $this->domainObjectToArray($value);
+            //         }
+            //     }
+            // }
         }
 
         return $ret;

@@ -1,10 +1,8 @@
 <?php
 
-include_once $app_path . '/store/PregaoItemStore.php';
+$pregao_item_store = new BasicStore('PregaoItemStore','PregaoItem');
 
 $id = 0;
-
-$pregao_item_store = new PregaoItemStore();
 
 $pregao_1_itens_1 = new PregaoItemDomain();
 $pregao_1_itens_1->_id = ++$id;

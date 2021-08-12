@@ -41,7 +41,8 @@ class BasicSystem
             include_once(__ROOT__ . "/" . $folderName . "/" . $className . ".php");
             $instanceName = camelToSnakeCase($value);
             $newClass = new ReflectionClass($className);
-            if (count($loadParameters[$key]) > 0) {
+
+            if (!empty($loadParameters) && count($loadParameters[$key]) > 0) {
                 $this->{$instanceName} = $newClass->newInstanceArgs($loadParameters[$key]);
             } else {
                 $this->{$instanceName} = $newClass->newInstance();
@@ -53,22 +54,4 @@ class BasicSystem
         }
         return $ret;
     }
-
-    // /**
-    //  * Carrega uma unica classe com parâmetros
-    //  * @param string $typeClass tipo da classe que será instanciado (Domain / Component / Mapper etc...)
-    //  * @param string|array $class nome da classe ou array de classes será carregado.
-    //  * @param string|null $folderName local da classe (opcional)
-    //  * @param array $parameters array com parâmetros que será instanciado..
-    //  */
-    // function instantiateClassParameter($typeClass, $class, $parameters, $folderName = null)
-    // {
-
-    //     pr($parameters);
-
-    //     $folderName = empty($folderName) ? strtolower($typeClass) : $folderName;
-    //     $className = $class . $typeClass;
-    //     include_once(__ROOT__ . "/" . $folderName . "/" . $className . ".php");
-    //     return $this->{camelToSnakeCase($className)} = new $className(implode(",", $parameters));
-    // }
 }

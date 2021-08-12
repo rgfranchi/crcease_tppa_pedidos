@@ -1,7 +1,6 @@
 <?php
 
 include_once('BasicStore.php');
-include_once('PregaoStore.php');
 
 class PregaoItemStore extends BasicStore
 {
@@ -10,10 +9,9 @@ class PregaoItemStore extends BasicStore
         parent::__construct(__CLASS__, "PregaoItem");
     }
 
-
-    function joinPregaoAndFindById($pregao_id)
+    function joinPregaoAndFindById($pregaoStore, $pregao_id)
     {
-        $pregaoStore = new PregaoStore();
+        // $pregaoStore = new PregaoStore();
         $pregao = $pregaoStore->getStore();
         $itens = $this->store;
         $join = $pregao->createQueryBuilder()->join(function ($value) use ($itens) {
@@ -24,7 +22,7 @@ class PregaoItemStore extends BasicStore
             ->disableCache()
             ->getQuery()
             ->first();
-        return $this->arrayToDomainObject($join);
+        return $this->arrayToDomainObject($join, array('itens'));
     }
 
     function findPregaoByItemId($item_id)
