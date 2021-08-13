@@ -18,6 +18,22 @@ class BasicSystem
     }
 
     /**
+     * Utiliza classe BasicStores carregar ou criar um novo store SleekDB.
+     * Retorna instancia em snake_case separado do store.
+     */
+    function loadBasicStores($storeName)
+    {
+        $store = $storeName . 'Store';
+        $domain = $storeName;
+        $this->{camelToSnakeCase($storeName)} = $this->instantiateClass('Store', 'Basic', array($store, $domain));
+    }
+
+    function loadStores($store)
+    {
+        $store = $this->instantiateClass('Store', $store);
+    }
+
+    /**
      * Carrega uma ou múltiplas classes
      * @param string $typeClass tipo da classe que será instanciado (Domain / Component / Mapper etc...)
      * @param string|array $class nome da classe ou array de classes será carregado.

@@ -27,4 +27,22 @@ class PregaoItemDomain extends BasicDomain
 
     // Objeto Pregoes.php
     public $pregao_id;
+
+
+    function getObject()
+    {
+        $ret = parent::getObject();
+        $ret->valor_unitario = convertToMoneyBR($ret->valor_unitario);
+        $ret->valor_solicitado = convertToMoneyBR($ret->valor_solicitado);
+        return $ret;
+    }
+
+    function getObjectArray()
+    {
+        $ret = parent::getObjectArray();
+        $ret['valor_unitario'] = convertCommaToDot($ret['valor_unitario']);
+        $ret['valor_solicitado'] = convertCommaToDot($ret['valor_solicitado']);
+        return $ret;
+    }  
+
 }

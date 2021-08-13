@@ -1,5 +1,6 @@
 <?php
-class PregaoItemComponent
+
+class PregaoHeadComponent
 {
     public $_id;
     public $nome;

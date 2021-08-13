@@ -11,8 +11,9 @@ class PregaoItemController extends BasicController
         $this->loadStores('PregaoItem');
         $this->loadView('pregao_item');
 
-        $this->loadBasicMapper('Pregao','PregaoItem');
+        $this->loadBasicMapper('Pregao','PregaoHead');
         $this->loadBasicMapper('PregaoItem','PregaoItemList');
+        $this->loadBasicMapper('PregaoItem','PregaoItemForm');
         
         // $this->loadMapper(array(
         //     'PregaoItemToPregaoItemList',
@@ -31,11 +32,11 @@ class PregaoItemController extends BasicController
     function index()
     {
         $pregaoId = $this->view->dataGet()['pregao_id'];
+        
+        $res = $this->pregao_item->joinPregaoAndFindById($pregaoId);
 
-        $res = $this->pregao_item->joinPregaoAndFindById($this->pregao, $pregaoId);
-
-        $this->pregao_map_pregao_item->directComponent($res);
-        $data['pregao'] = $this->pregao_map_pregao_item->getComponent();
+        $this->pregao_map_pregao_head->directComponent($res);
+        $data['pregao'] = $this->pregao_map_pregao_head->getComponent();
 
         $this->pregao_item_map_pregao_item_list->directComponentList($res->itens);
         $data['itens'] = $this->pregao_item_map_pregao_item_list->getComponent();
@@ -44,18 +45,19 @@ class PregaoItemController extends BasicController
 
         $this->view->render("index", $data);
     }
+
+
     function add()
     {
 
-continuar ajustes ..... 
-
+ajustar adicionar item.
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $this->view->setData(array('pregao_id' => $pregao_id));
 
         $resp = $this->pregao->findById($pregao_id);
 
-        $this->pregao_item_to_pregao_item_form->directComponent();
-        $data['item'] = $this->pregao_item_to_pregao_item_form->getComponent();
+        $this->pregao_item_map_pregao_item_form->directComponent();
+        $data['item'] = $this->pregao_item_map_pregao_item_form->getComponent();
 
         $this->pregao_to_pregao_item->directComponent($resp);
         $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
@@ -69,11 +71,11 @@ continuar ajustes .....
         $item_id = $this->view->dataGet()['item_id'];
         $resp = $this->pregao_item->findPregaoByItemId($item_id);
 
-        $this->pregao_item_to_pregao_item_form->directComponent($resp);
-        $data['item'] = $this->pregao_item_to_pregao_item_form->getComponent();
+        $this->pregao_item_map_pregao_item_form->directComponent($resp);
+        $data['item'] = $this->pregao_item_map_pregao_item_form->getComponent();
 
-        $this->pregao_to_pregao_item->directComponent($resp->pregao);
-        $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
+        $this->pregao_map_pregao_head->directComponent($resp->pregao);
+        $data['pregao'] = $this->pregao_map_pregao_head->getComponent();
 
         $this->view->setTitle("Atualiza Item para o pregão");
 

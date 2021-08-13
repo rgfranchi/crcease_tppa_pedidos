@@ -7,35 +7,37 @@ class PregaoItemStore extends BasicStore
     function __construct()
     {
         parent::__construct(__CLASS__, "PregaoItem");
+        $this->loadBasicStores("Pregao");
     }
 
-    function joinPregaoAndFindById($pregaoStore, $pregao_id)
+    function joinPregaoAndFindById($pregao_id)
     {
-        // $pregaoStore = new PregaoStore();
-        $pregao = $pregaoStore->getStore();
+        $pregao = $this->pregao->getStore();
         $itens = $this->store;
         $join = $pregao->createQueryBuilder()->join(function ($value) use ($itens) {
-            // returns result
             return $itens->findBy(["pregao_id", "==", $value["_id"]]);
-        }, "itens")
+        }, 'itens')
             ->where(['_id', '==', $pregao_id])
             ->disableCache()
             ->getQuery()
             ->first();
-        return $this->arrayToDomainObject($join, array('itens'));
+        $joinPregaoItem = $this->arrayToDomainObject($join, $this->pregao->pregao);
+        $joinPregaoItem->itens = $this->arrayToDomainObject($join['itens']);
+        return $joinPregaoItem;
     }
 
     function findPregaoByItemId($item_id)
     {
-        $pregaoStore = new PregaoStore();
-        $pregoes = $pregaoStore->getStore();
+        $pregoes = $this->pregao->getStore();
         $itens = $this->store;
         $join = $itens->createQueryBuilder()->join(function ($pregao) use ($pregoes) {
             return $pregoes->findById($pregao['pregao_id']);
-        }, "pregao")
+        }, 'pregao')
             ->where(['_id', '==', $item_id])
             ->getQuery()
             ->first();
-        return $this->arrayToDomainObject($join);
+        $joinPregaoItem = $this->arrayToDomainObject($join);
+        $joinPregaoItem->pregao = $this->arrayToDomainObject($join['pregao'], $this->pregao->pregao);
+        return $joinPregaoItem;
     }
 }

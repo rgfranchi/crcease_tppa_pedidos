@@ -80,27 +80,27 @@ class BasicStore extends BasicSystem
     }
     function getStore()
     {
-        return $this->arrayToDomainObject($this->store);
+        return $this->store;
     }
 
     /**
      * Converte Array em objeto.
      * @param array $array - array do banco de dados.
-     * @param array $appendFields - campos realizar join
+     * @param array $object - objeto para conversão.
      */
-    function arrayToDomainObject($array, $joinFields = array())
+    function arrayToDomainObject($array, $_object = null)
     {
         if (!is_array($array)) {
             return $array;
         }
         $ret = array();
         // cria novo objeto para inserção na lista ou retorno.
-        $newObject = new $this->object;
+        $newObject = empty($_object) ? new $this->object : new $_object;
         foreach ($array as $key => $value) {
             if (is_int($key)) {
                 $ret[] = $this->arrayToDomainObject($value);
             } else {
-                if(property_exists($newObject,$key) || in_array($key, $joinFields)) {
+                if(property_exists($newObject,$key)) {
                     $newObject->{$key} = $this->arrayToDomainObject($value);
                 } 
             }
@@ -124,6 +124,7 @@ class BasicStore extends BasicSystem
             return $domain->getObjectArray();
         }
         $ret = array();
+        pr($domain);
         foreach ($domain as $key => $value) {
             if (is_int($key)) {
                 $ret[] = $this->domainObjectToArray($value);
