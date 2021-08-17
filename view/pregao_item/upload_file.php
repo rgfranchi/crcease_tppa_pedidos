@@ -1,6 +1,5 @@
 <?php include_once 'pregao_item.php'; ?>
 <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
-
 <?php
 // cria select para os cabeçalhos
 $select = '<select id="typeField" class="typeField" name="typeField[%s]"><option value="null" selected>Não Selecionado</option>';
@@ -26,7 +25,7 @@ $select .= sprintf('%s</select>',$options);
     <?php if (!isset($this->data['load_file'])) : ?>
       <h3>ARQUIVO NÃO CARREGADO</h3>
     <?php else : ?>
-      <div class="table-responsive">
+      <div class="table-responsive scrollTopTable">
         <form id="file_form" action='<?= $this->action("PregaoItem", "file_save"); ?>' method="post"> 
           <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">

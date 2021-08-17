@@ -50,10 +50,24 @@ function snakeToTextCase($string)
  * Retira ',' do valor para conversão em float.
  */
 function convertCommaToDot($value) {
+    if(is_numeric($value)) {
+        return number_format($value, 2,'.','');
+    }
     $value = str_replace(',','_',$value);
-    $value = str_replace('.','',$value);
-    $value = str_replace('_','.',$value);
-    return number_format($value, 2,'.','');
+    $value = str_replace('.','_',$value);
+    if(empty($value)) {
+        return 0;
+    }
+    $pos = strrpos($value, '_');
+    if($pos !== false) {
+        $value = substr_replace($value, '.', $pos, strlen("_"));
+        $value = str_replace('_','',$value);
+    }
+    if(is_numeric($value)) {
+        return number_format($value, 2,'.','');
+    } else {
+        throw new Exception(sprintf("Não foi possível converter o valor '%s' em numero",$value));
+    }
 }
 
 /**

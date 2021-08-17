@@ -11,6 +11,7 @@
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
           <th>ID</th>
+          <th>COD</th>
           <th>Nome</th>
           <th>Descrição</th>
           <th>Valor Unitário</th>
@@ -19,6 +20,7 @@
         </thead>
         <tfoot>
           <th>ID</th>
+          <th>COD</th>
           <th>Nome</th>
           <th>Descrição</th>
           <th>Valor Unitário</th>
@@ -28,6 +30,7 @@
         <?php foreach ($this->data['itens'] as $row) : ?>
           <tr>
             <td><?= $row->_id ?></td>
+            <td><?= $row->cod_item_pregao ?></td>
             <td><?= $row->nome ?></td>
             <td><?= $row->descricao ?></td>
             <td><?= $row->valor_unitario ?></td>

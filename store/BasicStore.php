@@ -38,32 +38,56 @@ class BasicStore extends BasicSystem
     }
 
     /**
-     * Objeto com _id executa update.
-     * Objecto sem _id executa insert.
+     * Salva array ou objeto após validação.<br>
+     * Converte para array.
+     * @param Objeto/Array sem _id insert com _id update.
      */
-    function save($object)
+    function save($data)
     {
-
-        pr($this->domainObjectToArray($object));
-        die;
-
-
-        if (isset($object->_id) && $object->_id > 0) {
-            return $this->update($object);
-        } else {
-            return $this->create($object);
+        $newObject = $this->validateData($data);
+        if(!$newObject) {
+            return false;
         }
+        $dataArray = (array) $data;
+        if (isset($dataArray['_id']) && $dataArray['_id'] > 0) {
+            return $this->update($newObject->getObjectArray());
+        } else {
+            return $this->create($newObject->getObjectArray());
+        }
+    }
+
+    /**
+     * Verifica se o array enviado tem os mesmos parâmetros da data enviada.
+     */
+    function validateData($data) {
+        $copyData = (array) $data;
+        $newObject = new $this->object;
+        foreach(array_keys(get_object_vars($this->object)) as $key) {
+            $newObject->$key = $copyData[$key];
+            unset($copyData[$key]);
+        }
+        if(!empty($copyData)){
+            pr($this->object);
+            pr($copyData);
+            throw new Exception("Valores enviados para salvar incompatível com objeto previsto");
+            return false;
+        }
+        return $newObject;
     }
 
     function saveAll($arrayObjects)
     {
-        $toArray = $this->domainObjectToArray($arrayObjects);
-        foreach ($toArray as &$value) {
-            if (empty($value['_id'])) {
-                unset($value["_id"]);
-            }
+        if(!is_array($arrayObjects)) {
+            pr($arrayObjects);
+            throw new Exception("Array inválido.");
+            return false;
         }
-        return $this->arrayToDomainObject($this->store->updateOrInsertMany($toArray));
+        $ret = array();
+        $toArray = $this->domainObjectToArray($arrayObjects);
+        foreach($toArray as $key => $values) {
+            $ret[] = $this->save($values);
+        }
+        return $ret;
     }
 
     function findById($id)
@@ -102,7 +126,7 @@ class BasicStore extends BasicSystem
             } else {
                 if(property_exists($newObject,$key)) {
                     $newObject->{$key} = $this->arrayToDomainObject($value);
-                } 
+                }
             }
         }
         
@@ -119,12 +143,10 @@ class BasicStore extends BasicSystem
      */
     function domainObjectToArray($domain)
     {
-
         if (!is_array($domain)) {
             return $domain->getObjectArray();
         }
         $ret = array();
-        pr($domain);
         foreach ($domain as $key => $value) {
             if (is_int($key)) {
                 $ret[] = $this->domainObjectToArray($value);

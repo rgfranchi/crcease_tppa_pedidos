@@ -40,6 +40,7 @@ class PregaoItemDomain extends BasicDomain
     function getObjectArray()
     {
         $ret = parent::getObjectArray();
+        $ret['qtd_total'] = empty($ret['qtd_total']) ? $ret['qtd_disponivel'] + $ret['qtd_solicitada'] : $ret['qtd_total'];
         $ret['valor_unitario'] = convertCommaToDot($ret['valor_unitario']);
         $ret['valor_solicitado'] = convertCommaToDot($ret['valor_solicitado']);
         return $ret;

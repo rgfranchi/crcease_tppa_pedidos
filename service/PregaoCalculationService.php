@@ -1,42 +1,105 @@
 <?php
-class PregaoCalculationService {
+
+require_once(__ROOT__ . '/config.php');
+
+class PregaoCalculationService extends BasicSystem {
     
     private $objectPregao = null;
 
-    function setObjectPregao($objectPregao) {
-        $this->objectPregao = $objectPregao;
+    function __construct()
+    {
+        $this->loadBasicStores('Pregao');
     }
 
-
-    function sumListItemPregao($listItem) {
+    /**
+     * Soma lista de itens ao pregão.
+     */
+    function sumListItemPregao($pregao_id, $listItem) {
+        $this->objectPregao = $this->pregao->findById($pregao_id);
         foreach($listItem as $value) {
-            $this->sumItemPregao($value);
+            $this->sumPregao($value);
         }
-        pr("fim sum list");
+        $this->pregao->save($this->objectPregao);
+    }
+
+    /**
+     * Soma um único item do pregão
+     */
+    function sumItemPregao($item) {
+        $this->objectPregao = $this->pregao->findById($item->pregao_id);
+        $this->sumPregao($item);
+        $this->pregao->save($this->objectPregao);
+    }
+
+    /**
+     * Subtrai um único item do pregão
+     */
+    function subtractItemPregao($item) {
+        $this->objectPregao = $this->pregao->findById($item->pregao_id);
+        $this->subtractPregao($item);
+        $this->pregao->save($this->objectPregao);
+    }
+
+    /**
+     * Atualiza um único item do pregão
+     */
+    function updateItemPregao($item) {
+        $this->objectPregao = $this->pregao->findById($item->pregao_id);
+        $this->subtractPregao($item);
+        $this->sumPregao($item);
+        $this->pregao->save($this->objectPregao);
     }
 
 
-    function sumItemPregao($item) {
+    /**
+     * Soma respectivamente:
+     * PregaoItem qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
+     * Pregao     qtd_total, qtd_disponivel, valor_total
+     */
+    function sumPregao($item) {
+        if(empty($this->objectPregao)) {
+            throw new Exception("'objectPregao' não definido");
+        }
+        $valorTotalItem = convertCommaToDot($item->valor_unitario) * $item->qtd_total;
+        $this->sumMoneyFloat($this->objectPregao->valor_total, $valorTotalItem);
+        $this->objectPregao->qtd_total += $item->qtd_total;
+        $this->objectPregao->qtd_disponivel += $item->qtd_total;
+    }
 
+    /**
+     * Subtrai respectivamente:
+     * PregaoItem qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
+     * Pregao     qtd_total, qtd_disponivel, valor_total
+     */
+    function subtractPregao($item) {
         if(empty($this->objectPregao)) {
             throw new Exception("Pregão não definido incluir 'setPregao(pregao)'");
         }
-        pr($item);
-        pr($this->objectPregao);
-
-        $this->objectPregao->qtd_total += $item->qtd_total;
-        var_dump(floatval($item->valor_unitario));
-        $this->objectPregao->valor_total += $item->valor_unitario;
-
-        pr($this->objectPregao);
-
-        die;
-        // somar quantidade Total
-        // somar valor total
+        $valorTotalItem = convertCommaToDot($item->valor_unitario) * $item->qtd_total;
+        $this->subtractMoneyFloat($this->objectPregao->valor_total, $valorTotalItem);
+        $this->objectPregao->qtd_total -= $item->qtd_total;
+        $this->objectPregao->qtd_disponivel -= $item->qtd_total;
     }
 
-    function subtractItemPregao() {
-        // subtrai quantidade total
-        // subtrai valor total
+    /**
+     * Soma valores e retorna em $valueAdd
+     */
+    function sumMoneyFloat(&$valueAdd, $value) {
+        $value = convertCommaToDot($value);
+        $valueAdd = convertCommaToDot($valueAdd);
+        $valueAdd += $value;
+        $valueAdd = convertToMoneyBR($valueAdd);
     }
+
+    /**
+     * Subtrai valores e retorna em $valueSubtract
+     */    
+    function subtractMoneyFloat(&$valueSubtract, $value) {
+        $value = convertCommaToDot($value);
+        $valueSubtract = convertCommaToDot($valueSubtract);
+        $valueSubtract -= $value;
+        $valueSubtract = convertToMoneyBR($valueSubtract);
+    }
+
+
 }

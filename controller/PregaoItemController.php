@@ -14,15 +14,7 @@ class PregaoItemController extends BasicController
         $this->loadBasicMapper('Pregao','PregaoHead');
         $this->loadBasicMapper('PregaoItem','PregaoItemList');
         $this->loadBasicMapper('PregaoItem','PregaoItemForm');
-        
-        // $this->loadMapper(array(
-        //     'PregaoItemToPregaoItemList',
-        //     'PregaoToPregaoItem',
-        //     'PregaoItemToPregaoItemForm',
-        //     'PregaoItemFormToPregaoItem',
-        //     'PregaoItemToPregaoItemFile',
-        //     'PregaoItemFileToPregaoItem',
-        // ));
+        $this->loadMapper('PregaoItemMapPregaoItemFile');
         $this->loadService(array(
             'PhpSpreadsheet',
             'PregaoCalculation'
@@ -49,8 +41,6 @@ class PregaoItemController extends BasicController
 
     function add()
     {
-
-ajustar adicionar item.
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $this->view->setData(array('pregao_id' => $pregao_id));
 
@@ -59,8 +49,8 @@ ajustar adicionar item.
         $this->pregao_item_map_pregao_item_form->directComponent();
         $data['item'] = $this->pregao_item_map_pregao_item_form->getComponent();
 
-        $this->pregao_to_pregao_item->directComponent($resp);
-        $data['pregao'] = $this->pregao_to_pregao_item->getComponent();
+        $this->pregao_map_pregao_head->directComponent($resp);
+        $data['pregao'] = $this->pregao_map_pregao_head->getComponent();
 
         $this->view->setTitle("Cadastra Item para o pregão");
 
@@ -81,16 +71,32 @@ ajustar adicionar item.
 
         $this->view->render("form", $data);
     }
+
     function save()
     {
-        $post = $this->pregao_item_form_to_pregao_item->directComponent($this->view->dataPost());
-        $this->pregao_item->save($post);
+        $post = $this->view->dataPost();
+        // ITEM UPDATE
+        if(isset($post['_id'])) {
+            $item = $this->pregao_item->findById($post['_id']);
+            $this->pregao_calculation->subtractItemPregao($item);
+        }
+
+        $this->pregao_item_map_pregao_item_form->directDomain($post);
+        $savedItem = $this->pregao_item->save($this->pregao_item_map_pregao_item_form->getDomain());
+        // pr($savedItem);
+        // pr(json_encode($savedItem));
+        // $objTest = '';
+        // $savedItem = json_decode($objTest);
+
+incluir cáculo do pregão no Store.        
+        $this->pregao_calculation->sumItemPregao($savedItem);
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
     }
     function delete()
     {
         $id = $this->view->dataGet()['item_id'];
         $item = $this->pregao_item->findById($id);
+        $this->pregao_calculation->subtractItemPregao($item);
         $this->pregao_item->delete($id);
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $item->pregao_id));
     }
@@ -110,7 +116,7 @@ ajustar adicionar item.
         $path = __ROOT__ . '/tests/arquivos/PE 13GAPSP2021.xls';
         $data['load_file'] = $this->php_spreadsheet->loadfile($path);
         // fim teste
-        $data['option_fields'] = $this->pregao_item_to_pregao_item_file->arrayOptionFields();
+        $data['option_fields'] = $this->pregao_item_map_pregao_item_file->arrayOptionFields();
 
         $data['pregao'] = $this->pregao->findById($pregao_id);
         $this->view->render("upload_file", $data);
@@ -118,22 +124,13 @@ ajustar adicionar item.
 
     function file_save() {
         $post = $this->view->dataPost();
-        $savedItens = $this->pregao_item->saveAll($this->pregao_item_file_to_pregao_item->dataPregaoItem($post));
-        pr($savedItens);
-        pr(json_encode($savedItens));
-        
-        die;
-
-        $pregao = $this->pregao->findById($post['pregao_id']);
-
-        // $savedItens = json_decode('');
-
-        $this->pregao_calculation->setObjectPregao($pregao);
-        $updatePregao = $this->pregao_calculation->sumListItemPregao($savedItens);
-
-        pr($updatePregao);
-        die;
-
+        $dataItens = $this->pregao_item_map_pregao_item_file->dataPregaoItem($post);
+        $savedItens = $this->pregao_item->saveAll($dataItens);
+        // pr($savedItens);
+        // pr(json_encode($savedItens));
+        // $objTest = '';
+        // $savedItens = json_decode($objTest);
+        $this->pregao_calculation->sumListItemPregao($post['pregao_id'], $savedItens);
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
     }
 
