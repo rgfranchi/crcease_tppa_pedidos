@@ -17,7 +17,7 @@ class PregaoItemController extends BasicController
         $this->loadMapper('PregaoItemMapPregaoItemFile');
         $this->loadService(array(
             'PhpSpreadsheet',
-            'PregaoCalculation'
+            // 'PregaoCalculation'
         ));
     }
 
@@ -75,29 +75,16 @@ class PregaoItemController extends BasicController
     function save()
     {
         $post = $this->view->dataPost();
-        // ITEM UPDATE
-        if(isset($post['_id'])) {
-            $item = $this->pregao_item->findById($post['_id']);
-            $this->pregao_calculation->subtractItemPregao($item);
-        }
-
         $this->pregao_item_map_pregao_item_form->directDomain($post);
-        $savedItem = $this->pregao_item->save($this->pregao_item_map_pregao_item_form->getDomain());
-        // pr($savedItem);
-        // pr(json_encode($savedItem));
-        // $objTest = '';
-        // $savedItem = json_decode($objTest);
-
-incluir cáculo do pregão no Store.        
-        $this->pregao_calculation->sumItemPregao($savedItem);
+        $this->pregao_item->save($this->pregao_item_map_pregao_item_form->getDomain());
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
     }
+
     function delete()
     {
         $id = $this->view->dataGet()['item_id'];
         $item = $this->pregao_item->findById($id);
-        $this->pregao_calculation->subtractItemPregao($item);
-        $this->pregao_item->delete($id);
+        $this->pregao_item->delete($item);
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $item->pregao_id));
     }
 
@@ -112,10 +99,10 @@ incluir cáculo do pregão no Store.
             $path = $_FILES['spreadsheet']['tmp_name'];
             $data['load_file'] = $this->php_spreadsheet->loadfile($path);
         }
-        // teste 
-        $path = __ROOT__ . '/tests/arquivos/PE 13GAPSP2021.xls';
-        $data['load_file'] = $this->php_spreadsheet->loadfile($path);
-        // fim teste
+        // // teste 
+        // $path = __ROOT__ . '/tests/arquivos/PE 13GAPSP2021.xls';
+        // $data['load_file'] = $this->php_spreadsheet->loadfile($path);
+        // // fim teste
         $data['option_fields'] = $this->pregao_item_map_pregao_item_file->arrayOptionFields();
 
         $data['pregao'] = $this->pregao->findById($pregao_id);
@@ -130,7 +117,7 @@ incluir cáculo do pregão no Store.
         // pr(json_encode($savedItens));
         // $objTest = '';
         // $savedItens = json_decode($objTest);
-        $this->pregao_calculation->sumListItemPregao($post['pregao_id'], $savedItens);
+        // $this->pregao_calculation->sumListItemPregao($post['pregao_id'], $savedItens);
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
     }
 

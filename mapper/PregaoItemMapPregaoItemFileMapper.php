@@ -52,6 +52,12 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
                     case 'valor_solicitado':  
                         is_numeric($value) ? $pregaoItem->{$type} = str_replace(',','',$value) : "";
                         break;
+                    case 'cnpj':
+                        $pregaoItem->fornecedor = empty($pregaoItem->fornecedor) ? $value : $pregaoItem->fornecedor .= " - ".$value;
+                        break;
+                    case 'fornecedor': // já possui valor, provável CNPJ.
+                        $pregaoItem->fornecedor = empty($pregaoItem->fornecedor) ? $value : $value .= " - ".$pregaoItem->fornecedor;
+                        break;
                     default:
                         $pregaoItem->{$type} = $value;
                 }

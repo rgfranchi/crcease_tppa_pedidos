@@ -11,3 +11,8 @@ Planilhas:
     https://github.com/PHPOffice/PhpSpreadsheet
     Instalado sem composer: https://github.com/PHPOffice/PhpSpreadsheet/issues/31#issuecomment-354502740
 
+Acessos: 
+    SERVER: 10.140.8.96
+    SSH: guerrargf / G!234567
+    PASTA: /home/docker/nginx
+    Link: http://tppa.crcease.intraer/tppa_pedidos/

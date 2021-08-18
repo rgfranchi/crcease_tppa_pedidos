@@ -35,7 +35,7 @@
             <td><?= $row->descricao ?></td>
             <td><?= $row->valor_unitario ?></td>
             <td><?= $row->qtd_disponivel ?></td>
-            <td>
+            <td class="table-action">
               <a href="<?= $this->action("PregaoItem", "edit", array('item_id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
               <a href="<?= $this->action("PregaoItem", "delete", array('item_id' => $row->_id)); ?>" class="btn-sm btn-danger btn-circle delete" title="EXCLUIR"><i class="fas fa-trash"></i></a>
             </td>

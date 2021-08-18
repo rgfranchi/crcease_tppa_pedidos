@@ -2,11 +2,6 @@
 
 class BasicSystem
 {
-
-    function __construct()
-    {
-    }
-
     function loadDomain($domain)
     {
         return $this->instantiateClass('Domain', $domain);
@@ -31,6 +26,11 @@ class BasicSystem
     function loadStores($store)
     {
         $store = $this->instantiateClass('Store', $store);
+    }
+
+    function loadService($service)
+    {
+        $this->instantiateClass('Service', $service);
     }
 
     /**

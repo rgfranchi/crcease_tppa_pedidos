@@ -8,6 +8,7 @@ class PregaoItemStore extends BasicStore
     {
         parent::__construct(__CLASS__, "PregaoItem");
         $this->loadBasicStores("Pregao");
+        $this->loadService('PregaoCalculation');
     }
 
     function joinPregaoAndFindById($pregao_id)
@@ -40,4 +41,25 @@ class PregaoItemStore extends BasicStore
         $joinPregaoItem->pregao = $this->arrayToDomainObject($join['pregao'], $this->pregao->pregao);
         return $joinPregaoItem;
     }
+
+    function create($object)
+    {
+        $savedItem = parent::create($object);
+        $this->pregao_calculation->sumItemPregao($savedItem);
+    }
+
+    function update($object)
+    {
+        $old_item = $this->findById($object['_id']);
+        $this->pregao_calculation->subtractItemPregao($old_item);
+        $savedItem = parent::update($object);
+        $this->pregao_calculation->sumItemPregao($savedItem);
+    }
+
+    function delete($item)
+    {
+        $this->pregao_calculation->subtractItemPregao($item);        
+        parent::delete($item->_id);
+    }
+
 }
