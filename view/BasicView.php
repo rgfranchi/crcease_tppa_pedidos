@@ -2,9 +2,10 @@
 
 include_once(__ROOT__ . "/config.php");
 
-class BasicView
+class BasicView extends BasicSystem
 {
     private $folder;
+    public $component;
     // Variável de tramitação dos valores com o controller.
     private $data = array();
     // titilo utilizado no body_start.php

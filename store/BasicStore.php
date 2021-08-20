@@ -30,11 +30,11 @@ class BasicStore extends BasicSystem
 
     function create($object)
     {
-        return $this->arrayToDomainObject($this->store->insert((array) $object));
+        return $this->arrayToObject($this->store->insert((array) $object), $this->object);
     }
     function update($object)
     {
-        return $this->arrayToDomainObject($this->store->updateOrInsert((array) $object));
+        return $this->arrayToObject($this->store->updateOrInsert((array) $object), $this->object);
     }
 
     /**
@@ -83,84 +83,100 @@ class BasicStore extends BasicSystem
             return false;
         }
         $ret = array();
-        $toArray = $this->domainObjectToArray($arrayObjects);
+        $toArray = $this->objectToArray($arrayObjects);
         foreach($toArray as $key => $values) {
             $ret[] = $this->save($values);
         }
         return $ret;
     }
 
+
     function findById($id)
     {
-        return $this->arrayToDomainObject($this->store->findById($id));
+        return $this->arrayToObject($this->store->findById($id), $this->object);
     }
     function delete($id)
     {
-        return $this->arrayToDomainObject($this->store->deleteById($id));
+        return $this->arrayToObject($this->store->deleteById($id), $this->object);
     }
     function findAll()
     {
-        return $this->arrayToDomainObject($this->store->findAll());
+        pr($this->store->findAll());
+
+        return $this->arrayToObject($this->store->findAll(), $this->object);
     }
+
+    // function findById($id)
+    // {
+    //     return $this->arrayToDomainObject($this->store->findById($id));
+    // }
+    // function delete($id)
+    // {
+    //     return $this->arrayToDomainObject($this->store->deleteById($id));
+    // }
+    // function findAll()
+    // {
+    //     return $this->arrayToDomainObject($this->store->findAll());
+    // }
     function getStore()
     {
         return $this->store;
     }
 
-    /**
-     * Converte Array em objeto.
-     * @param array $array - array do banco de dados.
-     * @param array $object - objeto para conversão.
-     */
-    function arrayToDomainObject($array, $_object = null)
-    {
-        if (!is_array($array)) {
-            return $array;
-        }
-        $ret = array();
-        // cria novo objeto para inserção na lista ou retorno.
-        $newObject = empty($_object) ? new $this->object : new $_object;
-        foreach ($array as $key => $value) {
-            if (is_int($key)) {
-                $ret[] = $this->arrayToDomainObject($value);
-            } else {
-                if(property_exists($newObject,$key)) {
-                    $newObject->{$key} = $this->arrayToDomainObject($value);
-                }
-            }
-        }
+    // /**
+    //  * Converte Array em objeto.
+    //  * @param array $array - array do banco de dados.
+    //  * @param array $object - objeto para conversão.
+    //  */
+    // function arrayToDomainObject($array, $_object = null)
+    // {
+    //     if (!is_array($array)) {
+    //         return $array;
+    //     }
+    //     $ret = array();
+    //     // cria novo objeto para inserção na lista ou retorno.
+    //     $newObject = empty($_object) ? new $this->object : new $_object;
+    //     foreach ($array as $key => $value) {
+    //         if (is_int($key)) {
+    //             $ret[] = $this->arrayToDomainObject($value);
+    //         } else {
+    //             if(property_exists($newObject,$key)) {
+    //                 $newObject->{$key} = $this->arrayToDomainObject($value);
+    //             }
+    //         }
+    //     }
         
-        if($this->object != $newObject) {
-            // recebe configuração dos campos do objeto.
-            $ret = $newObject->getObject();
-        }
-        return $ret;
-    }
+    //     if($this->object != $newObject) {
+    //         // recebe configuração dos campos do objeto.
+    //         $ret = $newObject->getObject();
+    //     }
+    //     return $ret;
+    // }
 
     /**
      * Converte Objeto em array.
      * @todo Não testado objeto com sub-objeto.
      */
-    function domainObjectToArray($domain)
-    {
-        if (!is_array($domain)) {
-            return $domain->getObjectArray();
-        }
-        $ret = array();
-        foreach ($domain as $key => $value) {
-            if (is_int($key)) {
-                $ret[] = $this->domainObjectToArray($value);
-            } 
-            // else {
-            //     $ret = (array) $domain;
-            //     foreach ($ret as $key => $value) {
-            //         if (!is_array($domain)) {
-            //             $ret[$key] = $this->domainObjectToArray($value);
-            //         }
-            //     }
-            // }
-        }
+    // function domainObjectToArray($domain)
+    // {
+    //     if (!is_array($domain)) {
+    //         return $domain->getObjectArray();
+    //     }
+    //     $ret = array();
+    //     foreach ($domain as $key => $value) {
+    //         if (is_int($key)) {
+    //             $ret[] = $this->domainObjectToArray($value);
+    //         } 
+    //         // else {
+    //         //     $ret = (array) $domain;
+    //         //     foreach ($ret as $key => $value) {
+    //         //         if (!is_array($domain)) {
+    //         //             $ret[$key] = $this->domainObjectToArray($value);
+    //         //         }
+    //         //     }
+    //         // }
+    //     }
 
-        return $ret;
-    }
+    //     return $ret;
+    // }
 }

@@ -2,9 +2,9 @@
 
 class BasicSystem
 {
-    function loadDomain($domain)
+    function loadDomain($object)
     {
-        return $this->instantiateClass('Domain', $domain);
+        return $this->instantiateClass('Domain', $object);
     }
 
     function loadComponent($component)
@@ -19,8 +19,9 @@ class BasicSystem
     function loadBasicStores($storeName)
     {
         $store = $storeName . 'Store';
-        $domain = $storeName;
-        $this->{camelToSnakeCase($storeName)} = $this->instantiateClass('Store', 'Basic', array($store, $domain));
+        $object = $storeName;
+        $this->{camelToSnakeCase($storeName)} = $this->instantiateClass('Store', 'Basic', array($store, $object));
+        return $this->{camelToSnakeCase($storeName)};
     }
 
     function loadStores($store)
@@ -35,7 +36,7 @@ class BasicSystem
 
     /**
      * Carrega uma ou múltiplas classes
-     * @param string $typeClass tipo da classe que será instanciado (Domain / Component / Mapper etc...)
+     * @param string $typeClass tipo da classe que será instanciado (object$object / Component / Mapper etc...)
      * @param string|array $class nome da classe ou array de classes será carregado.
      * @param string|null $parameters array com parâmetros, se mais de uma classe incluir como subarray
      * @param string|null $folderName local da classe (opcional)
@@ -70,4 +71,59 @@ class BasicSystem
         }
         return $ret;
     }
+
+    /**
+     * Converte Array em objeto.<br>
+     * Objeto processado deve extender a classe RawObject.
+     * Se for array com sub array, retorna array de objetos.<br>
+     * Processo executado recursivamente.
+     * @param array $array - array do banco de dados.
+     * @param object $object - objeto tipo para conversão.
+     */
+    function arrayToObject($array, $object)
+    {
+        if (!is_array($array)) {
+            return $array;
+        }
+        $ret = array();
+        // cria novo objeto para inserção na lista ou retorno.
+        $newObject = new $object;
+        foreach ($array as $key => $value) {
+            if (is_int($key)) {
+                $ret[] = $this->arrayToObject($value, $object);
+            } else {
+                if(property_exists($newObject,$key)) {
+                    $newObject->{$key} = $this->arrayToObject($value, $object);
+                }
+            }
+        }
+
+        if($object != $newObject) {
+            // recebe configuração dos campos do objeto.
+            $ret = $newObject->getObject();
+        }
+        return $ret;
+    }
+
+
+    /**
+     * Converte Objeto em Array.<br>
+     * Se array de objetos, retorna array com sub array .<br>
+     * Processo executado recursivamente.
+     * @param object|array $object - objeto para conversão.
+     */
+    function objectToArray($object)
+    {
+        if (!is_array($object)) {
+            return $object->getObjectArray();
+        }
+        $ret = array();
+        foreach ($object as $key => $value) {
+            if (is_int($key)) {
+                $ret[] = $this->objectToArray($value);
+            } 
+        }
+        return $ret;
+    }
+
 }

@@ -14,7 +14,16 @@ class PregaoController extends BasicController
 
     function index()
     {
+
+        pr($this->pregao->findAll());
+        die;
+
+        pr($this->pregao_map_pregao_list->getStore()->findAll());
+
+        die();
+
         $this->pregao_map_pregao_list->directComponentList($this->pregao->findAll());
+
         $this->view->setTitle("Lista Pregões");
         $this->view->render("index", $this->pregao_map_pregao_list->getComponent());
     }

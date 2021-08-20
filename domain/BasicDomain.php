@@ -1,13 +1,5 @@
 <?php
 
-class BasicDomain
+class BasicDomain extends BasicRawObject
 {
-    function getObject()
-    {
-        return $this;
-    }
-    function getObjectArray()
-    {
-        return (array) $this;
-    }
 }

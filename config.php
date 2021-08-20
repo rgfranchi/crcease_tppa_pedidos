@@ -2,6 +2,7 @@
 setlocale(LC_ALL, 'pt_BR');
 
 include "BasicSystem.php";
+include "BasicRawObject.php";
 
 define('__ROOT__', dirname(__FILE__));
 

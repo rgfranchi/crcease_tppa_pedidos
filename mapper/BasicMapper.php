@@ -9,14 +9,22 @@ class BasicMapper extends BasicSystem
     public $component = null;
 
     /**
-     * Inicializa classe com as estruturas basicas. 
+     * Inicializa classe com as estruturas básicas. 
      * @param string $domain mantem estrutura de dados.
      * @param string $component mantem estrutura da view
+     * @param string|boolean|null $store carrega estore, se falso não carrega, se null mesma store do $domain
      */
-    function __construct($domain = null, $component = null)
+    function __construct($domain = null, $component = null, $store = null)
     {
         $this->domain = $this->loadDomain($domain);
         $this->component = $this->loadComponent($component);
+        if(is_null($store)) {
+            $store = $domain;
+        }
+        if($store !== false) {
+            $this->store = $this->loadBasicStores($store);
+        }
+        
     }
 
     /**
