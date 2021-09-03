@@ -1,17 +1,17 @@
 <?php
 
-class BasicRawObject
+interface BasicRawObject
 {
-    function getObject()
-    {
-        return $this;
-    }
-    function getObjectArray()
-    {
-        return (array) $this;
-    }
-    function getFieldsName() 
-    {
-        return array_keys((array) $this);
-    }
+    function getObject();
+    function getObjectArray();
+    function getFieldsName();
+    /**
+     * Aplicar para classe instanciada a conversão do campo.
+     */
+    function convertField($name, $value);
+    /**
+     * Aplicar validação de conversão do campo.
+     * @return boolean true (valido) false (invalido)
+     */
+    function validateField($name, $value);
 }

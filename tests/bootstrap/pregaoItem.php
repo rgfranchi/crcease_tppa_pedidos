@@ -20,7 +20,7 @@ $id = 0;
 // $pregao_1_itens_1->qtd_minima = '0';
 // $pregao_1_itens_1->natureza_despesa = '33.90.30';
 // pr($pregao_1_itens_1);
-// $pregao_item_store->update($pregao_1_itens_1);
+// $pregao_item_store->update((array) $pregao_1_itens_1);
 
 // $pregao_1_itens_2 = new PregaoItemDomain();
 // $pregao_1_itens_2->_id = ++$id;
@@ -38,7 +38,7 @@ $id = 0;
 // $pregao_1_itens_2->qtd_minima = '0';
 // $pregao_1_itens_2->natureza_despesa = '33.90.30';
 // pr($pregao_1_itens_2);
-// $pregao_item_store->update($pregao_1_itens_2);
+// $pregao_item_store->update((array) $pregao_1_itens_2);
 
 $pregao_2_itens_1 = new PregaoItemDomain();
 $pregao_2_itens_1->_id = ++$id;
@@ -59,4 +59,4 @@ $pregao_2_itens_1->natureza_despesa = '44.90.52';
 
 
 pr($pregao_2_itens_1);
-$pregao_item_store->update($pregao_2_itens_1);
+$pregao_item_store->update((array) $pregao_2_itens_1);

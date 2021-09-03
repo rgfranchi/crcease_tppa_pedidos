@@ -28,61 +28,82 @@ class BasicStore extends BasicSystem
         $this->object = $this->loadDomain($domainName);
     }
 
-    function create($object)
+    function create($array)
     {
-        return $this->arrayToObject($this->store->insert((array) $object), $this->object);
+        return $this->arrayToObject($this->store->insert($array), $this->object);
     }
-    function update($object)
+    function update($array)
     {
-        return $this->arrayToObject($this->store->updateOrInsert((array) $object), $this->object);
+        return $this->arrayToObject($this->store->updateOrInsert($array), $this->object);
     }
 
     /**
-     * Salva array ou objeto após validação.<br>
-     * Converte para array.
-     * @param Objeto/Array sem _id insert com _id update.
+     * Cria ou atualiza Registro no banco de dados.<br>
+     * Cria: '_id' zero ou menor.
+     * Atualiza: '_id' maior que zero. 
+     * Utiliza post em array.
+     * @param Array (conforme utilizado no banco de dados).
      */
     function save($data)
     {
-        $newObject = $this->validateData($data);
-        if(!$newObject) {
-            return false;
+        $isNew = true;
+        if (isset($data['_id']) && $data['_id'] > 0) {
+            $isNew = false;
+        } 
+        foreach($data as $key => &$value) {
+            if(!property_exists($this->object,$key)) {
+                loadException("Valor '$key' enviados não consta no objeto");
+            }
+            if($isNew) {
+                $value = $this->object->convertFieldCreate($key, $value);
+                $this->object->validateFieldCreate($key, $value);
+            } else {
+                $this->object->{$key} = $this->object->convertFieldUpdate($key, $value);
+                $this->object->validateFieldCreate($key, $this->object->{$key});
+            }
+            $value = $this->object->convertField($key, $value);
+            $this->object->validateField($key, $value);
         }
-        $dataArray = (array) $data;
-        if (isset($dataArray['_id']) && $dataArray['_id'] > 0) {
-            return $this->update($newObject->getObjectArray());
+        if ($isNew) {
+            return $this->create($data);
         } else {
-            return $this->create($newObject->getObjectArray());
+            return $this->update($data);
         }
     }
 
     /**
      * Verifica se o array enviado tem os mesmos parâmetros da data enviada.
      */
-    function validateData($data) {
-        $copyData = (array) $data;
-        $newObject = new $this->object;
-        foreach(array_keys(get_object_vars($this->object)) as $key) {
-            $newObject->$key = $copyData[$key];
-            unset($copyData[$key]);
-        }
-        if(!empty($copyData)){
-            pr($this->object);
-            pr($copyData);
-            throw new Exception("Valores enviados para salvar incompatível com objeto previsto");
-            return false;
-        }
-        return $newObject;
-    }
+    // function validateData($data) {
+
+    //     $this->object;
+
+
+    //     $copyData = (array) $data;
+    //     $newObject = new $this->object;
+    //     foreach(array_keys(get_object_vars($this->object)) as $key) {
+    //         $newObject->$key = $copyData[$key];
+    //         unset($copyData[$key]);
+    //     }
+    //     if(!empty($copyData)){
+    //         pr($this->object);
+    //         pr($copyData);
+    //         throw new Exception("Valores enviados para salvar incompatível com objeto previsto");
+    //         return false;
+    //     }
+    //     return $newObject;
+    // }
 
     function saveAll($arrayObjects)
     {
         if(!is_array($arrayObjects)) {
-            pr($arrayObjects);
-            throw new Exception("Array inválido.");
-            return false;
+            loadException("Esperado array Array inválido.");
         }
         $ret = array();
+        pr($ret);
+        pr("VERIFICAR SE SERÁ ARRAY COM SUB ARRAY ou OBJETO");
+        die;
+
         $toArray = $this->objectToArray($arrayObjects);
         foreach($toArray as $key => $values) {
             $ret[] = $this->save($values);
@@ -97,13 +118,26 @@ class BasicStore extends BasicSystem
     }
     function delete($id)
     {
+        $beforeDelete = $this->object->beforeDelete($id);
+        if($beforeDelete != false) {
+            return $beforeDelete;
+        }
         return $this->arrayToObject($this->store->deleteById($id), $this->object);
     }
     function findAll()
     {
-        pr($this->store->findAll());
-
         return $this->arrayToObject($this->store->findAll(), $this->object);
+    }
+    function emptyValues()
+    {
+        return $this->object;
+    }
+
+    /** 
+     * Elimina campos do domínio não utilizado no componente.
+     */
+    function loadObject($newObject) {
+        $this->object = $newObject;
     }
 
     // function findById($id)
@@ -118,10 +152,10 @@ class BasicStore extends BasicSystem
     // {
     //     return $this->arrayToDomainObject($this->store->findAll());
     // }
-    function getStore()
-    {
-        return $this->store;
-    }
+    // function getStore()
+    // {
+    //     return $this->store;
+    // }
 
     // /**
     //  * Converte Array em objeto.

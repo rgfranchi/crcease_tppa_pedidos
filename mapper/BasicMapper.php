@@ -14,67 +14,87 @@ class BasicMapper extends BasicSystem
      * @param string $component mantem estrutura da view
      * @param string|boolean|null $store carrega estore, se falso não carrega, se null mesma store do $domain
      */
-    function __construct($domain = null, $component = null, $store = null)
+    function __construct($domain, $component, $store = null)
     {
         $this->domain = $this->loadDomain($domain);
         $this->component = $this->loadComponent($component);
         if(is_null($store)) {
             $store = $domain;
         }
-        if($store !== false) {
-            $this->store = $this->loadBasicStores($store);
-        }
-        
+        $this->store = $this->loadBasicStores($store);
     }
 
     /**
      * Carrega instancia do componente e reponde com instancia do domínio
      * @param object $loadComponent instancia a ser mapeada
      */
-    function directDomain($loadComponent)
-    {
-        $this->verifyValue($loadComponent);
-        if (empty($loadComponent)) {
-            return $this->domain;
-        }
-        $ret = null;
-        if (is_array($loadComponent)) {
-            foreach ($loadComponent as $key => $value) {
-                $ret[$key] = $this->mapper($value, $this->component, $this->domain);
-            }
-        } else {
-            $ret = $this->mapper($loadComponent, $this->component, $this->domain);
-        }
-        $this->domain = $ret;
+    // function directDomain($loadComponent)
+    // {
+    //     $this->verifyValue($loadComponent);
+    //     if (empty($loadComponent)) {
+    //         return $this->domain;
+    //     }
+    //     $ret = null;
+    //     if (is_array($loadComponent)) {
+    //         foreach ($loadComponent as $key => $value) {
+    //             $ret[$key] = $this->mapper($value, $this->component, $this->domain);
+    //         }
+    //     } else {
+    //         $ret = $this->mapper($loadComponent, $this->component, $this->domain);
+    //     }
+    //     $this->domain = $ret;
+    // }
+
+    // /**
+    //  * Carrega instancia do domínio e reponde com instancia do componente
+    //  * @param object $loadDomain instancia a ser mapeada
+    //  */
+    // function directComponent($loadDomain = null)
+    // {
+    //     $this->verifyValue($loadDomain);
+    //     if (empty($loadDomain)) {
+    //         return $this->component;
+    //     }
+    //     $ret = null;
+    //     if (is_array($loadDomain)) {
+    //         foreach ($loadDomain as $key => $value) {
+    //             $ret[$key] = $this->mapper($value, $this->domain, $this->component);
+    //         }
+    //     } else {
+    //         $ret = $this->mapper($loadDomain, $this->domain, $this->component);
+    //     }
+    //     $this->component = $ret;
+    // }
+
+    // function directComponentList($loadDomainList)
+    // {
+    //     if (empty($loadDomainList)) {
+    //         $this->component = array();
+    //     }
+    //     $this->directComponent($loadDomainList);
+    // }
+
+    /**
+     * Retorna componente preenchido com valores de store.
+     */
+    function component() {
+        $this->store->loadObject($this->component);
+        return $this->store;
     }
 
     /**
-     * Carrega instancia do domínio e reponde com instancia do componente
-     * @param object $loadDomain instancia a ser mapeada
+     * Retorna domain preenchido com valores de store.
      */
-    function directComponent($loadDomain = null)
-    {
-        $this->verifyValue($loadDomain);
-        if (empty($loadDomain)) {
-            return $this->component;
-        }
-        $ret = null;
-        if (is_array($loadDomain)) {
-            foreach ($loadDomain as $key => $value) {
-                $ret[$key] = $this->mapper($value, $this->domain, $this->component);
-            }
-        } else {
-            $ret = $this->mapper($loadDomain, $this->domain, $this->component);
-        }
-        $this->component = $ret;
+    function domain() {
+        $this->store->loadObject($this->domain);
+        return $this->store;
     }
 
-    function directComponentList($loadDomainList)
-    {
-        if (empty($loadDomainList)) {
-            $this->component = array();
-        }
-        $this->directComponent($loadDomainList);
+    /**
+     * Retorna store
+     */
+    function getStore() {
+        return $this->store;
     }
 
 

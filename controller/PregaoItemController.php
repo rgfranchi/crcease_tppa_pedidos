@@ -6,6 +6,9 @@ class PregaoItemController extends BasicController
 {
     function __construct()
     {
+
+revisar pregão item .... 
+
         parent::__construct();
         $this->loadBasicStores('Pregao');
         $this->loadStores('PregaoItem');

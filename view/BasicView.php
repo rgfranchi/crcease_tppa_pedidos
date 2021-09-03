@@ -12,6 +12,9 @@ class BasicView extends BasicSystem
     public $title = null;
     public $template_js = null;
 
+    public $controller;
+    public $action;
+
     function __construct($folder)
     {
         $this->folder = $folder;
@@ -40,7 +43,12 @@ class BasicView extends BasicSystem
      */
     function dataGet()
     {
-        return $_GET;
+        $get = $_GET;
+        $this->controller = $get['controller'];
+        unset($get['controller']);
+        $this->action = $get['action'];
+        unset($get['action']);
+        return $get;
     }
 
     /**

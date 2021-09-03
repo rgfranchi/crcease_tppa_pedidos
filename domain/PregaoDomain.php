@@ -23,20 +23,37 @@ class PregaoDomain extends BasicDomain
     //  */
     // public $pregoes_itens = array(); 
 
-    function getObject()
-    {
-        $ret = parent::getObject();
-        $ret->valor_total = convertToMoneyBR($ret->valor_total);
-        $ret->valor_solicitado = convertToMoneyBR($ret->valor_solicitado);
-        return $ret;
+    function convertField($name, $value){
+        switch($name) {
+            case 'valor_solicitado' :
+            case 'valor_total' :
+                $value = convertCommaToDot($value);
+                break;
+            case 'data_homologacao' :
+                $value = convertToDateTimeSystem($value, false);
+                break;
+        }
+        return $value;
     }
 
-    function getObjectArray()
+    function validateField($name, $value)
     {
-        $ret = parent::getObjectArray();
-        $ret['valor_total'] = convertCommaToDot($ret['valor_total']);
-        $ret['valor_solicitado'] = convertCommaToDot($ret['valor_solicitado']);
-        return $ret;
-    }    
+        $validate = true;
+        switch($name) {
+            case 'valor_solicitado' :
+            case 'valor_total' :
+                $validate = is_numeric($value);
+                break;
+        }
+        if(!$validate) {
+            loadException("Campo $name com valor $value inválido");
+        } 
+    }
+
+    // EXEMPLO DE TRATAMENTO ANTES DE EXCLUIR.
+    // function beforeDelete($deleteId) {
+    //     pr($deleteId . " TESTE");
+    //     return "REGISTRO NÃO PODE SER EXCLUÍDO";
+    // }
 
 }

@@ -25,7 +25,7 @@ $pregoes_1->url_anexo= "http://comprasnet.gov.br/livre/Pregao/anexosDosItens.asp
 $pregoes_1->url_siasg_net = "https://www2.comprasnet.gov.br/siasgnet-atasrp/public/pesquisarItemSRP.do?method=iniciar&parametro.identificacaoCompra.numeroUasg=120633&parametro.identificacaoCompra.modalidadeCompra=5&parametro.identificacaoCompra.numeroCompra=00051&parametro.identificacaoCompra.anoCompra=2020";
 
 pr($pregoes_1);
-$pregao_store->update($pregoes_1);
+$pregao_store->update((array) $pregoes_1);
 
 $pregoes_2 = new PregaoDomain();
 $pregoes_2->_id = ++$id;
@@ -43,4 +43,4 @@ $pregoes_2->url_anexo= "http://comprasnet.gov.br/livre/Pregao/anexosDosItens.asp
 $pregoes_2->url_siasg_net = "https://www2.comprasnet.gov.br/siasgnet-atasrp/public/pesquisarItemSRP.do?method=iniciar&parametro.identificacaoCompra.numeroUasg=120633&parametro.identificacaoCompra.modalidadeCompra=5&parametro.identificacaoCompra.numeroCompra=00082&parametro.identificacaoCompra.anoCompra=2020";
 
 pr($pregoes_2);
-$pregao_store->update($pregoes_2);
+$pregao_store->update((array) $pregoes_2);

@@ -38,7 +38,7 @@
               <td><?= $row->objeto ?></td>
               <td><?= $row->valor_solicitado ?></td>
               <td><?= $row->qtd_disponivel ?></td>
-              <td><?= date('d/m/Y',strtotime($row->data_homologacao)) ?></td>
+              <td><?= $row->data_homologacao ?></td>
               <td class="table-action">
                 <a href="<?= $this->action("Pregao", "edit", array('id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
                 <a href="<?= $this->action("Pregao", "delete", array('id' => $row->_id)); ?>" class="btn-sm btn-danger btn-circle delete" title="EXCLUIR"><i class="fas fa-trash"></i></a>

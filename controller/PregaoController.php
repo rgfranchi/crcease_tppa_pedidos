@@ -6,7 +6,6 @@ class PregaoController extends BasicController
 {
     function __construct()
     {
-        $this->loadBasicStores('Pregao');
         $this->loadView('pregao');
         $this->loadBasicMapper("Pregao", "PregaoList");
         $this->loadBasicMapper("Pregao", "PregaoForm");
@@ -14,46 +13,31 @@ class PregaoController extends BasicController
 
     function index()
     {
-
-        pr($this->pregao->findAll());
-        die;
-
-        pr($this->pregao_map_pregao_list->getStore()->findAll());
-
-        die();
-
-        $this->pregao_map_pregao_list->directComponentList($this->pregao->findAll());
-
         $this->view->setTitle("Lista Pregões");
-        $this->view->render("index", $this->pregao_map_pregao_list->getComponent());
+        $this->view->render("index", $this->pregao_map_pregao_list->component()->findAll());
     }
 
     function add()
     {
-        $this->pregao_map_pregao_form->directComponent();
         $this->view->setTitle("Cadastra Pregão");
-        $this->view->render("form", $this->pregao_map_pregao_form->getComponent());
+        $this->view->render("form", $this->pregao_map_pregao_form->component()->emptyValues());
     }
 
     function edit()
     {
-        $this->pregao_map_pregao_form->directComponent($this->pregao->findById($this->view->getData()['get']['id']));
         $this->view->setTitle("Edita Pregão");
-        $this->view->render("form", $this->pregao_map_pregao_form->getComponent());
+        $this->view->render("form", $this->pregao_map_pregao_form->component()->findById($this->view->dataGet()['id']));
     }
 
     function save()
     {
-        $post = $this->view->getData()['post'];
-        $this->pregao_map_pregao_form->directDomain($post);
-        $this->pregao->save($this->pregao_map_pregao_form->getDomain());
-        $this->view->redirect('Pregao', "index");
+        $this->pregao_map_pregao_form->domain()->save($this->view->dataPost());
+        $this->view->redirect("Pregao", "index");
     }
 
     function delete()
     {
-        $get = $this->view->getData()['get'];
-        $this->pregao->delete($get['id']);
-        $this->view->redirect('Pregao', "index");
+        $this->pregao_map_pregao_list->domain()->delete($this->view->dataGet()['id']);
+        $this->view->redirect("Pregao", "index");
     }
 }

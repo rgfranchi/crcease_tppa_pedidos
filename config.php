@@ -51,6 +51,9 @@ function snakeToTextCase($string)
  * Retira ',' do valor para conversão em float.
  */
 function convertCommaToDot($value) {
+    if(empty($value)) {
+        $value = 0;
+    }
     if(is_numeric($value)) {
         return number_format($value, 2,'.','');
     }
@@ -79,6 +82,32 @@ function convertToMoneyBR($value) {
     return number_format($value, 2,',','.');
 }
 
+/**
+ * Convert to date time BR
+ */
+function convertToDateTimeBR($value, $time = true) {
+    if(empty($value)) {
+        return null;
+    }    
+    $dateTime = new DateTime($value);
+    $mask = 'd/m/Y';
+    $mask .= $time ? ' H:i:s' : '';
+    return $dateTime->format($mask);
+}
+
+/**
+ * Convert to date time BR
+ */
+function convertToDateTimeSystem($value, $time = true) {
+    if(empty($value)) {
+        return null;
+    }
+    $dateTime = str_replace('/', '-', $value); // considera '-' formato Europeu de data.
+    $mask = 'Y-m-d';
+    $mask .= $time ? ' H:i:s' : '';
+    return date($mask, strtotime($dateTime));
+}
+
 
 /**
  * Exibe variável na tela (Debug)
@@ -92,6 +121,16 @@ function pr($var, $die = false)
     echo "</pre>";
     $die ? die() : '';
 }
+
+
+function loadException($textException) {
+    $trace = debug_backtrace();
+    foreach($trace as $key => $value) {
+        echo "[" . $key . "]" . $value['file'] . "(" . $value['line'] . ")-".$value['function']."</br>";
+    }
+    throw new Exception($textException);
+}
+
 
 function navbarActive($active = false)
 {

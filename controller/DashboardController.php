@@ -6,7 +6,6 @@ class DashboardController extends BasicController
 {
     function __construct()
     {
-        parent::__construct();
         $this->loadView('dashboard');
     }
 

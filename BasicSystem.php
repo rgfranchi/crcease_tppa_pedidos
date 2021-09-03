@@ -90,14 +90,15 @@ class BasicSystem
         $newObject = new $object;
         foreach ($array as $key => $value) {
             if (is_int($key)) {
-                $ret[] = $this->arrayToObject($value, $object);
+                $ret[$key] = $this->arrayToObject($value, $object);
             } else {
                 if(property_exists($newObject,$key)) {
+                    $value = $newObject->convertField($key, $value);
+                    $newObject->validateField($key, $value);
                     $newObject->{$key} = $this->arrayToObject($value, $object);
                 }
             }
         }
-
         if($object != $newObject) {
             // recebe configuração dos campos do objeto.
             $ret = $newObject->getObject();
