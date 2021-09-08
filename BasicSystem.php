@@ -26,7 +26,7 @@ class BasicSystem
 
     function loadStores($store)
     {
-        $store = $this->instantiateClass('Store', $store);
+        return $this->instantiateClass('Store', $store);
     }
 
     function loadService($service)

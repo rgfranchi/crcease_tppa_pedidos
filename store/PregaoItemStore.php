@@ -8,38 +8,28 @@ class PregaoItemStore extends BasicStore
     {
         parent::__construct(__CLASS__, "PregaoItem");
         $this->loadBasicStores("Pregao");
+        $this->loadComponent("PregaoHead");
         $this->loadService('PregaoCalculation');
     }
 
-    function joinPregaoAndFindById($pregao_id)
+    function findByPregaoId($pregao_id)
     {
-        $pregao = $this->pregao->getStore();
-        $itens = $this->store;
-        $join = $pregao->createQueryBuilder()->join(function ($value) use ($itens) {
-            return $itens->findBy(["pregao_id", "==", $value["_id"]]);
-        }, 'itens')
-            ->where(['_id', '==', $pregao_id])
-            ->disableCache()
-            ->getQuery()
-            ->first();
-        $joinPregaoItem = $this->arrayToDomainObject($join, $this->pregao->pregao);
-        $joinPregaoItem->itens = $this->arrayToDomainObject($join['itens']);
-        return $joinPregaoItem;
+        return $this->arrayToObject($this->store->findBy(["pregao_id", "==", $pregao_id]),$this->object);
     }
 
     function findPregaoByItemId($item_id)
     {
-        $pregoes = $this->pregao->getStore();
-        $itens = $this->store;
-        $join = $itens->createQueryBuilder()->join(function ($pregao) use ($pregoes) {
+        $pregoes = $this->pregao->store;
+        $join = $this->store->createQueryBuilder()->join(function ($pregao) use ($pregoes) {
             return $pregoes->findById($pregao['pregao_id']);
         }, 'pregao')
             ->where(['_id', '==', $item_id])
             ->getQuery()
             ->first();
-        $joinPregaoItem = $this->arrayToDomainObject($join);
-        $joinPregaoItem->pregao = $this->arrayToDomainObject($join['pregao'], $this->pregao->pregao);
-        return $joinPregaoItem;
+          
+        $ret['pregao'] = $this->arrayToObject($join['pregao'], $this->pregao_head);
+        $ret['item'] = $this->arrayToObject($join,$this->object);
+        return $ret;
     }
 
     function create($object)
@@ -56,10 +46,10 @@ class PregaoItemStore extends BasicStore
         $this->pregao_calculation->sumItemPregao($savedItem);
     }
 
-    function delete($item)
+    function delete($del_item)
     {
-        $this->pregao_calculation->subtractItemPregao($item);        
-        parent::delete($item->_id);
+        $this->pregao_calculation->subtractItemPregao($del_item);        
+        return parent::delete($del_item->_id);
     }
 
 }

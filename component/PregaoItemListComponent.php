@@ -1,7 +1,8 @@
 <?php
 
-// namespace Domain;
-class PregaoItemListComponent
+include_once 'helper/PregaoItemHelper.php';
+
+class PregaoItemListComponent extends BasicComponent
 {
     public $_id;
     public $cod_item_pregao;
@@ -9,4 +10,10 @@ class PregaoItemListComponent
     public $descricao;
     public $valor_unitario;
     public $qtd_disponivel;
+
+    function convertField($name, $value){
+        $pregaoItemHelper = new PregaoItemHelper();
+        return $pregaoItemHelper->convertField($name, $value);
+    }
+
 }

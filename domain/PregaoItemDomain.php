@@ -5,7 +5,7 @@ include_once('BasicDomain.php');
 class PregaoItemDomain extends BasicDomain
 {
     public $_id;
-    public $cod_item_pregao; // codigo do item no PE.
+    public $cod_item_pregao; // código do item no PE.
     public $nome; 
     public $descricao;
     public $valor_unitario;
@@ -25,25 +25,32 @@ class PregaoItemDomain extends BasicDomain
     */
     public $natureza_despesa;  
 
-    // Objeto Pregoes.php
+    // id do Objeto Pregoes.php
     public $pregao_id;
 
 
-    function getObject()
-    {
-        $ret = parent::getObject();
-        $ret->valor_unitario = convertToMoneyBR($ret->valor_unitario);
-        $ret->valor_solicitado = convertToMoneyBR($ret->valor_solicitado);
-        return $ret;
+    function convertField($name, $value){
+        switch($name) {
+            case 'valor_unitario' :
+            case 'valor_solicitado' :
+                $value = convertCommaToDot($value);
+                break;
+        }
+        return $value;
     }
 
-    function getObjectArray()
+    function validateField($name, $value)
     {
-        $ret = parent::getObjectArray();
-        $ret['qtd_total'] = empty($ret['qtd_total']) ? $ret['qtd_disponivel'] + $ret['qtd_solicitada'] : $ret['qtd_total'];
-        $ret['valor_unitario'] = convertCommaToDot($ret['valor_unitario']);
-        $ret['valor_solicitado'] = convertCommaToDot($ret['valor_solicitado']);
-        return $ret;
-    }  
+        $validate = true;
+        switch($name) {
+            case 'valor_unitario' :
+            case 'valor_solicitado' :
+                $validate = is_numeric($value);
+                break;
+        }
+        if(!$validate) {
+            loadException("Campo $name com valor $value inválido");
+        } 
+    }
 
 }

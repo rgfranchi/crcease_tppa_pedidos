@@ -10,11 +10,12 @@ class BasicController extends BasicSystem
     /**
      * Utiliza classe BasicMapper para montar o mapeamento direto entre as classes.
      * Retorna instanciar em snake_case separado por 'map' ex: classe_domain_map_classe_component
+     * @see BasicMapper.
      */
-    function loadBasicMapper($domain, $component)
+    function loadBasicMapper($domain, $component, $store = null)
     {
         $name = camelToSnakeCase($domain) . '_map_' . camelToSnakeCase($component);
-        $this->{$name} = $this->instantiateClass('Mapper', 'Basic', array($domain, $component));
+        $this->{$name} = $this->instantiateClass('Mapper', 'Basic', array($domain, $component, $store));
     }
 
     function loadMapper($mapper)

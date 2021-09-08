@@ -19,7 +19,7 @@ class PregaoCalculationService extends BasicSystem {
         foreach($listItem as $value) {
             $this->sumPregao($value);
         }
-        $this->pregao->save($this->objectPregao);
+        $this->pregao->save((array) $this->objectPregao);
     }
 
     /**
@@ -28,7 +28,7 @@ class PregaoCalculationService extends BasicSystem {
     function sumItemPregao($item) {
         $this->objectPregao = $this->pregao->findById($item->pregao_id);
         $this->sumPregao($item);
-        $this->pregao->save($this->objectPregao);
+        $this->pregao->save((array) $this->objectPregao);
     }
 
     /**
@@ -37,7 +37,7 @@ class PregaoCalculationService extends BasicSystem {
     function subtractItemPregao($item) {
         $this->objectPregao = $this->pregao->findById($item->pregao_id);
         $this->subtractPregao($item);
-        $this->pregao->save($this->objectPregao);
+        $this->pregao->save((array) $this->objectPregao);
     }
 
     /**
@@ -47,7 +47,7 @@ class PregaoCalculationService extends BasicSystem {
         $this->objectPregao = $this->pregao->findById($item->pregao_id);
         $this->subtractPregao($item);
         $this->sumPregao($item);
-        $this->pregao->save($this->objectPregao);
+        $this->pregao->save((array) $this->objectPregao);
     }
 
 
