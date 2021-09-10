@@ -50,19 +50,20 @@ class BasicStore extends BasicSystem
         if (isset($data['_id']) && $data['_id'] > 0) {
             $isNew = false;
         } 
+        $saveObject = new $this->object;
         foreach($data as $key => &$value) {
-            if(!property_exists($this->object,$key)) {
+            if(!property_exists($saveObject,$key)) {
                 loadException("Valor '$key' enviados não consta no objeto");
             }
             if($isNew) {
-                $value = $this->object->convertFieldCreate($key, $value);
-                $this->object->validateFieldCreate($key, $value);
+                $value = $saveObject->convertFieldCreate($key, $value);
+                $saveObject->validateFieldCreate($key, $value);
             } else {
-                $this->object->{$key} = $this->object->convertFieldUpdate($key, $value);
-                $this->object->validateFieldCreate($key, $this->object->{$key});
+                $saveObject->{$key} = $saveObject->convertFieldUpdate($key, $value);
+                $saveObject->validateFieldCreate($key, $saveObject->{$key});
             }
-            $value = $this->object->convertField($key, $value);
-            $this->object->validateField($key, $value);
+            $value = $saveObject->convertField($key, $value);
+            $saveObject->validateField($key, $value);
         }
         if ($isNew) {
             return $this->create($data);

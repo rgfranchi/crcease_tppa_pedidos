@@ -1,5 +1,7 @@
 <?php
 
+include_once('BasicComponent.php');
+
 class PregaoItemFileComponent extends BasicComponent
 {
     public $_id;

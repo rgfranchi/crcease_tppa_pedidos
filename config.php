@@ -70,7 +70,7 @@ function convertCommaToDot($value) {
     if(is_numeric($value)) {
         return number_format($value, 2,'.','');
     } else {
-        throw new Exception(sprintf("Não foi possível converter o valor '%s' em numero",$value));
+        loadException(sprintf("Não foi possível converter o valor '%s' em numero",$value));
     }
 }
 

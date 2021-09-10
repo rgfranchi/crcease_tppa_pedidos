@@ -1,5 +1,6 @@
 <?php
 
+include_once('BasicComponent.php');
 include 'helper/PregaoHelper.php';
 
 class PregaoFormComponent extends BasicComponent

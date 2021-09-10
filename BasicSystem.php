@@ -84,8 +84,9 @@ class BasicSystem
     {
         if (!is_array($array)) {
             return $array;
-        }
+        } 
         $ret = array();
+        // $ret = $object;
         // cria novo objeto para inserção na lista ou retorno.
         $newObject = new $object;
         foreach ($array as $key => $value) {
@@ -99,10 +100,11 @@ class BasicSystem
                 }
             }
         }
+
         if($object != $newObject) {
             // recebe configuração dos campos do objeto.
             $ret = $newObject->getObject();
-        }
+        } 
         return $ret;
     }
 

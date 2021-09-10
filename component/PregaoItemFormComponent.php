@@ -1,6 +1,6 @@
 <?php
 
-include_once 'helper/PregaoItemHelper.php';
+include_once('helper/PregaoItemHelper.php');
 
 class PregaoItemFormComponent extends BasicComponent
 {

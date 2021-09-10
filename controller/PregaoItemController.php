@@ -10,14 +10,11 @@ class PregaoItemController extends BasicController
         $this->loadBasicMapper('Pregao','PregaoHead');
         $this->loadBasicMapper('PregaoItem','PregaoItemList','PregaoItem');
         $this->loadBasicMapper('PregaoItem','PregaoItemForm','PregaoItem');
-
-atualizar para arquivo.
-
-        // $this->loadMapper('PregaoItemMapPregaoItemFile');
-        // $this->loadService(array(
-        //     'PhpSpreadsheet',
-        //     // 'PregaoCalculation'
-        // ));
+        $this->loadMapper('PregaoItemMapPregaoItemFile');
+        $this->loadService(array(
+            'PhpSpreadsheet',
+            // 'PregaoCalculation'
+        ));
     }
 
     function index()
@@ -72,20 +69,21 @@ atualizar para arquivo.
             $path = $_FILES['spreadsheet']['tmp_name'];
             $data['load_file'] = $this->php_spreadsheet->loadfile($path);
         }
-        // // teste 
+        $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
+        // inicio teste 
         // $path = __ROOT__ . '/tests/arquivos/PE 13GAPSP2021.xls';
         // $data['load_file'] = $this->php_spreadsheet->loadfile($path);
-        // // fim teste
+        // fim teste
         $data['option_fields'] = $this->pregao_item_map_pregao_item_file->arrayOptionFields();
-
-        $data['pregao'] = $this->pregao->findById($pregao_id);
         $this->view->render("upload_file", $data);
     }
 
     function file_save() {
         $post = $this->view->dataPost();
-        $dataItens = $this->pregao_item_map_pregao_item_file->dataPregaoItem($post);
-        $savedItens = $this->pregao_item->saveAll($dataItens);
+        $this->pregao_item_map_pregao_item_file->saveAllPregaoItem($post);
+        
+
+        
         // pr($savedItens);
         // pr(json_encode($savedItens));
         // $objTest = '';
