@@ -93,6 +93,22 @@ class BasicView extends BasicSystem
         header("Location: http://" . $url);
     }
 
+    /**
+     * Download do arquivo e redirecionamento and Redirect.
+     */
+    function download($path, $controller, $action, $parameter = array())
+    {
+        header('Content-Description: File Transfer');
+        header('Content-Disposition: attachment; filename='.basename($path));
+        header('Expires: 0');
+        header('Cache-Control: must-revalidate');
+        header('Pragma: public');
+        header('Content-Length: ' . filesize($path));
+        header("Content-Type: " . mime_content_type($path));
+        // header("Content-Type: text/plain");
+        readfile($path);            
+    }
+
 
     /**
      * Direciona ação da view para o controller.

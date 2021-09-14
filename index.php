@@ -17,13 +17,13 @@ try {
     // $className = 'PregaoController';
     $pathController = "./controller/" . $className . ".php";
     if (!file_exists($pathController)) {
-        throw new Exception('Falha ao carregar Controller [' . $pathController . ']');
+        loadException('Falha ao carregar Controller [' . $pathController . ']');
     }
     include $pathController;
     $controller = new $className();
     $action = $params['action'];
     if (!method_exists($controller, $action)) {
-        throw new Exception('Falha ao carregar Ação (Método) [' . $pathController . '][' . $action . ']');
+        loadException('Falha ao carregar Ação (Método) [' . $pathController . '][' . $action . ']');
     }
     $controller->{$action}($params);
 } catch (Exception $e) {

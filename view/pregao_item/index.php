@@ -3,14 +3,14 @@
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">
       <a href="<?= $this->action("PregaoItem", "add", array('pregao_id' => $this->data['pregao']->_id)); ?>">Adicionar</a> |
-      <a href="<?= $this->action("PregaoItem", "upload_file", array('pregao_id' => $this->data['pregao']->_id)); ?>">Carregar Arquivo</a>
+      <a href="<?= $this->action("PregaoItem", "upload_file", array('pregao_id' => $this->data['pregao']->_id)); ?>">Carregar Arquivo</a> |
+      <a href="<?= $this->action("PregaoItem", "download_file", array('pregao_id' => $this->data['pregao']->_id)); ?>" >Gerar Arquivo</a> |
     </h6>
   </div>
   <div class="card-body">
     <div class="table-responsive">
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
-          <th>ID</th>
           <th>COD</th>
           <th>Nome</th>
           <th>Descrição</th>
@@ -19,7 +19,6 @@
           <th>Ação</th>
         </thead>
         <tfoot>
-          <th>ID</th>
           <th>COD</th>
           <th>Nome</th>
           <th>Descrição</th>
@@ -29,7 +28,6 @@
         </tfoot>
         <?php foreach ($this->data['itens'] as $row) : ?>
           <tr>
-            <td><?= $row->_id ?></td>
             <td><?= $row->cod_item_pregao ?></td>
             <td><?= $row->nome ?></td>
             <td><?= $row->descricao ?></td>

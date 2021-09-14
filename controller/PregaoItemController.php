@@ -21,7 +21,7 @@ class PregaoItemController extends BasicController
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-        $data['itens'] = $this->pregao_item_map_pregao_item_list->component()->findByPregaoId($pregao_id);
+        $data['itens'] = $this->pregao_item_map_pregao_item_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
         $this->view->setTitle("Lista Itens Pregões");
         $this->view->render("index", $data);
     }
@@ -71,7 +71,7 @@ class PregaoItemController extends BasicController
         }
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
         // inicio teste 
-        // $path = __ROOT__ . '/tests/arquivos/PE 13GAPSP2021.xls';
+        // $path = __ROOT__ . '/tests/arquivos/PEDIDO_SEGURANCA_PE13_2021_ORIGEM.csv';
         // $data['load_file'] = $this->php_spreadsheet->loadfile($path);
         // fim teste
         $data['option_fields'] = $this->pregao_item_map_pregao_item_file->arrayOptionFields();
@@ -81,18 +81,19 @@ class PregaoItemController extends BasicController
     function file_save() {
         $post = $this->view->dataPost();
         $this->pregao_item_map_pregao_item_file->saveAllPregaoItem($post);
-        
-
-        
         // pr($savedItens);
         // pr(json_encode($savedItens));
         // $objTest = '';
         // $savedItens = json_decode($objTest);
         // $this->pregao_calculation->sumListItemPregao($post['pregao_id'], $savedItens);
-        $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
+        $this->view->redirect("PregaoItem", "index", array('pregao_id' => $post['pregao_id']));
     }
 
-
-
-    
+    function download_file()
+    {
+        $pregao_id = $this->view->dataGet()['pregao_id'];
+        $obj = $this->pregao_item_map_pregao_item_list->domain()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
+        $file_path = $this->php_spreadsheet->saveFile($obj, 'tmp_file');
+        $this->view->download($file_path, "PregaoItem", "index", array('pregao_id' => $pregao_id));
+    }
 }

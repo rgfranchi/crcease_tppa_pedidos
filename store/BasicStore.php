@@ -47,8 +47,9 @@ class BasicStore extends BasicSystem
     function save($data)
     {
         $isNew = true;
-        if (isset($data['_id']) && $data['_id'] > 0) {
-            $isNew = false;
+        if (isset($data['_id'])) {
+            if($data['_id'] > 0) { $isNew = false; }
+            if($data['_id'] == 0) { unset($data['_id']); }
         } 
         $saveObject = new $this->object;
         foreach($data as $key => &$value) {
@@ -112,7 +113,17 @@ class BasicStore extends BasicSystem
         return $ret;
     }
 
-
+    /**
+     * Busca por condição (conforme regras do Sleek DB)
+     * @param $condition [field,param,value] ex.: ['nome', '==', 'James']
+     * @param array $orderBy [field => <'asc' ou 'desc'] ex.: ['nome' => 'asc']
+     * @param int $limit
+     * @param int $offset [field,param,value] ex.: ['nome', '==', 'James']
+     */
+    function findBy($condition, array $orderBy = null, int $limit = null, int $offset = null)
+    {
+        return $this->arrayToObject($this->store->findBy($condition, $orderBy, $limit, $offset), $this->object);
+    }
     function findById($id)
     {
         return $this->arrayToObject($this->store->findById($id), $this->object);
@@ -125,9 +136,15 @@ class BasicStore extends BasicSystem
         }
         return $this->arrayToObject($this->store->deleteById($id), $this->object);
     }
-    function findAll()
+    /**
+     * Busca todos os registros. (conforme regras do Sleek DB)
+     * @param array $orderBy [field => <'asc' ou 'desc'] ex.: ['nome' => 'asc']
+     * @param int $limit
+     * @param int $offset [field,param,value] ex.: ['nome', '==', 'James']
+     */
+    function findAll(array $orderBy = null, int $limit = null, int $offset = null)
     {
-        return $this->arrayToObject($this->store->findAll(), $this->object);
+        return $this->arrayToObject($this->store->findAll($orderBy, $limit, $offset), $this->object);
     }
     function emptyValues()
     {

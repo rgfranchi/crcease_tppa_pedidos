@@ -12,11 +12,6 @@ class PregaoItemStore extends BasicStore
         $this->loadService('PregaoCalculation');
     }
 
-    function findByPregaoId($pregao_id)
-    {
-        return $this->arrayToObject($this->store->findBy(["pregao_id", "==", $pregao_id]),$this->object);
-    }
-
     function findPregaoByItemId($item_id)
     {
         $pregoes = $this->pregao->store;

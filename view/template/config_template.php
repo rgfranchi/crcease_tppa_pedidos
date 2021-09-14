@@ -26,7 +26,7 @@ $navbar = array(
     array( // link de acesso direto
         'type' => 'link',
         'text' => 'Solicitação',
-        'href' => urlController("Pregao", 'index'),
+        'href' => urlController("PedidoPregao", 'index'),
         'icon' => 'fas fa-truck-moving text-gray-300', // opcional
     ),
 

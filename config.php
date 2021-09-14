@@ -21,6 +21,8 @@ $config_store = array(
     "path_store" => __DIR__ . "/TPPA_STORE"
 );
 
+define('TMP_FOLDER', 'tmp');
+
 define('CONFIG', array('config_store' => $config_store));
 
 
@@ -122,7 +124,6 @@ function pr($var, $die = false)
     $die ? die() : '';
 }
 
-
 function loadException($textException) {
     $trace = debug_backtrace();
     foreach($trace as $key => $value) {
@@ -131,8 +132,58 @@ function loadException($textException) {
     throw new Exception($textException);
 }
 
-
 function navbarActive($active = false)
 {
     return $active ? 'active' : '';
+}
+
+function setores() {
+    return array( // setores que devem ser considerados pelo sistema.
+        'DTCEA-SP',
+        'DTCEA-MT',
+        'DTCEA-SJ',
+        'DTCEA-GW',
+        'DTCEA-AF',
+        'DTCEA-GL',
+        'DTCEA-ST',
+		'DTCEA-SC',
+		'DA',
+		'DO',
+        'DT',
+        'CTR',
+		'TCAQ',
+		'TCEM', 
+        'ELM',
+		'TECL',
+		'TEEL',
+		'TEES',
+		'TEMC',
+        'LSC',
+		'NAV',
+		'TNAV',
+		'TNMT',
+        'PLT',
+		'TPMC',
+		'TPPA',
+        'RAD',
+		'TREE',
+		'TRMR',
+        'STI',
+		'TIAD',
+		'TIMC',
+		'TIOP',
+		'TISI',
+        'SUP',
+		'TSAC',
+		'TSAR',
+		'TSES',
+		'TSRE',
+        'TEL',
+		'TTEN',
+		'TIIR',
+		'TTRC',
+		'TTSA',
+		'TTST',
+		'TTTF',
+    );
 }
