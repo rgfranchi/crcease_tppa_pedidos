@@ -20,4 +20,13 @@ $(document).ready(function () {
   $("a.delete").click(function () {
     return confirm("Excluir registro?");
   });
+
+  $("a.deleteAll").click(function () {
+    let bool = confirm("Excluir TODOS os Registros?");
+    if(bool) {
+      return !confirm("Clique em CANCELAR para confirmar.")
+    }
+    return false;
+  });
+
 });

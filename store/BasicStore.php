@@ -12,7 +12,7 @@ use SleekDB\Store;
 class BasicStore extends BasicSystem
 {
     protected $store = null;
-    protected $object = null;
+    protected $domain = null;
 
     protected $domainName = null;
 
@@ -25,16 +25,16 @@ class BasicStore extends BasicSystem
         $config_store = CONFIG['config_store'];
         $this->store = new Store($store_name, $config_store["path_store"]);
         $this->domainName = $domainName;
-        $this->object = $this->loadDomain($domainName);
+        $this->domain = $this->loadDomain($domainName);
     }
 
     function create($array)
     {
-        return $this->arrayToObject($this->store->insert($array), $this->object);
+        return $this->arrayToObject($this->store->insert($array), $this->domain);
     }
     function update($array)
     {
-        return $this->arrayToObject($this->store->updateOrInsert($array), $this->object);
+        return $this->arrayToObject($this->store->updateOrInsert($array), $this->domain);
     }
 
     /**
@@ -51,7 +51,7 @@ class BasicStore extends BasicSystem
             if($data['_id'] > 0) { $isNew = false; }
             if($data['_id'] == 0) { unset($data['_id']); }
         } 
-        $saveObject = new $this->object;
+        $saveObject = new $this->domain;
         foreach($data as $key => &$value) {
             if(!property_exists($saveObject,$key)) {
                 loadException("Valor '$key' enviados não consta no objeto");
@@ -78,17 +78,17 @@ class BasicStore extends BasicSystem
      */
     // function validateData($data) {
 
-    //     $this->object;
+    //     $this->domain;
 
 
     //     $copyData = (array) $data;
-    //     $newObject = new $this->object;
-    //     foreach(array_keys(get_object_vars($this->object)) as $key) {
+    //     $newObject = new $this->domain;
+    //     foreach(array_keys(get_object_vars($this->domain)) as $key) {
     //         $newObject->$key = $copyData[$key];
     //         unset($copyData[$key]);
     //     }
     //     if(!empty($copyData)){
-    //         pr($this->object);
+    //         pr($this->domain);
     //         pr($copyData);
     //         throw new Exception("Valores enviados para salvar incompatível com objeto previsto");
     //         return false;
@@ -122,19 +122,35 @@ class BasicStore extends BasicSystem
      */
     function findBy($condition, array $orderBy = null, int $limit = null, int $offset = null)
     {
-        return $this->arrayToObject($this->store->findBy($condition, $orderBy, $limit, $offset), $this->object);
+        return $this->arrayToObject($this->store->findBy($condition, $orderBy, $limit, $offset), $this->domain);
     }
     function findById($id)
     {
-        return $this->arrayToObject($this->store->findById($id), $this->object);
+        return $this->arrayToObject($this->store->findById($id), $this->domain);
     }
+    /**
+     * Excluir um registro.<br>
+     * Verifica cada objeto antes de excluir.
+     * @param int $limit
+     * @return objeto excluido.
+     */
     function delete($id)
     {
-        $beforeDelete = $this->object->beforeDelete($id);
+        $beforeDelete = $this->domain->beforeDelete($id);
         if($beforeDelete != false) {
             return $beforeDelete;
         }
-        return $this->arrayToObject($this->store->deleteById($id), $this->object);
+        return $this->arrayToObject($this->store->deleteById($id), $this->domain);
+    }
+    /**
+     * Exclui muitos registro pela condição<br>
+     * Não realiza verificação no objeto antes de excluir.
+     * @return boolean
+     */
+    function deleteAll($condition)
+    {
+        
+        return $this->store->deleteBy($condition);
     }
     /**
      * Busca todos os registros. (conforme regras do Sleek DB)
@@ -144,18 +160,18 @@ class BasicStore extends BasicSystem
      */
     function findAll(array $orderBy = null, int $limit = null, int $offset = null)
     {
-        return $this->arrayToObject($this->store->findAll($orderBy, $limit, $offset), $this->object);
+        return $this->arrayToObject($this->store->findAll($orderBy, $limit, $offset), $this->domain);
     }
     function emptyValues()
     {
-        return $this->object;
+        return $this->domain;
     }
 
     /** 
      * Elimina campos do domínio não utilizado no componente.
      */
     function loadObject($newObject) {
-        $this->object = $newObject;
+        $this->domain = $newObject;
     }
 
     // function findById($id)
@@ -170,10 +186,10 @@ class BasicStore extends BasicSystem
     // {
     //     return $this->arrayToDomainObject($this->store->findAll());
     // }
-    // function getStore()
-    // {
-    //     return $this->store;
-    // }
+    function getStore()
+    {
+        return $this->store;
+    }
 
     // /**
     //  * Converte Array em objeto.
@@ -187,7 +203,7 @@ class BasicStore extends BasicSystem
     //     }
     //     $ret = array();
     //     // cria novo objeto para inserção na lista ou retorno.
-    //     $newObject = empty($_object) ? new $this->object : new $_object;
+    //     $newObject = empty($_object) ? new $this->domain : new $_object;
     //     foreach ($array as $key => $value) {
     //         if (is_int($key)) {
     //             $ret[] = $this->arrayToDomainObject($value);
@@ -198,7 +214,7 @@ class BasicStore extends BasicSystem
     //         }
     //     }
         
-    //     if($this->object != $newObject) {
+    //     if($this->domain != $newObject) {
     //         // recebe configuração dos campos do objeto.
     //         $ret = $newObject->getObject();
     //     }

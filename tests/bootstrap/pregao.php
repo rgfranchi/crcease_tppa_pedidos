@@ -1,6 +1,9 @@
 <?php
 
 $id = 0;
+$pregao_delete = new BasicStore('PregaoStore','Pregao');
+$pregao_delete->getStore()->deleteStore();
+
 $pregao_store = new BasicStore('PregaoStore','Pregao');
 
 pr($pregao_store);

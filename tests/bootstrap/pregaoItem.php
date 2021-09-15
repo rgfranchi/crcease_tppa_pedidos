@@ -1,7 +1,9 @@
 <?php
 
-$pregao_item_store = new BasicStore('PregaoItemStore','PregaoItem');
+$pregao_item_delete = new BasicStore('PregaoItemStore','PregaoItem');
+$pregao_item_delete->getStore()->deleteStore();
 
+$pregao_item_store = new BasicStore('PregaoItemStore','PregaoItem');
 $id = 0;
 
 // $pregao_1_itens_1 = new PregaoItemDomain();
