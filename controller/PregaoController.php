@@ -13,6 +13,10 @@ class PregaoController extends BasicController
 
     function index()
     {
+
+desabilitar o uso do campo valor total assim como quantidade total.
+O campo deve ser controlado pelos itens cadastrados.
+
         $this->view->setTitle("Lista Pregões");
         $this->view->render("index", $this->pregao_map_pregao_list->component()->findAll(['nome' => 'asc']));
     }

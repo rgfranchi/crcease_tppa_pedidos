@@ -50,6 +50,17 @@ class PregaoCalculationService extends BasicSystem {
         $this->pregao->save((array) $this->objectPregao);
     }
 
+    /**
+     * Zera valor dos itens do pregão.
+     */
+    function resetItensPregao($pregao_id) {
+        $this->objectPregao = $this->pregao->findById($pregao_id);
+        $this->objectPregao->valor_total = 0.0;
+        $this->objectPregao->qtd_total = 0;
+        $this->objectPregao->qtd_disponivel = 0;
+        $this->pregao->save((array) $this->objectPregao);
+    }
+
 
     /**
      * Soma respectivamente:
@@ -62,7 +73,11 @@ class PregaoCalculationService extends BasicSystem {
         }
         $this->objectPregao->valor_total += (convertCommaToDot($item->valor_unitario) * $item->qtd_total);
         $this->objectPregao->qtd_total += $item->qtd_total;
-        $this->objectPregao->qtd_disponivel += $item->qtd_disponivel;
+        if($item->qtd_disponivel > 0) {
+            $this->objectPregao->qtd_disponivel += $item->qtd_disponivel;
+        } else {
+            $this->objectPregao->qtd_disponivel += $item->qtd_total;
+        }
     }
 
     /**
@@ -76,27 +91,10 @@ class PregaoCalculationService extends BasicSystem {
         }
         $this->objectPregao->valor_total -= (convertCommaToDot($item->valor_unitario) * $item->qtd_total);
         $this->objectPregao->qtd_total -= $item->qtd_total;
-        $this->objectPregao->qtd_disponivel -= $item->qtd_disponivel;
+        if($item->qtd_disponivel > 0) {
+            $this->objectPregao->qtd_disponivel -= $item->qtd_disponivel;
+        } else {
+            $this->objectPregao->qtd_disponivel -= $item->qtd_total;
+        }        
     }
-
-    // /**
-    //  * Soma valores e retorna em $valueAdd
-    //  */
-    // function sumFloat(&$valueAdd, $value) {
-    //     $value = convertCommaToDot($value);
-    //     $valueAdd = convertCommaToDot($valueAdd);
-    //     $valueAdd += $value;
-    // }
-
-    // /**
-    //  * Subtrai valores e retorna em $valueSubtract
-    //  */    
-    // function subtractMoneyFloat(&$valueSubtract, $value) {
-    //     $value = convertCommaToDot($value);
-    //     $valueSubtract = convertCommaToDot($valueSubtract);
-    //     $valueSubtract -= $value;
-    //     $valueSubtract = convertToMoneyBR($valueSubtract);
-    // }
-
-
 }

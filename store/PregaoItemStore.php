@@ -23,7 +23,7 @@ class PregaoItemStore extends BasicStore
             ->first();
           
         $ret['pregao'] = $this->arrayToObject($join['pregao'], $this->pregao_head);
-        $ret['item'] = $this->arrayToObject($join,$this->object);
+        $ret['item'] = $this->arrayToObject($join,$this->domain);
         return $ret;
     }
 
@@ -45,6 +45,12 @@ class PregaoItemStore extends BasicStore
     {
         $this->pregao_calculation->subtractItemPregao($del_item);        
         return parent::delete($del_item->_id);
+    }
+
+    function deleteAll($pregao_id)
+    {
+        $this->pregao_calculation->resetItensPregao($pregao_id);        
+        return $this->store->deleteBy(['pregao_id',"==",$pregao_id]);
     }
 
 }

@@ -61,7 +61,7 @@ class PregaoItemController extends BasicController
     function delete_all()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-        $this->pregao_item_map_pregao_item_list->domain()->deleteAll(['pregao_id', '==', $pregao_id]);
+        $this->pregao_item_map_pregao_item_list->domain()->deleteAll($pregao_id);
         $this->view->redirect('PregaoItem', "index", array('pregao_id' => $pregao_id));
     }
 

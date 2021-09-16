@@ -5,7 +5,7 @@
       <a href="<?= $this->action("PregaoItem", "add", array('pregao_id' => $this->data['pregao']->_id)); ?>">Adicionar</a> |
       <a href="<?= $this->action("PregaoItem", "upload_file", array('pregao_id' => $this->data['pregao']->_id)); ?>">Carregar Arquivo</a> |
       <a href="<?= $this->action("PregaoItem", "download_file", array('pregao_id' => $this->data['pregao']->_id)); ?>" >Gerar Arquivo</a> |
-      <a href="<?= $this->action("PregaoItem", "delete_all", array('pregao_id' => $this->data['pregao']->_id)); ?>" class="deleteAll" >Excluir Todos os Registros</a> |
+      <a href="<?= $this->action("PregaoItem", "delete_all", array('pregao_id' => $this->data['pregao']->_id)); ?>" class="deleteAll" >Excluir Todos</a> |
     </h6>
   </div>
   <div class="card-body">

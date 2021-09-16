@@ -36,6 +36,7 @@ class PregaoItemDomain extends BasicDomain
                 $value = convertCommaToDot($value);
                 break;
         }
+        
         return $value;
     }
 
@@ -53,4 +54,14 @@ class PregaoItemDomain extends BasicDomain
         } 
     }
 
+    function beforeSave($data)
+    {
+        if(is_null($data['qtd_total'])) {
+            $data['qtd_total'] = $data['qtd_disponivel'] + $data['qtd_solicitada'] + 0;
+        }
+        if(is_null($data['qtd_disponivel'])) {
+            $data['qtd_disponivel'] = $data['qtd_total'] - $data['qtd_solicitada'] + 0;
+        }
+        return $data;
+    }
 }

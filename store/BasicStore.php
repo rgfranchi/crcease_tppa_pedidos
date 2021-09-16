@@ -66,6 +66,7 @@ class BasicStore extends BasicSystem
             $value = $saveObject->convertField($key, $value);
             $saveObject->validateField($key, $value);
         }
+        $data = $this->domain->beforeSave($data);
         if ($isNew) {
             return $this->create($data);
         } else {
@@ -73,45 +74,22 @@ class BasicStore extends BasicSystem
         }
     }
 
-    /**
-     * Verifica se o array enviado tem os mesmos parâmetros da data enviada.
-     */
-    // function validateData($data) {
-
-    //     $this->domain;
-
-
-    //     $copyData = (array) $data;
-    //     $newObject = new $this->domain;
-    //     foreach(array_keys(get_object_vars($this->domain)) as $key) {
-    //         $newObject->$key = $copyData[$key];
-    //         unset($copyData[$key]);
+    // function saveAll($arrayObjects)
+    // {
+    //     if(!is_array($arrayObjects)) {
+    //         loadException("Esperado array Array inválido.");
     //     }
-    //     if(!empty($copyData)){
-    //         pr($this->domain);
-    //         pr($copyData);
-    //         throw new Exception("Valores enviados para salvar incompatível com objeto previsto");
-    //         return false;
+    //     $ret = array();
+    //     pr($ret);
+    //     pr("VERIFICAR SE SERÁ ARRAY COM SUB ARRAY ou OBJETO");
+    //     die;
+
+    //     $toArray = $this->objectToArray($arrayObjects);
+    //     foreach($toArray as $key => $values) {
+    //         $ret[] = $this->save($values);
     //     }
-    //     return $newObject;
+    //     return $ret;
     // }
-
-    function saveAll($arrayObjects)
-    {
-        if(!is_array($arrayObjects)) {
-            loadException("Esperado array Array inválido.");
-        }
-        $ret = array();
-        pr($ret);
-        pr("VERIFICAR SE SERÁ ARRAY COM SUB ARRAY ou OBJETO");
-        die;
-
-        $toArray = $this->objectToArray($arrayObjects);
-        foreach($toArray as $key => $values) {
-            $ret[] = $this->save($values);
-        }
-        return $ret;
-    }
 
     /**
      * Busca por condição (conforme regras do Sleek DB)
@@ -142,16 +120,7 @@ class BasicStore extends BasicSystem
         }
         return $this->arrayToObject($this->store->deleteById($id), $this->domain);
     }
-    /**
-     * Exclui muitos registro pela condição<br>
-     * Não realiza verificação no objeto antes de excluir.
-     * @return boolean
-     */
-    function deleteAll($condition)
-    {
-        
-        return $this->store->deleteBy($condition);
-    }
+    
     /**
      * Busca todos os registros. (conforme regras do Sleek DB)
      * @param array $orderBy [field => <'asc' ou 'desc'] ex.: ['nome' => 'asc']
@@ -174,77 +143,8 @@ class BasicStore extends BasicSystem
         $this->domain = $newObject;
     }
 
-    // function findById($id)
-    // {
-    //     return $this->arrayToDomainObject($this->store->findById($id));
-    // }
-    // function delete($id)
-    // {
-    //     return $this->arrayToDomainObject($this->store->deleteById($id));
-    // }
-    // function findAll()
-    // {
-    //     return $this->arrayToDomainObject($this->store->findAll());
-    // }
     function getStore()
     {
         return $this->store;
     }
-
-    // /**
-    //  * Converte Array em objeto.
-    //  * @param array $array - array do banco de dados.
-    //  * @param array $object - objeto para conversão.
-    //  */
-    // function arrayToDomainObject($array, $_object = null)
-    // {
-    //     if (!is_array($array)) {
-    //         return $array;
-    //     }
-    //     $ret = array();
-    //     // cria novo objeto para inserção na lista ou retorno.
-    //     $newObject = empty($_object) ? new $this->domain : new $_object;
-    //     foreach ($array as $key => $value) {
-    //         if (is_int($key)) {
-    //             $ret[] = $this->arrayToDomainObject($value);
-    //         } else {
-    //             if(property_exists($newObject,$key)) {
-    //                 $newObject->{$key} = $this->arrayToDomainObject($value);
-    //             }
-    //         }
-    //     }
-        
-    //     if($this->domain != $newObject) {
-    //         // recebe configuração dos campos do objeto.
-    //         $ret = $newObject->getObject();
-    //     }
-    //     return $ret;
-    // }
-
-    /**
-     * Converte Objeto em array.
-     * @todo Não testado objeto com sub-objeto.
-     */
-    // function domainObjectToArray($domain)
-    // {
-    //     if (!is_array($domain)) {
-    //         return $domain->getObjectArray();
-    //     }
-    //     $ret = array();
-    //     foreach ($domain as $key => $value) {
-    //         if (is_int($key)) {
-    //             $ret[] = $this->domainObjectToArray($value);
-    //         } 
-    //         // else {
-    //         //     $ret = (array) $domain;
-    //         //     foreach ($ret as $key => $value) {
-    //         //         if (!is_array($domain)) {
-    //         //             $ret[$key] = $this->domainObjectToArray($value);
-    //         //         }
-    //         //     }
-    //         // }
-    //     }
-
-    //     return $ret;
-    // }
 }

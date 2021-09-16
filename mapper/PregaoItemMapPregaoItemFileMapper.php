@@ -36,18 +36,9 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
         $pregao_id = $post['pregao_id'];
         $typeField = $post['typeField'];
         $data = $post['data_load'];
-
-        // pr($pregao_id);
-        // pr($typeField);
-        // pr($data);
-        
         foreach($data as $itens) {
             $pregaoItem = (array) $this->domain;
             $pregaoItem['pregao_id'] = $pregao_id;
-
-            // pr($pregaoItem);
-            // pr($typeField);
-            // die;
             foreach($itens as $key => $value) {
                 $type = $typeField[$key];
                 $value = trim($value);
@@ -55,10 +46,6 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
                     case 'null':
                         continue;
                         break;
-                    // case 'valor_unitario':  
-                    // case 'valor_solicitado':  
-                    //     is_numeric($value) ? $pregaoItem->{$type} = str_replace(',','',$value) : "";
-                    //     break;
                     case 'cnpj': // agrupa fornecedor com CNPJ.
                         $pregaoItem['fornecedor'] = empty($pregaoItem['fornecedor']) ? $value : $pregaoItem['fornecedor'] .= " - ".$value;
                         break;
