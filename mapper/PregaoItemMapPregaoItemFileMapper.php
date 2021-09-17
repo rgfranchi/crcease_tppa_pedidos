@@ -22,9 +22,18 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
             
             switch($keys) {
                 case "_id":
-                    $newComponent[$keys] = "ID DO SISTEMA";
+                    $newComponent[$keys] = "_ID DO SISTEMA";
                 case "pregao_id":
                     continue;
+                case 'qtd_disponivel' :                    
+                case 'qtd_total':
+                    $newComponent[$keys] = snakeToTextCase($keys)." **";
+                    break;
+                case 'cod_item_pregao' :
+                case 'nome' : 
+                case 'valor_unitario' :
+                    $newComponent[$keys] = snakeToTextCase($keys)." *";
+                    break;          
                 default:
                 $newComponent[$keys] = snakeToTextCase($keys);
             }
@@ -37,7 +46,14 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
         $typeField = $post['typeField'];
         $data = $post['data_load'];
         foreach($data as $itens) {
-            $pregaoItem = (array) $this->domain;
+            // cria objeto para inserção ou adiciona valores para update.
+            $pos = array_search('_id', $typeField);
+            if($pos !== false) {
+                $tmpItem = (array) $this->pregao_item->findById($itens[$pos]);
+                $pregaoItem = empty($tmpItem) ? (array) $this->domain : $tmpItem;
+            } else {
+                $pregaoItem = (array) $this->domain;
+            }
             $pregaoItem['pregao_id'] = $pregao_id;
             foreach($itens as $key => $value) {
                 $type = $typeField[$key];

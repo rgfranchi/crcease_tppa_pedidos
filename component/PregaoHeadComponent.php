@@ -9,9 +9,9 @@ class PregaoHeadComponent extends BasicComponent
     public $nome;
     public $objeto;
     public $valor_total;
+    public $qtd_total;    
+    public $qtd_disponivel;    
     public $valor_solicitado;
-    public $qtd_total;
-    public $qtd_disponivel;
 
     function convertField($name, $value){
         $pregaoHelper = new PregaoHelper();

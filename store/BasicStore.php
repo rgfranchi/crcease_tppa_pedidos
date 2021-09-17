@@ -51,6 +51,7 @@ class BasicStore extends BasicSystem
             if($data['_id'] > 0) { $isNew = false; }
             if($data['_id'] == 0) { unset($data['_id']); }
         } 
+        $data = $this->domain->beforeSave($data);
         $saveObject = new $this->domain;
         foreach($data as $key => &$value) {
             if(!property_exists($saveObject,$key)) {
@@ -66,7 +67,7 @@ class BasicStore extends BasicSystem
             $value = $saveObject->convertField($key, $value);
             $saveObject->validateField($key, $value);
         }
-        $data = $this->domain->beforeSave($data);
+        // pr("SAVE END"); die;
         if ($isNew) {
             return $this->create($data);
         } else {

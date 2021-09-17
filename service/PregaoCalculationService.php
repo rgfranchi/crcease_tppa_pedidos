@@ -58,6 +58,7 @@ class PregaoCalculationService extends BasicSystem {
         $this->objectPregao->valor_total = 0.0;
         $this->objectPregao->qtd_total = 0;
         $this->objectPregao->qtd_disponivel = 0;
+        $this->objectPregao->valor_solicitado = 0;
         $this->pregao->save((array) $this->objectPregao);
     }
 
@@ -78,6 +79,11 @@ class PregaoCalculationService extends BasicSystem {
         } else {
             $this->objectPregao->qtd_disponivel += $item->qtd_total;
         }
+        if($item->qtd_solicitada > 0) {
+            $this->objectPregao->valor_solicitado += ($item->qtd_solicitada * $item->valor_unitario);
+        } else {
+            $this->objectPregao->valor_solicitado += $item->valor_solicitado;
+        }
     }
 
     /**
@@ -96,5 +102,6 @@ class PregaoCalculationService extends BasicSystem {
         } else {
             $this->objectPregao->qtd_disponivel -= $item->qtd_total;
         }        
+        $this->objectPregao->valor_solicitado -= ($item->qtd_solicitada * $item->valor_unitario);
     }
 }

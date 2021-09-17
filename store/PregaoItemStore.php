@@ -36,7 +36,9 @@ class PregaoItemStore extends BasicStore
     function update($object)
     {
         $old_item = $this->findById($object['_id']);
-        $this->pregao_calculation->subtractItemPregao($old_item);
+        if(!empty($old_item)) { // caso tenha excluido os itens e recadastrado com mesmo _id
+            $this->pregao_calculation->subtractItemPregao($old_item);
+        }
         $savedItem = parent::update($object);
         $this->pregao_calculation->sumItemPregao($savedItem);
     }

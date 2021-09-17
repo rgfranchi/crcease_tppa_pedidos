@@ -32,6 +32,7 @@ class PregaoItemDomain extends BasicDomain
     function convertField($name, $value){
         switch($name) {
             case 'valor_unitario' :
+                if(is_null($value)) break;
             case 'valor_solicitado' :
                 $value = convertCommaToDot($value);
                 break;
@@ -45,22 +46,28 @@ class PregaoItemDomain extends BasicDomain
         $validate = true;
         switch($name) {
             case 'valor_unitario' :
+                if($validate = !is_null($value)) break;
             case 'valor_solicitado' :
                 $validate = is_numeric($value);
                 break;
+            case 'cod_item_pregao' :
+            case 'qtd_disponivel' :
+            case 'nome' :
+                $validate = !is_null($value);
+                break;
         }
         if(!$validate) {
-            loadException("Campo $name com valor $value inválido");
+            loadException("Campo '$name' com valor '$value' inválido");
         } 
     }
 
     function beforeSave($data)
     {
-        if(is_null($data['qtd_total'])) {
-            $data['qtd_total'] = $data['qtd_disponivel'] + $data['qtd_solicitada'] + 0;
+        if(is_null($data['qtd_total']) && !is_null($data['qtd_disponivel'])) {
+            $data['qtd_total'] = $data['qtd_disponivel'] + $data['qtd_solicitada'];
         }
-        if(is_null($data['qtd_disponivel'])) {
-            $data['qtd_disponivel'] = $data['qtd_total'] - $data['qtd_solicitada'] + 0;
+        if(is_null($data['qtd_disponivel']) && !is_null($data['qtd_total'])) {
+            $data['qtd_disponivel'] = $data['qtd_total'] - $data['qtd_solicitada'];
         }
         return $data;
     }
