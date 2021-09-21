@@ -28,13 +28,13 @@ class PedidoPregaoController extends BasicController
     function itens()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-       // $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-       // $data['itens'] = $this->pregao_item_map_pedido_pregao_item_list->component()->findByPregaoId($pregao_id);
+        $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
+        $data['itens'] = $this->pregao_item_map_pedido_pregao_item_list->component()->findBy(["pregao_id", "==", $pregao_id]);
         $pedidos = $this->pedido_pregao_map_pedido_pregao_data->component()->findBy(["pregao_id", "==", $pregao_id]);
 
         $itens_id = array();
-        foreach($pedidos as $data) {
-            foreach($data->itens_id as $key => $values) {
+        foreach($pedidos as $pedido) {
+            foreach($pedido->itens_id as $key => $values) {
                 $values = empty($values) ? 0 : $values;
                 if(isset($itens_id[$key])) {
                     $itens_id[$key] += $values;

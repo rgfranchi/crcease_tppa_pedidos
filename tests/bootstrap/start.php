@@ -9,3 +9,4 @@ echo '<h1>INCLUI VALORES NO BANCO DE DADOS PARA TESTES</h1>';
 
 include 'pregao.php';
 include 'pregaoItem.php';
+include 'pedidoPregao.php';

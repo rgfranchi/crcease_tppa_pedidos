@@ -1,6 +1,6 @@
 <?php
 
-include('helper/PregaoHelper.php');
+include_once('helper/PregaoHelper.php');
 include_once('BasicComponent.php');
 
 class PedidoPregaoListComponent extends BasicComponent
@@ -8,17 +8,15 @@ class PedidoPregaoListComponent extends BasicComponent
     public $_id;
     public $nome;
     public $objeto;
-    public $data_homologacao;
-    public $valor_solicitado;
-    public $qtd_disponivel;
+    public $data_vencimento;
 
     function convertField($name, $value){
         switch($name) {
-            case 'data_homologacao' :
+            case 'data_vencimento' :
                 $value = convertToDateTimeBR($value, false);
-                break;
+                break;                
         }
-        $pregaoHelper = new PregaoHelper();
-        return $pregaoHelper->convertField($name, $value);
+
+        return $value;
     }
 }
