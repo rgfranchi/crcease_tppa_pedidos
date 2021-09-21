@@ -23,11 +23,34 @@ $navbar = array(
         'href' => urlController("Pregao", 'index'),
         'icon' => 'fas fa-folder-plus text-gray-300', // opcional
     ),
+    // array( // link de acesso direto
+    //     'type' => 'link',
+    //     'text' => 'Solicitação',
+    //     'href' => urlController("PedidoPregao", 'index'),
+    //     'icon' => 'fas fa-truck-moving text-gray-300', // opcional
+    // ),
     array( // link de acesso direto
-        'type' => 'link',
+        'type' => 'links',
         'text' => 'Solicitação',
+        'icon' => 'fas fa-fw fa-cog', // opcional
         'href' => urlController("PedidoPregao", 'index'),
         'icon' => 'fas fa-truck-moving text-gray-300', // opcional
+        'sub_itens' => array(
+                        // array(
+                        //     'type' => 'title',
+                        //     'text' => 'Pedidos:'
+                        // ),
+                        array(
+                            'type' => 'link',
+                            'href' => urlController("PedidoPregao", 'index'),
+                            'text' => 'Nova',
+                        ),
+                        array(
+                            'type' => 'link',
+                            'href' => urlController("PedidoPregao", 'consult'),
+                            'text' => 'Consultar',
+                        ),                        
+                    )
     ),
 
 );

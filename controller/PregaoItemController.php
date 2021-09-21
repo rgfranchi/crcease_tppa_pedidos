@@ -13,7 +13,6 @@ class PregaoItemController extends BasicController
         $this->loadMapper('PregaoItemMapPregaoItemFile');
         $this->loadService(array(
             'PhpSpreadsheet',
-            // 'PregaoCalculation'
         ));
     }
 

@@ -8,11 +8,19 @@ class PedidoPregaoDomain extends BasicDomain
     public $pregao_id;
     public $setor;
     public $solicitante;
+    public $status;
 
     /**
      * Array <br>
      * key -> pregao_item_id<br>
      * value -> quantidade
      */
-    public $itens_id;
+    public $itens_pedido;
+
+    function statusPedido() {
+        return ["CRIADO", "AGUARDANDO", "APROVADO", "EXECUTADO"];
+    }
 }
+
+
+

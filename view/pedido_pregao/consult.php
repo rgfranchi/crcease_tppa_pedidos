@@ -30,7 +30,7 @@
               <td><?= $row->objeto ?></td>
               <td style="color:<?= $row->data_vencimento_color ?>"><?= $row->data_vencimento ?></td>
               <td class="table-action">
-                <a href="<?= $this->action("PedidoPregao", "add", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-warning btn-circle" title="ITENS"><i class="fas fa-list"></i></a>
+                <a href="<?= $this->action("PedidoPregao", "consult_pedido", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="PEDIDO"><i class="fas fa-list"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>
