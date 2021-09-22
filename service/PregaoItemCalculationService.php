@@ -39,6 +39,7 @@ class PregaoItemCalculationService extends BasicSystem {
                 $values->qtd_disponivel -= $total_itens_pedido[$values->_id];
             }
         }
+
         return $pregao_itens;
     }
 

@@ -27,7 +27,6 @@ class PedidoPregaoController extends BasicController
         $this->view->setTitle("Pedido Pregão");
         $this->view->render("index", $this->pregao_map_pedido_pregao_list->component()->findAll());
     }
-
     function add()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
@@ -42,53 +41,58 @@ class PedidoPregaoController extends BasicController
     /**
      * Pregões disponíveis.
      */
-    function consult()
+    function edit()
     {
         $this->view->setTitle("Consultar Pedido (Pregão)");
-        $this->view->render("consult", $this->pregao_map_pedido_pregao_list->component()->findAll());
+        $this->view->render("edit_pregao", $this->pregao_map_pedido_pregao_list->component()->findAll());
     }
-
     /**
      * Pedidos realizados para o pregão.
      */
-    function consult_pedido()
+    function edit_pedido()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-        // $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
+        
         // $pregao_itens = $this->pregao_item_map_pedido_pregao_item_list->component()->findBy(["pregao_id", "==", $pregao_id]);
-        $data = $this->pedido_pregao_map_pedido_pregao_data->component()->findBy(["pregao_id", "==", $pregao_id]);
+        $data['pedido'] = $this->pedido_pregao_map_pedido_pregao_data->component()->findBy(["pregao_id", "==", $pregao_id]);
+        $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
         // $data['itens'] = $this->pregao_item_calculation->disponiveis($pregao_itens, $pedidos);
         $this->view->setTitle("Consultar Pedido");
-        $this->view->render("consult_pedido", $data);
+        $this->view->render("edit_pedido", $data);
     }
-
     /**
      * Consultar itens solicitados.
      */
-    function consult_itens()
+    function edit_itens()
     {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        $data = $this->pedido_pregao_map_pedido_pregao_data->component()->findById($pedido_pregao_id);
-
-carregar itens.
-
-        // $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-        // $pregao_itens = $this->pregao_item_map_pedido_pregao_item_list->component()->findBy(["pregao_id", "==", $pregao_id]);
-        
-        // $data['itens'] = $this->pregao_item_calculation->disponiveis($pregao_itens, $pedidos);
-
-        pr($data); die;
+        // Pedido selecionado.
+        $data['pedido'] = $this->pedido_pregao_map_pedido_pregao_data->component()->findById($pedido_pregao_id);
+        $pregao_id = $data['pedido']->pregao_id;
+        $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
+        // Itens do pregão relacionado ao pedido.
+        $pregao_itens = $this->pregao_item_map_pedido_pregao_item_list->component()->findBy(["pregao_id", "==", $pregao_id]);
+        // Outros pedidos realizados exceto o atual.
+        $pedidos = $this->pedido_pregao_map_pedido_pregao_data->component()->findBy(
+            [
+                ["pregao_id", "==", $pregao_id],
+                "AND",
+                [ "_id","<>",$pedido_pregao_id]
+            ]
+        );
+        // Calcula quantidade disponível.
+        $data['itens'] = $this->pregao_item_calculation->disponiveis($pregao_itens, $pedidos);
 
         $this->view->setTitle("Pedido Pregão Itens");
-        $this->view->render("consult_pedido", $data);
+        $this->view->render("edit_itens", $data);
     }
 
 
+    function edit_status() {
+        $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
 
-    function edit()
-    {
-        // $this->view->setTitle("Edita Pregão");
-        // $this->view->render("form", $this->pregao_map_pregao_form->component()->findById($this->view->dataGet()['id']));
+        carregar na tela as informações do pedido. (totais e do pregão.)
+
     }
 
     function save()

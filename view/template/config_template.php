@@ -47,8 +47,8 @@ $navbar = array(
                         ),
                         array(
                             'type' => 'link',
-                            'href' => urlController("PedidoPregao", 'consult'),
-                            'text' => 'Consultar',
+                            'href' => urlController("PedidoPregao", 'edit'),
+                            'text' => 'Editar',
                         ),                        
                     )
     ),

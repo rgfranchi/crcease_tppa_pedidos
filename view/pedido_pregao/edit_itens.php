@@ -4,28 +4,14 @@
     <input type="hidden" id="_id" name="_id" value="<?= isset($this->data['pedido']->_id) ? $this->data['pedido']->_id : 0 ?>">
     <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
     <input type="hidden" id="itens_pedido" name="itens_pedido" value="SOLICITADO">
-    
+    <?php $disableEdit = $this->data['pedido']->status !== 'SOLICITADO' ?>
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary">
-        <div class="input-group">
-          <div class="input-group-prepend">
-            <select class="custom-select" name="setor" required="required">
-              <option value="">Selecione um setor</option>
-              <?php foreach (setores() as $value) : ?>
-              <option value="<?=$value?>"><?=$value?></option>
-              <?php endforeach; ?>
-            </select>
-          </div>
-          <input 
-            type="text" 
-            class="form-control" aria-label="Text input with dropdown button"
-            name="solicitante" 
-            required="required" 
-            title="Nome do Solicitante"   
-            placeholder="Solicitante" />
-            <input type="submit" value="SALVAR" />
-        </div>  
-        
+          Setor: <?= $this->data['pedido']->setor; ?> |
+          Solicitante: <?= $this->data['pedido']->solicitante; ?> |
+          Status: <?= $this->data['pedido']->status; ?> 
+          <?=$disableEdit ? "" : " | <input type='submit'  value='SALVAR' />" ?> 
+          
       </h6>
     </div>
     <div class="card-body">
@@ -58,7 +44,7 @@
               <td><?= $row->valor_unitario ?></td>
               <td><?= $row->qtd_disponivel ?></td>
               <td class="table-action">
-                <input type='number' name='itens_pedido[<?= $row->_id ?>]' min=0 max=<?= $row->qtd_disponivel ?>   />
+                <input type='number' <?=$disableEdit ? "disabled" : "" ?> name='itens_pedido[<?= $row->_id ?>]' value='<?= isset($this->data['pedido']->itens_pedido[$row->_id]) ? $this->data['pedido']->itens_pedido[$row->_id] : 0 ?>' min=0 max=<?= $row->qtd_disponivel ?>   />
               </td>
             </tr>
           <?php endforeach; ?>

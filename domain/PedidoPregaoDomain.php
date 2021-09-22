@@ -18,7 +18,7 @@ class PedidoPregaoDomain extends BasicDomain
     public $itens_pedido;
 
     function statusPedido() {
-        return ["CRIADO", "AGUARDANDO", "APROVADO", "EXECUTADO"];
+        return ["SOLICITADO", "AGUARDANDO APROVAÇÃO", "APROVADO", "REGISTRADO", "EMPENHADO"];
     }
 }
 
