@@ -43,6 +43,38 @@ class PregaoItemCalculationService extends BasicSystem {
         return $pregao_itens;
     }
 
+    /**
+     * Recebe pedidos e inclui informação dos itens solicitados.<br>
+     * Totaliza quantidade e valores por item e total.
+     * @param object $pedido realizado 
+     */
+    function solicitados($pedido) {
+        $pedido_valor_total = 0;
+        $pedido_quantidade_total = 0;
+        foreach($pedido->itens_pedido as $key => &$value) {
+            $item = $this->pregao_item->findById($key);
+            if(empty($item)) {
+                continue;
+            }
+
+            $item->pedido_valor = $value * $item->valor_unitario;
+            $pedido_valor_total += $item->pedido_valor;
+            $pedido_quantidade_total += $value;
+
+            $item->pedido_quantidade = $value;
+            $item->pedido_valor = convertToMoneyBR($item->pedido_valor);
+            $item->valor_unitario = convertToMoneyBR($item->valor_unitario);
+            $item->valor_solicitado = convertToMoneyBR($item->valor_solicitado);
+            
+
+            $value = $item;
+            
+        }
+        $pedido->pedido_valor_total = convertToMoneyBR($pedido_valor_total);
+        $pedido->pedido_quantidade_total =  $pedido_quantidade_total;
+        return $pedido;
+    }
+
 
     /**
      * Atualiza pregão item quando salva pedido

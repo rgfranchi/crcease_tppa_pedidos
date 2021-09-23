@@ -43,12 +43,12 @@ $navbar = array(
                         array(
                             'type' => 'link',
                             'href' => urlController("PedidoPregao", 'index'),
-                            'text' => 'Nova',
+                            'text' => 'Pedidos',
                         ),
                         array(
                             'type' => 'link',
-                            'href' => urlController("PedidoPregao", 'edit'),
-                            'text' => 'Editar',
+                            'href' => urlController("PedidoPregao", 'find'),
+                            'text' => 'Pesquisar',
                         ),                        
                     )
     ),

@@ -15,10 +15,7 @@ class PedidoPregaoController extends BasicController
         $this->loadService(array(
             'PregaoItemCalculation'
         ));
-
-
-
-        // $this->loadBasicMapper("Pregao", "PregaoForm");
+        $this->loadBasicMapper("Pregao", "PregaoInfo");
         // $this->loadBasicMapper("Pregao", "PregaoListPedido");
     }
 
@@ -43,16 +40,10 @@ class PedidoPregaoController extends BasicController
      */
     function edit()
     {
-        $this->view->setTitle("Consultar Pedido (Pregão)");
-        $this->view->render("edit_pregao", $this->pregao_map_pedido_pregao_list->component()->findAll());
-    }
-    /**
-     * Pedidos realizados para o pregão.
-     */
-    function edit_pedido()
-    {
         $pregao_id = $this->view->dataGet()['pregao_id'];
         
+
+
         // $pregao_itens = $this->pregao_item_map_pedido_pregao_item_list->component()->findBy(["pregao_id", "==", $pregao_id]);
         $data['pedido'] = $this->pedido_pregao_map_pedido_pregao_data->component()->findBy(["pregao_id", "==", $pregao_id]);
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
@@ -82,17 +73,21 @@ class PedidoPregaoController extends BasicController
         );
         // Calcula quantidade disponível.
         $data['itens'] = $this->pregao_item_calculation->disponiveis($pregao_itens, $pedidos);
-
         $this->view->setTitle("Pedido Pregão Itens");
         $this->view->render("edit_itens", $data);
     }
-
-
+    /**
+     * Altera o status do item.
+     */
     function edit_status() {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-
-        carregar na tela as informações do pedido. (totais e do pregão.)
-
+        $pedido = $this->pedido_pregao_map_pedido_pregao_data->component()->findById($pedido_pregao_id);
+        $pregao_id = $pedido->pregao_id;
+        $data['status'] = $this->pedido_pregao_map_pedido_pregao_data->getDomain()->statusPedido();
+        $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
+        $data['pedido'] = $this->pregao_item_calculation->solicitados($pedido);
+        $this->view->setTitle("Pedido STATUS");
+        $this->view->render("edit_status", $data);
     }
 
     function save()

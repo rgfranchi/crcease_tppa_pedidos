@@ -34,7 +34,9 @@ class BasicStore extends BasicSystem
     }
     function update($array)
     {
-        return $this->arrayToObject($this->store->updateOrInsert($array), $this->domain);
+        $_id = $array['_id'];
+        unset($array['_id']);
+        return $this->arrayToObject($this->store->updateById($_id,$array), $this->domain);
     }
 
     /**
@@ -51,6 +53,7 @@ class BasicStore extends BasicSystem
             if($data['_id'] > 0) { $isNew = false; }
             if($data['_id'] == 0) { unset($data['_id']); }
         } 
+
         $data = $this->domain->beforeSave($data);
         $saveObject = new $this->domain;
         foreach($data as $key => &$value) {
