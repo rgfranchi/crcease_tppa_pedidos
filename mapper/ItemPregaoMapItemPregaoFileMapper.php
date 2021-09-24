@@ -2,7 +2,7 @@
 
 include_once 'BasicMapper.php';
 
-class PregaoItemMapPregaoItemFileMapper extends BasicMapper
+class ItemPregaoMapItemPregaoFileMapper extends BasicMapper
 {
     /**
      * @param string nome da classe filha 
@@ -10,7 +10,7 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
      */
     function __construct()
     {
-        parent::__construct("PregaoItem", "PregaoItemFile", "PregaoItem");
+        parent::__construct("ItemPregao", "ItemPregaoFile", "ItemPregao");
     }
 
     function arrayOptionFields() {
@@ -41,7 +41,7 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
         return $newComponent;
     }
 
-    function saveAllPregaoItem($post) {
+    function saveAllItemPregao($post) {
         $pregao_id = $post['pregao_id'];
         $typeField = $post['typeField'];
         $data = $post['data_load'];
@@ -49,12 +49,12 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
             // cria objeto para inserção ou adiciona valores para update.
             $pos = array_search('_id', $typeField);
             if($pos !== false) {
-                $tmpItem = (array) $this->pregao_item->findById($itens[$pos]);
-                $pregaoItem = empty($tmpItem) ? (array) $this->domain : $tmpItem;
+                $tmpItem = (array) $this->item_pregao->findById($itens[$pos]);
+                $itemPregao = empty($tmpItem) ? (array) $this->domain : $tmpItem;
             } else {
-                $pregaoItem = (array) $this->domain;
+                $itemPregao = (array) $this->domain;
             }
-            $pregaoItem['pregao_id'] = $pregao_id;
+            $itemPregao['pregao_id'] = $pregao_id;
             foreach($itens as $key => $value) {
                 $type = $typeField[$key];
                 $value = trim($value);
@@ -63,16 +63,16 @@ class PregaoItemMapPregaoItemFileMapper extends BasicMapper
                         continue;
                         break;
                     case 'cnpj': // agrupa fornecedor com CNPJ.
-                        $pregaoItem['fornecedor'] = empty($pregaoItem['fornecedor']) ? $value : $pregaoItem['fornecedor'] .= " - ".$value;
+                        $itemPregao['fornecedor'] = empty($itemPregao['fornecedor']) ? $value : $itemPregao['fornecedor'] .= " - ".$value;
                         break;
                     case 'fornecedor': // já possui valor, provável CNPJ.
-                        $pregaoItem['fornecedor'] = empty($pregaoItem['fornecedor']) ? $value : $value .= " - ".$pregaoItem['fornecedor'];
+                        $itemPregao['fornecedor'] = empty($itemPregao['fornecedor']) ? $value : $value .= " - ".$itemPregao['fornecedor'];
                         break;
                     default:
-                        $pregaoItem[$type] = $value;
+                        $itemPregao[$type] = $value;
                 }
             }
-            $this->domain()->save($pregaoItem);
+            $this->domain()->save($itemPregao);
         }
         return true;
     }

@@ -1,4 +1,4 @@
-<?php include (__ROOT__ . "/view/pregao_item/pregao_item.php"); ?>
+<?php include_once( __ROOT__ . '/view/default/pregao_head.php'); ?>
 <div class="card shadow mb-4">
   <div class="card-header py-3">
   </div>

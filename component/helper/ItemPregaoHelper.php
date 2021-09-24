@@ -1,6 +1,6 @@
 <?php
 
-class PregaoItemHelper {
+class ItemPregaoHelper {
     function convertField($name, $value){
         switch($name) {
             case 'valor_unitario' :

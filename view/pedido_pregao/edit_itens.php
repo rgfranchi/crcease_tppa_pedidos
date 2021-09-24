@@ -1,4 +1,4 @@
-<?php include_once( __ROOT__ . '/view/pregao_item/pregao_item.php'); ?>
+<?php include_once( __ROOT__ . '/view/default/pregao_head.php'); ?>
 <div class="card shadow mb-4">
   <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
     <input type="hidden" id="_id" name="_id" value="<?= isset($this->data['pedido']->_id) ? $this->data['pedido']->_id : 0 ?>">

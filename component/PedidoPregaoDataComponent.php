@@ -12,7 +12,7 @@ class PedidoPregaoDataComponent extends BasicComponent
 
     /**
      * Array <br>
-     * key -> pregao_item_id<br>
+     * key -> item_pregao_id<br>
      * value -> quantidade
      */
     public $itens_pedido;

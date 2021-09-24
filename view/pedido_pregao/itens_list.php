@@ -1,4 +1,4 @@
-<?php include_once( __ROOT__ . '/view/pregao_item/pregao_item.php'); ?>
+<?php include_once( __ROOT__ . '/view/default/pregao_head.php'); ?>
 <div class="card shadow mb-4">
   <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
     <input type="hidden" id="_id" name="_id" value="<?= isset($this->data['pedido']->_id) ? $this->data['pedido']->_id : 0 ?>">
@@ -32,26 +32,23 @@
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
-            <th>ID</th>
             <th>COD</th>
             <th>Nome</th>
             <th>Descrição</th>
             <th>Valor Unitário</th>
             <th>Qtd Disponível</th>
-            <th>Ação</th>
+            <th>Quantidade</th>
           </thead>
           <tfoot>
-            <th>ID</th>
             <th>COD</th>
             <th>Nome</th>
             <th>Descrição</th>
             <th>Valor Unitário</th>
             <th>Qtd Disponível</th>
-            <th>Ação</th>
+            <th>Quantidade</th>
           </tfoot>
           <?php foreach ($this->data['itens'] as $row) : ?>
             <tr>
-              <td><?= $row->_id ?></td>
               <td><?= $row->cod_item_pregao ?></td>
               <td><?= $row->nome ?></td>
               <td><?= $row->descricao ?></td>

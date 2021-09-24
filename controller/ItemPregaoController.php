@@ -2,15 +2,15 @@
 
 include 'BasicController.php';
 
-class PregaoItemController extends BasicController
+class ItemPregaoController extends BasicController
 {
     function __construct()
     {
-        $this->loadView('pregao_item');
+        $this->loadView('item_pregao');
         $this->loadBasicMapper('Pregao','PregaoHead');
-        $this->loadBasicMapper('PregaoItem','PregaoItemList','PregaoItem');
-        $this->loadBasicMapper('PregaoItem','PregaoItemForm','PregaoItem');
-        $this->loadMapper('PregaoItemMapPregaoItemFile');
+        $this->loadBasicMapper('ItemPregao','ItemPregaoList','ItemPregao');
+        $this->loadBasicMapper('ItemPregao','ItemPregaoForm','ItemPregao');
+        $this->loadMapper('ItemPregaoMapItemPregaoFile');
         $this->loadService(array(
             'PhpSpreadsheet',
         ));
@@ -20,7 +20,7 @@ class PregaoItemController extends BasicController
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-        $data['itens'] = $this->pregao_item_map_pregao_item_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
+        $data['itens'] = $this->item_pregao_map_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
         $this->view->setTitle("Lista Itens Pregões");
         $this->view->render("index", $data);
     }
@@ -30,14 +30,14 @@ class PregaoItemController extends BasicController
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-        $data['item'] = $this->pregao_item_map_pregao_item_form->component()->emptyValues();
+        $data['item'] = $this->item_pregao_map_item_pregao_form->component()->emptyValues();
         $this->view->setTitle("Cadastra Item para o pregão");
         $this->view->render("form", $data);
     }
     function edit()
     {
         $item_id = $this->view->dataGet()['item_id'];
-        $data = $this->pregao_item_map_pregao_item_form->component()->findPregaoByItemId($item_id);
+        $data = $this->item_pregao_map_item_pregao_form->component()->findPregaoByItemId($item_id);
         $this->view->setTitle("Atualiza Item para o pregão");
         $this->view->render("form", $data);
     }
@@ -45,23 +45,23 @@ class PregaoItemController extends BasicController
     function save()
     {
         $post = $this->view->dataPost();
-        $this->pregao_item_map_pregao_item_form->domain()->save($post);
-        $this->view->redirect('PregaoItem', "index", array('pregao_id' => $post['pregao_id']));
+        $this->item_pregao_map_item_pregao_form->domain()->save($post);
+        $this->view->redirect('ItemPregao', "index", array('pregao_id' => $post['pregao_id']));
     }
 
     function delete()
     {
         $item_id = $this->view->dataGet()['item_id'];
-        $del_item = $this->pregao_item_map_pregao_item_list->domain()->findById($item_id);
-        $this->pregao_item_map_pregao_item_list->domain()->delete($del_item);
-        $this->view->redirect('PregaoItem', "index", array('pregao_id' => $del_item->pregao_id));
+        $del_item = $this->item_pregao_map_item_pregao_list->domain()->findById($item_id);
+        $this->item_pregao_map_item_pregao_list->domain()->delete($del_item);
+        $this->view->redirect('ItemPregao', "index", array('pregao_id' => $del_item->pregao_id));
     }
 
     function delete_all()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-        $this->pregao_item_map_pregao_item_list->domain()->deleteAll($pregao_id);
-        $this->view->redirect('PregaoItem', "index", array('pregao_id' => $pregao_id));
+        $this->item_pregao_map_item_pregao_list->domain()->deleteAll($pregao_id);
+        $this->view->redirect('ItemPregao', "index", array('pregao_id' => $pregao_id));
     }
 
 
@@ -80,26 +80,26 @@ class PregaoItemController extends BasicController
         // $path = __ROOT__ . '/tests/arquivos/PEDIDO_SEGURANCA_PE13_2021_ORIGEM.csv';
         // $data['load_file'] = $this->php_spreadsheet->loadfile($path);
         // fim teste
-        $data['option_fields'] = $this->pregao_item_map_pregao_item_file->arrayOptionFields();
+        $data['option_fields'] = $this->item_pregao_map_item_pregao_file->arrayOptionFields();
         $this->view->render("upload_file", $data);
     }
 
     function file_save() {
         $post = $this->view->dataPost();
-        $this->pregao_item_map_pregao_item_file->saveAllPregaoItem($post);
+        $this->item_pregao_map_item_pregao_file->saveAllItemPregao($post);
         // pr($savedItens);
         // pr(json_encode($savedItens));
         // $objTest = '';
         // $savedItens = json_decode($objTest);
         // $this->pregao_calculation->sumListItemPregao($post['pregao_id'], $savedItens);
-        $this->view->redirect("PregaoItem", "index", array('pregao_id' => $post['pregao_id']));
+        $this->view->redirect("ItemPregao", "index", array('pregao_id' => $post['pregao_id']));
     }
 
     function download_file()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-        $obj = $this->pregao_item_map_pregao_item_list->domain()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
+        $obj = $this->item_pregao_map_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
         $file_path = $this->php_spreadsheet->saveFile($obj, 'tmp_file');
-        $this->view->download($file_path, "PregaoItem", "index", array('pregao_id' => $pregao_id));
+        $this->view->download($file_path, "ItemPregao", "index", array('pregao_id' => $pregao_id));
     }
 }

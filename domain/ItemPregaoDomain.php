@@ -2,7 +2,7 @@
 
 include_once('BasicDomain.php');
 
-class PregaoItemDomain extends BasicDomain
+class ItemPregaoDomain extends BasicDomain
 {
     public $_id;
     public $cod_item_pregao; // código do item no PE.

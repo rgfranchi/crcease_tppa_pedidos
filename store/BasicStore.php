@@ -38,6 +38,11 @@ class BasicStore extends BasicSystem
         unset($array['_id']);
         return $this->arrayToObject($this->store->updateById($_id,$array), $this->domain);
     }
+    function create_update_object($array)
+    {
+        return $this->arrayToObject($this->store->updateOrInsert($array), $this->domain);
+    }
+
 
     /**
      * Cria ou atualiza Registro no banco de dados.<br>

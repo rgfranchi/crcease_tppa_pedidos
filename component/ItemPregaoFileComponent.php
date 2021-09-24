@@ -2,7 +2,7 @@
 
 include_once('BasicComponent.php');
 
-class PregaoItemFileComponent extends BasicComponent
+class ItemPregaoFileComponent extends BasicComponent
 {
     public $_id;
     public $cod_item_pregao; // código do item no PE.

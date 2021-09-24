@@ -8,13 +8,13 @@ require_once(__ROOT__ . '/config.php');
  * Status [CRIADO, AGUARDANDO, APROVADO, EXECUTADO]
  * Altera o item quando o status do pedido estiver como executado.
  */
-class PregaoItemCalculationService extends BasicSystem {
+class ItemPregaoCalculationService extends BasicSystem {
     
-    private $objectPregao = null;
+    // private $objectPregao = null;
 
     function __construct()
     {
-        $this->loadBasicStores('PregaoItem');
+        $this->loadBasicStores('ItemPregao');
     }
 
     /**
@@ -39,7 +39,6 @@ class PregaoItemCalculationService extends BasicSystem {
                 $values->qtd_disponivel -= $total_itens_pedido[$values->_id];
             }
         }
-
         return $pregao_itens;
     }
 
@@ -52,41 +51,33 @@ class PregaoItemCalculationService extends BasicSystem {
         $pedido_valor_total = 0;
         $pedido_quantidade_total = 0;
         foreach($pedido->itens_pedido as $key => &$value) {
-            $item = $this->pregao_item->findById($key);
+            $item = $this->item_pregao->findById($key);
             if(empty($item)) {
                 continue;
             }
-
             $item->pedido_valor = $value * $item->valor_unitario;
             $pedido_valor_total += $item->pedido_valor;
             $pedido_quantidade_total += $value;
-
             $item->pedido_quantidade = $value;
             $item->pedido_valor = convertToMoneyBR($item->pedido_valor);
             $item->valor_unitario = convertToMoneyBR($item->valor_unitario);
             $item->valor_solicitado = convertToMoneyBR($item->valor_solicitado);
-            
-
             $value = $item;
-            
         }
         $pedido->pedido_valor_total = convertToMoneyBR($pedido_valor_total);
         $pedido->pedido_quantidade_total =  $pedido_quantidade_total;
         return $pedido;
     }
 
-
     /**
      * Atualiza pregão item quando salva pedido
      */
     function savePedido($itens_pedido) {
-
         pr($itens_pedido);
         die;
         $saveAll = array();
         foreach($itens_pedido as $item_id => $quantidade) {
-            $item = $this->pregaoItem->findById($item_id);
-
+            $item = $this->itemPregao->findById($item_id);
             $item->qtd_disponivel -= $quantidade;
             $item->qtd_solicitada += $quantidade;
             $item->valor_solicitado += $quantidade * $item->valor_unitario;
@@ -96,12 +87,10 @@ class PregaoItemCalculationService extends BasicSystem {
                 $saveAll[] = $item;
             }
         }
-
         pr($saveAll);
         die;
-
         if(count($saveAll) > 0) {
-            $this->pregaoItem->saveAll($saveAll);
+            $this->itemPregao->saveAll($saveAll);
         }
     }
 
@@ -145,10 +134,9 @@ class PregaoItemCalculationService extends BasicSystem {
     //     $this->pregao->save((array) $this->objectPregao);
     // }
 
-
     // /**
     //  * Soma respectivamente:
-    //  * PregaoItem qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
+    //  * ItemPregao qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
     //  * Pregao     qtd_total, qtd_disponivel, valor_total
     //  */
     // function sumPregao($item) {
@@ -171,7 +159,7 @@ class PregaoItemCalculationService extends BasicSystem {
 
     // /**
     //  * Subtrai respectivamente:
-    //  * PregaoItem qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
+    //  * ItemPregao qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
     //  * Pregao     qtd_total, qtd_disponivel, valor_total
     //  */
     // function subtractPregao($item) {

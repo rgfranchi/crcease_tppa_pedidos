@@ -1,8 +1,8 @@
 <?php
 
-include_once('helper/PregaoItemHelper.php');
+include_once('helper/ItemPregaoHelper.php');
 
-class PregaoItemFormComponent extends BasicComponent
+class ItemPregaoFormComponent extends BasicComponent
 {
     public $_id;
     public $cod_item_pregao; // codigo do item no PE.
@@ -29,8 +29,8 @@ class PregaoItemFormComponent extends BasicComponent
     public $pregao_id;
 
     function convertField($name, $value){
-        $pregaoItemHelper = new PregaoItemHelper();
-        return $pregaoItemHelper->convertField($name, $value);
+        $helper = new ItemPregaoHelper();
+        return $helper->convertField($name, $value);
     }
 
 }

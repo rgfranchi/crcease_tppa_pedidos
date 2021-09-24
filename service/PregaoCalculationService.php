@@ -65,7 +65,7 @@ class PregaoCalculationService extends BasicSystem {
 
     /**
      * Soma respectivamente:
-     * PregaoItem qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
+     * ItemPregao qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
      * Pregao     qtd_total, qtd_disponivel, valor_total
      */
     function sumPregao($item) {
@@ -88,7 +88,7 @@ class PregaoCalculationService extends BasicSystem {
 
     /**
      * Subtrai respectivamente:
-     * PregaoItem qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
+     * ItemPregao qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
      * Pregao     qtd_total, qtd_disponivel, valor_total
      */
     function subtractPregao($item) {

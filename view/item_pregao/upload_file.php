@@ -1,4 +1,4 @@
-<?php include_once 'pregao_item.php'; ?>
+<?php include_once( __ROOT__ . '/view/default/pregao_head.php'); ?>
 <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
 <?php
 // cria select para os cabeçalhos
@@ -15,7 +15,7 @@ $select .= sprintf('%s</select>',$options);
 <div class="card shadow mb-4">
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">
-      <form enctype="multipart/form-data" id="file_form" action='<?= $this->action("PregaoItem", "upload_file"); ?>' method="post">
+      <form enctype="multipart/form-data" id="file_form" action='<?= $this->action("ItemPregao", "upload_file"); ?>' method="post">
         <input type='file' name="spreadsheet" id="file_spreadsheet"> | * é Obrigatório | ** um é Obrigatório 
         <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
       </form>
@@ -26,7 +26,7 @@ $select .= sprintf('%s</select>',$options);
       <h3>ARQUIVO NÃO CARREGADO</h3>
     <?php else : ?>
       <div class="table-responsive scrollTopTable">
-        <form id="file_form" action='<?= $this->action("PregaoItem", "file_save"); ?>' method="post"> 
+        <form id="file_form" action='<?= $this->action("ItemPregao", "file_save"); ?>' method="post"> 
           <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>

@@ -2,11 +2,11 @@
 
 include_once('BasicStore.php');
 
-class PregaoItemStore extends BasicStore
+class ItemPregaoStore extends BasicStore
 {
     function __construct()
     {
-        parent::__construct(__CLASS__, "PregaoItem");
+        parent::__construct(__CLASS__, "ItemPregao");
         $this->loadBasicStores("Pregao");
         $this->loadComponent("PregaoHead");
         $this->loadService('PregaoCalculation');
