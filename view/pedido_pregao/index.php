@@ -32,6 +32,7 @@
               <td class="table-action">
                 <a href="<?= $this->action("PedidoPregao", "add", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-success btn-circle" title="CRIAR"><i class="fas fa-list"></i></a>
                 <a href="<?= $this->action("PedidoPregao", "edit", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-warning btn-circle" title="EDITAR"><i class="fas fa-list"></i></a>
+                <a href="<?= $this->action("PedidoPregao", "edit_aprovado", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-warning btn-circle" title="PEDIDOS APROVADOS"><i class="fas fa-flag"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>

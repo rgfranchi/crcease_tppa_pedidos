@@ -43,6 +43,57 @@ class ItemPregaoCalculationService extends BasicSystem {
     }
 
     /**
+     * Soma a quantidades de itens por pedido.
+     * @param $itens_pregao itens do objeto pregão
+     * @param $pedidos itens pedidos do pregão.
+     */
+    function total_aprovados($pedido_pregao, $pregao_id) {
+        $res = array();
+
+        $res['HEADER'] = [
+            'cod_item_pregao' => "COD ITEM",
+            'nome' => "NOME",
+            'descricao' => "DESCRIÇÃO",
+            'valor_unitario' => "VALOR UNITARIO",
+            'fornecedor' => "FORNECEDOR",
+        ];
+
+        // recuperar todos os itens do pregão. 
+        $find_itens_pregao = $this->item_pregao->findBy(["pregao_id", "==", $pregao_id], ["cod_item_pregao" => "ASC"]);        
+        // altera chave do array para id e inclui valores conforme HEADER
+        foreach($find_itens_pregao as $value) {
+            foreach(array_keys($res['HEADER']) as $param) {
+                $res["BODY"][$value->_id][$param] = $value->{$param};
+            }
+        }
+
+        $total_pedido = array();
+        // Lê cada pedidos, retira valores que não será exibido.
+        foreach($pedido_pregao as $pedidos) {
+            $pedido_key = 'pedido_' . $pedidos->_id;
+            $res['HEADER'][$pedido_key] = $pedidos->setor . ' - ' . $pedidos->solicitante;
+            // preenche os itens do pedido.
+            pr($res["BODY"][$value->_id]['valor_unitario']);
+            foreach($pedidos->itens_pedido as $key_item => $qtd_item) {
+                if(isset($res["BODY"][$key_item]['total'])) {
+                    $res["BODY"][$key_item]['total'] += $qtd_item;
+                } else {
+                    $res["BODY"][$key_item]['total'] = $qtd_item;
+                }                 
+                $res["BODY"][$key_item]['sub_total'] = $res["BODY"][$key_item]['total'] * $res["BODY"][$key_item]['valor_unitario'];
+                $res["BODY"][$key_item][$pedido_key] = $qtd_item;
+            }   
+        }
+
+        $res['HEADER']['sub_total'] = 'SUB TOTAL';
+        $res['HEADER']['total'] = "TOTAL";
+        pr($pedido_pregao);
+        pr($res);
+        die;
+        return $res;
+    }
+    
+    /**
      * Recebe pedidos e inclui informação dos itens solicitados.<br>
      * Totaliza quantidade e valores por item e total.
      * @param object $pedido realizado 

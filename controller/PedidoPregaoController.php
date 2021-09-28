@@ -74,18 +74,48 @@ class PedidoPregaoController extends BasicController
         $this->view->render("edit_itens", $data);
     }
     /**
-     * Altera o status do item.
+     * Altera o o pedido de solicitado até aprovado.
      */
-    function edit_status() {
+    function edit_solicitado() {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
         $pedido = $this->pedido_pregao_map_pedido_pregao_data->component()->findById($pedido_pregao_id);
         $pregao_id = $pedido->pregao_id;
-        $data['status'] = $this->pedido_pregao_map_pedido_pregao_data->getDomain()->statusPedido();
+        $data['status'] = $this->pedido_pregao_map_pedido_pregao_data->getDomain()->statusPedido("PEDIDO");
         $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
         $data['pedido'] = $this->item_pregao_calculation->solicitados($pedido);
         $this->view->setTitle("Pedido STATUS");
-        $this->view->render("edit_status", $data);
+        $this->view->render("edit_solicitado", $data);
     }
+    /**
+     * Altera o pedido de aprovados até empenhado.
+     */
+    function edit_aprovado() {
+        $pregao_id = $this->view->dataGet()['pregao_id'];
+
+        $pedido = $this->pedido_pregao_map_pedido_pregao_data->component()->findBy([
+            ["pregao_id", "==", $pregao_id],
+            "AND",
+            ["status", "==", "APROVADO"] 
+        ]);
+
+        $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
+
+        $data['status'] = $this->pedido_pregao_map_pedido_pregao_data->getDomain()->statusPedido("CREDITO");
+
+        $data['pedidos'] = $this->item_pregao_calculation->total_aprovados($pedido, $pregao_id);
+
+        pr($pedido);
+        pr($data);
+        die;
+
+        // $pregao_id = $pedido->pregao_id;
+        // 
+        // $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
+        // $data['pedido'] = $this->item_pregao_calculation->solicitados($pedido);
+        // $this->view->setTitle("Pedido STATUS");
+        // $this->view->render("edit_status", $data);
+    }
+
 
     function save()
     {

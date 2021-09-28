@@ -6,8 +6,7 @@ class PregaoCalculationService extends BasicSystem {
     
     private $objectPregao = null;
 
-    function __construct()
-    {
+    function __construct() {
         $this->loadBasicStores('Pregao');
     }
 

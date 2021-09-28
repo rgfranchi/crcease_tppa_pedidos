@@ -29,7 +29,7 @@
               <td><?= $row->status ?></td>
               <td class="table-action">
                 <a href="<?= $this->action("PedidoPregao", "edit_itens", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="ITENS"><i class="fas fa-list"></i></a>
-                <a href="<?= $this->action("PedidoPregao", "edit_status", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-secondary btn-circle" title="STATUS"><i class="fas fa-anchor"></i></a>
+                <a href="<?= $this->action("PedidoPregao", "edit_solicitado", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-secondary btn-circle" title="SOLICITAÇÃO"><i class="fas fa-anchor"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>

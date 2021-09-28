@@ -3,6 +3,7 @@
         <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
             <input type="hidden" id="_id" name="_id" value="<?= $this->data['pedido']->_id ?>">
             <div class="input-group">
+            <?php if (in_array($this->data['pedido']->status,$this->data['status'])) : ?>
                 <div class="input-group-prepend">
                     <select class="custom-select" name="status" required="required">
                     <?php foreach ($this->data['status'] as $value) : ?>
@@ -11,11 +12,12 @@
                     </select>
                 </div>
                 <input type="submit" value="ATUALIZAR" />
+                <?php else : ?>
+                    <p><?=$this->data['pedido']->status ?></p>
+                <?php endif; ?>                
             </div>
         </form>
     </div>
-
-
     <div class="row">
         <div class="col-xl-4 col-md-6 mb-4">
             <div class="card border-left-primary shadow h-100 py-2">
