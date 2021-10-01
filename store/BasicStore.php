@@ -75,7 +75,6 @@ class BasicStore extends BasicSystem
             $value = $saveObject->convertField($key, $value);
             $saveObject->validateField($key, $value);
         }
-        // pr("SAVE END"); die;
         if ($isNew) {
             return $this->create($data);
         } else {
@@ -83,22 +82,16 @@ class BasicStore extends BasicSystem
         }
     }
 
-    // function saveAll($arrayObjects)
-    // {
-    //     if(!is_array($arrayObjects)) {
-    //         loadException("Esperado array Array inválido.");
-    //     }
-    //     $ret = array();
-    //     pr($ret);
-    //     pr("VERIFICAR SE SERÁ ARRAY COM SUB ARRAY ou OBJETO");
-    //     die;
-
-    //     $toArray = $this->objectToArray($arrayObjects);
-    //     foreach($toArray as $key => $values) {
-    //         $ret[] = $this->save($values);
-    //     }
-    //     return $ret;
-    // }
+    function saveAll($arrayObjects)
+    {
+        if(!is_array($arrayObjects)) {
+            loadException("Array inválido.");
+        }
+        foreach($arrayObjects as $key => $values) {
+            $ret[$key] = $this->save($values);
+        }
+        return $ret;
+    }
 
     /**
      * Busca por condição (conforme regras do Sleek DB)

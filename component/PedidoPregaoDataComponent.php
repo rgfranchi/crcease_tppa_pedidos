@@ -9,6 +9,7 @@ class PedidoPregaoDataComponent extends BasicComponent
     public $setor;
     public $solicitante;
     public $status;
+    public $hashCredito;
 
     /**
      * Array <br>

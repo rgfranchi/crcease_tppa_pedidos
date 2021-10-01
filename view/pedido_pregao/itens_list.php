@@ -3,7 +3,7 @@
   <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
     <input type="hidden" id="_id" name="_id" value="<?= isset($this->data['pedido']->_id) ? $this->data['pedido']->_id : 0 ?>">
     <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
-    <input type="hidden" id="itens_pedido" name="itens_pedido" value="SOLICITADO">
+    <input type="hidden" id="status" name="status" value="SOLICITADO">
     
     <div class="card-header py-3">
       <h6 class="m-0 font-weight-bold text-primary">

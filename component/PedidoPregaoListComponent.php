@@ -9,12 +9,13 @@ class PedidoPregaoListComponent extends BasicComponent
     public $nome;
     public $objeto;
     public $data_vencimento;
+    public $hashCredito;
 
     function convertField($name, $value){
         switch($name) {
             case 'data_vencimento' :
                 $value = convertToDateTimeBR($value, false);
-                break;                
+                break;   
         }
 
         return $value;

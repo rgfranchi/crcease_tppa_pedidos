@@ -50,6 +50,6 @@ $select .= sprintf('%s</select>',$options);
   </div>
 </div>
 
-<?php $this->template_js = 'upload_file' ?>
+<?php $this->template_js = array('upload_file', 'scrollTop') ?>
 
 <?php

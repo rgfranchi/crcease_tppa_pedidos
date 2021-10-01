@@ -41,37 +41,7 @@ $("select.typeField").change(function () {
     console.log(currentObject, "other");
     console.log(valueSelect);
   });
-
-  // recebe da coluna.
-  //   var th_element = $(this).parent();
-  //   var column_id = th_element.attr("column_id");
-  //   // localiza elementos da coluna para excluir
-  //   $('td[column_id="' + column_id + '"]').each(function () {
-  //     $(this).remove();
-  //   });
-  //   th_element.remove();
 });
 
-
-
-  // Inclui barra de navegação superior.
-  $("div.scrollTopTable").parent().prepend('<div class="scrollTop" style="overflow-x: scroll;"> <div class="scrollTopInner" style="height: 1px;"></div></div>');
-  //
-  $("button#sidebarToggle").click(topBarResize);
-
-  // configura dimensões dos elementos.
-  topBarResize();
-  function topBarResize() {
-    $("div.scrollTop").width($("div.scrollTopTable").width());
-    $("div.scrollTopInner").width($("div.scrollTopTable").find("table").width());
-  }
-  // altera scroll inferior quando superior é alterado.
-  $("div.scrollTop").scroll(function(){
-    $("div.scrollTopTable").scrollLeft($("div.scrollTop").scrollLeft());
-  });
-  // altera scroll superior quando inferior é alterado.
-  $("div.scrollTopTable").scroll(function(){
-    $("div.scrollTop").scrollLeft($("div.scrollTopTable").scrollLeft());
-  });
 
   

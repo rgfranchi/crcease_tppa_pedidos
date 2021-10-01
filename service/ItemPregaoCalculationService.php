@@ -51,7 +51,7 @@ class ItemPregaoCalculationService extends BasicSystem {
         $res = array();
 
         $res['HEADER'] = [
-            'cod_item_pregao' => "COD ITEM",
+            'cod_item_pregao' => "COD",
             'nome' => "NOME",
             'descricao' => "DESCRIÇÃO",
             'valor_unitario' => "VALOR UNITARIO",
@@ -67,13 +67,13 @@ class ItemPregaoCalculationService extends BasicSystem {
             }
         }
 
-        $total_pedido = array();
-        // Lê cada pedidos, retira valores que não será exibido.
+        $res['VALOR_TOTAL'] = 0;
+
+        // Lê cada pedidos, e inclui no corpo o valor.
         foreach($pedido_pregao as $pedidos) {
             $pedido_key = 'pedido_' . $pedidos->_id;
-            $res['HEADER'][$pedido_key] = $pedidos->setor . ' - ' . $pedidos->solicitante;
+            $res['HEADER'][$pedido_key] = '<small>' . $pedidos->setor . '</small></br><small style="font-size: xx-small;">' . $pedidos->solicitante . '</small>';
             // preenche os itens do pedido.
-            pr($res["BODY"][$value->_id]['valor_unitario']);
             foreach($pedidos->itens_pedido as $key_item => $qtd_item) {
                 if(isset($res["BODY"][$key_item]['total'])) {
                     $res["BODY"][$key_item]['total'] += $qtd_item;
@@ -82,14 +82,15 @@ class ItemPregaoCalculationService extends BasicSystem {
                 }                 
                 $res["BODY"][$key_item]['sub_total'] = $res["BODY"][$key_item]['total'] * $res["BODY"][$key_item]['valor_unitario'];
                 $res["BODY"][$key_item][$pedido_key] = $qtd_item;
-            }   
+                $res['VALOR_TOTAL'] += $res["BODY"][$key_item]['sub_total'];
+                
+             }
+             $res['pedidos_id'][] = $pedidos->_id;   
         }
 
         $res['HEADER']['sub_total'] = 'SUB TOTAL';
         $res['HEADER']['total'] = "TOTAL";
-        pr($pedido_pregao);
-        pr($res);
-        die;
+        $res['VALOR_TOTAL'] = $res['VALOR_TOTAL'];
         return $res;
     }
     

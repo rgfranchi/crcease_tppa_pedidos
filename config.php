@@ -81,6 +81,9 @@ function convertCommaToDot($value) {
  */
 function convertToMoneyBR($value) {
     $value = empty($value) ? 0.00 : $value;
+    if(!is_numeric($value)) {
+        return $value;
+    }
     return number_format($value, 2,',','.');
 }
 
