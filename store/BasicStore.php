@@ -88,6 +88,7 @@ class BasicStore extends BasicSystem
             loadException("Array inválido.");
         }
         foreach($arrayObjects as $key => $values) {
+            $values = is_object($values) ? (array) $values : $values;
             $ret[$key] = $this->save($values);
         }
         return $ret;
@@ -148,5 +149,10 @@ class BasicStore extends BasicSystem
     function getStore()
     {
         return $this->store;
+    }
+
+    function getDomain()
+    {
+        return $this->domain;
     }
 }

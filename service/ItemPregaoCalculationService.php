@@ -25,6 +25,9 @@ class ItemPregaoCalculationService extends BasicSystem {
     function disponiveis($pregao_itens, $pedidos) {
         $total_itens_pedido = array();
         foreach($pedidos as $pedido) {
+            if($pedido->status === "EMPENHADO") {
+                continue;
+            }
             foreach($pedido->itens_pedido as $key => $values) {
                 $values = empty($values) ? 0 : $values;
                 if(isset($total_itens_pedido[$key])) {
@@ -33,6 +36,10 @@ class ItemPregaoCalculationService extends BasicSystem {
                     $total_itens_pedido[$key] = $values;
                 }
             }
+        }
+        // se não tiver no valores para subtrair.
+        if(empty($total_itens_pedido)) {
+            return $pregao_itens;
         }
         foreach($pregao_itens as &$values) {
             if(isset($total_itens_pedido[$values->_id])) {
@@ -48,30 +55,41 @@ class ItemPregaoCalculationService extends BasicSystem {
      * @param $pedidos itens pedidos do pregão.
      */
     function total_aprovados($pedido_pregao, $pregao_id) {
-        $res = array();
-
-        $res['HEADER'] = [
-            'cod_item_pregao' => "COD",
-            'nome' => "NOME",
-            'descricao' => "DESCRIÇÃO",
-            'valor_unitario' => "VALOR UNITARIO",
-            'fornecedor' => "FORNECEDOR",
-        ];
-
+        $res = array(
+            // nome das colunas iniciais.
+            'HEADER' => array(
+                'cod_item_pregao' => "COD",
+                'nome' => "NOME",
+                'descricao' => "DESCRIÇÃO",
+                'valor_unitario' => "VALOR UNITARIO",
+                'fornecedor' => "FORNECEDOR",
+            ),
+            'BODY' => array()
+        );
+        $itens_in = array();
+        foreach($pedido_pregao as $value) {
+            $itens_in = array_unique(array_merge($itens_in,array_keys($value->itens_pedido)));
+        }
         // recuperar todos os itens do pregão. 
-        $find_itens_pregao = $this->item_pregao->findBy(["pregao_id", "==", $pregao_id], ["cod_item_pregao" => "ASC"]);        
+        $find_itens_pregao = $this->item_pregao->findBy(
+            [
+                ["pregao_id", "==", $pregao_id], 
+                'AND',
+                ["_id", "IN", $itens_in]
+            ],
+            ["cod_item_pregao" => "ASC"]
+        );        
         // altera chave do array para id e inclui valores conforme HEADER
         foreach($find_itens_pregao as $value) {
             foreach(array_keys($res['HEADER']) as $param) {
                 $res["BODY"][$value->_id][$param] = $value->{$param};
             }
         }
-
         $res['VALOR_TOTAL'] = 0;
-
         // Lê cada pedidos, e inclui no corpo o valor.
         foreach($pedido_pregao as $pedidos) {
             $pedido_key = 'pedido_' . $pedidos->_id;
+            // nome das colunas pedido
             $res['HEADER'][$pedido_key] = '<small>' . $pedidos->setor . '</small></br><small style="font-size: xx-small;">' . $pedidos->solicitante . '</small>';
             // preenche os itens do pedido.
             foreach($pedidos->itens_pedido as $key_item => $qtd_item) {
@@ -83,14 +101,17 @@ class ItemPregaoCalculationService extends BasicSystem {
                 $res["BODY"][$key_item]['sub_total'] = $res["BODY"][$key_item]['total'] * $res["BODY"][$key_item]['valor_unitario'];
                 $res["BODY"][$key_item][$pedido_key] = $qtd_item;
                 $res['VALOR_TOTAL'] += $res["BODY"][$key_item]['sub_total'];
-                
              }
              $res['pedidos_id'][] = $pedidos->_id;   
         }
-
+        foreach($res["BODY"] as $key => $value){
+            if($value['total'] == 0) {
+                unset($res["BODY"][$key]);
+            }
+        }
+        // nome das colunas TOTAIS.
         $res['HEADER']['sub_total'] = 'SUB TOTAL';
         $res['HEADER']['total'] = "TOTAL";
-        $res['VALOR_TOTAL'] = $res['VALOR_TOTAL'];
         return $res;
     }
     
@@ -105,6 +126,10 @@ class ItemPregaoCalculationService extends BasicSystem {
         foreach($pedido->itens_pedido as $key => &$value) {
             $item = $this->item_pregao->findById($key);
             if(empty($item)) {
+                continue;
+            }
+            if($value == 0) {
+                unset($pedido->itens_pedido[$key]);
                 continue;
             }
             $item->pedido_valor = $value * $item->valor_unitario;
@@ -124,27 +149,27 @@ class ItemPregaoCalculationService extends BasicSystem {
     /**
      * Atualiza pregão item quando salva pedido
      */
-    function savePedido($itens_pedido) {
-        pr($itens_pedido);
-        die;
-        $saveAll = array();
-        foreach($itens_pedido as $item_id => $quantidade) {
-            $item = $this->itemPregao->findById($item_id);
-            $item->qtd_disponivel -= $quantidade;
-            $item->qtd_solicitada += $quantidade;
-            $item->valor_solicitado += $quantidade * $item->valor_unitario;
-            if($item->qtd_disponivel < 0) {
-                loadException("QUANTIDADE DO ITEM $item->nome INDISPONÍVEL");
-            } else {
-                $saveAll[] = $item;
-            }
-        }
-        pr($saveAll);
-        die;
-        if(count($saveAll) > 0) {
-            $this->itemPregao->saveAll($saveAll);
-        }
-    }
+    // function savePedido($itens_pedido) {
+    //     pr($itens_pedido);
+    //     die;
+    //     $saveAll = array();
+    //     foreach($itens_pedido as $item_id => $quantidade) {
+    //         $item = $this->itemPregao->findById($item_id);
+    //         $item->qtd_disponivel -= $quantidade;
+    //         $item->qtd_solicitada += $quantidade;
+    //         $item->valor_solicitado += $quantidade * $item->valor_unitario;
+    //         if($item->qtd_disponivel < 0) {
+    //             loadException("QUANTIDADE DO ITEM $item->nome INDISPONÍVEL");
+    //         } else {
+    //             $saveAll[] = $item;
+    //         }
+    //     }
+    //     pr($saveAll);
+    //     die;
+    //     if(count($saveAll) > 0) {
+    //         $this->itemPregao->saveAll($saveAll);
+    //     }
+    // }
 
     // /**
     //  * Soma um único item do pregão

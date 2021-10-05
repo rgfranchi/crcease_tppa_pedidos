@@ -1,9 +1,9 @@
 <div class="card shadow mb-4">
     <div class="card-header py-1">
+    <?php if (in_array($this->data['pedido']->status,$this->data['status'])) : ?>
         <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
             <input type="hidden" id="_id" name="_id" value="<?= $this->data['pedido']->_id ?>">
             <div class="input-group">
-            <?php if (in_array($this->data['pedido']->status,$this->data['status'])) : ?>
                 <div class="input-group-prepend">
                     <select class="custom-select" name="status" required="required">
                     <?php foreach ($this->data['status'] as $value) : ?>
@@ -12,11 +12,11 @@
                     </select>
                 </div>
                 <input type="submit" value="ATUALIZAR" />
-                <?php else : ?>
-                    <p>STATUS: <?=$this->data['pedido']->status ?></p>
-                <?php endif; ?>                
             </div>
         </form>
+    <?php else : ?>
+        <p>STATUS: <?=$this->data['pedido']->status ?></p>
+    <?php endif; ?>         
     </div>
     <?php include_once( __ROOT__ . '/view/default/pedido_cards.php'); ?>
     <?php include_once( __ROOT__ . '/view/default/pregao_card.php'); ?>

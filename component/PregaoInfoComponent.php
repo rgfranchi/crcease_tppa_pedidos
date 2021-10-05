@@ -5,6 +5,7 @@ include_once('helper/PregaoHelper.php');
 
 class PregaoInfoComponent extends BasicComponent
 {
+    public $_id;
     public $nome;
     public $objeto;
     public $termo_referencia_origem;

@@ -18,7 +18,6 @@
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
-            <th>ID</th>
             <th>COD</th>
             <th>Nome</th>
             <th>Descrição</th>
@@ -27,7 +26,6 @@
             <th>Ação</th>
           </thead>
           <tfoot>
-            <th>ID</th>
             <th>COD</th>
             <th>Nome</th>
             <th>Descrição</th>
@@ -37,7 +35,6 @@
           </tfoot>
           <?php foreach ($this->data['itens'] as $row) : ?>
             <tr>
-              <td><?= $row->_id ?></td>
               <td><?= $row->cod_item_pregao ?></td>
               <td><?= $row->nome ?></td>
               <td><?= $row->descricao ?></td>

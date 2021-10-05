@@ -17,4 +17,4 @@ class PedidoPregaoDataComponent extends BasicComponent
      * value -> quantidade
      */
     public $itens_pedido;
-}
+} 

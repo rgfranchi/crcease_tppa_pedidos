@@ -27,7 +27,7 @@ class PedidoPregaoDomain extends BasicDomain
      */
     function statusPedido($etapa = "PEDIDO") {
         // mater a chave com valor crescente para controle por comparação. > ou <
-        $status = [
+        $status = array(
             0 => "SOLICITADO", // Pedido Criado. 
             1 => "AGUARDANDO APROVAÇÃO", // Verificando disponibilidades de valores.
             2 => "APROVADO", // Gestores da meta
@@ -35,7 +35,7 @@ class PedidoPregaoDomain extends BasicDomain
             4 => "CREDITADO", // Crédito Recebido (Nota de Credito)
             5 => "EMPENHO SOLICITADO", // Criada a Solicitação (SREQ SILOMS). 
             6 => "EMPENHADO" // Empenho recebido (Valor é subtraido do ItemPregão)
-        ];
+        );
 
         switch($etapa) {
             case "PEDIDO" : 
