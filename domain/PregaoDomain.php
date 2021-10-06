@@ -25,7 +25,7 @@ class PregaoDomain extends BasicDomain
     //  */
     // public $pregoes_itens = array(); 
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         switch($name) {
             case 'valor_solicitado' :
             case 'valor_total' :
@@ -35,7 +35,7 @@ class PregaoDomain extends BasicDomain
                 $value = convertToDateTimeSystem($value, false);
                 break;
         }
-        return $value;
+        parent::convertField($name, $value, $newObject);
     }
 
     function validateField($name, $value)

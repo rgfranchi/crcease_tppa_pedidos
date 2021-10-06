@@ -45,16 +45,16 @@ class ItemPregaoMapItemPregaoFileMapper extends BasicMapper
         $pregao_id = $post['pregao_id'];
         $typeField = $post['typeField'];
         $data = $post['data_load'];
+        $tmpData = array();
         foreach($data as $itens) {
             // cria objeto para inserção ou adiciona valores para update.
+            $newObject = new $this->domain;
             $pos = array_search('_id', $typeField);
             if($pos !== false) {
-                $tmpItem = (array) $this->item_pregao->findById($itens[$pos]);
-                $itemPregao = empty($tmpItem) ? (array) $this->domain : $tmpItem;
-            } else {
-                $itemPregao = (array) $this->domain;
-            }
-            $itemPregao['pregao_id'] = $pregao_id;
+                $newObject = $this->item_pregao->findById($itens[$pos]);
+            } 
+            
+            $newObject->pregao_id = $pregao_id;
             foreach($itens as $key => $value) {
                 $type = $typeField[$key];
                 $value = trim($value);
@@ -63,16 +63,19 @@ class ItemPregaoMapItemPregaoFileMapper extends BasicMapper
                         continue;
                         break;
                     case 'cnpj': // agrupa fornecedor com CNPJ.
-                        $itemPregao['fornecedor'] = empty($itemPregao['fornecedor']) ? $value : $itemPregao['fornecedor'] .= " - ".$value;
+                        $newObject->fornecedor = empty($newObject->fornecedor) ? $value : $newObject->fornecedor." - ".$value;
                         break;
                     case 'fornecedor': // já possui valor, provável CNPJ.
-                        $itemPregao['fornecedor'] = empty($itemPregao['fornecedor']) ? $value : $value .= " - ".$itemPregao['fornecedor'];
+                        $newObject->fornecedor = empty($newObject->fornecedor) ? $value : $value." - ".$itens['cnpj'];
                         break;
-                    default:
-                        $itemPregao[$type] = $value;
                 }
+                $this->domain->convertField($type,$value, $newObject);
+                $this->domain->validateField($type, $value);
             }
-            $this->domain()->save($itemPregao);
+            $tmpData[] = (array) $newObject;
+        }
+        if(!empty($tmpData)) {
+            $this->domain()->saveAll($tmpData);
         }
         return true;
     }

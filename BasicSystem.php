@@ -94,9 +94,14 @@ class BasicSystem
                 $ret[$key] = $this->arrayToObject($value, $object);
             } else {
                 if(property_exists($newObject,$key)) {
-                    $value = $newObject->convertField($key, $value);
-                    $newObject->validateField($key, $value);
-                    $newObject->{$key} = $this->arrayToObject($value, $object);
+                    // Valor newObject passado por referência.
+                    $object->convertField($key, $value, $newObject);
+                    $object->validateField($key, $value);
+                    $this->arrayToObject($value, $object);
+                    
+                    // $value = $newObject->convertField($key, $value);
+                    // $newObject->validateField($key, $value);
+                    // $newObject->{$key} = $this->arrayToObject($value, $object);
                 }
             }
         }

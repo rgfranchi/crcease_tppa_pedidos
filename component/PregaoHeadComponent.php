@@ -13,8 +13,9 @@ class PregaoHeadComponent extends BasicComponent
     public $qtd_disponivel;    
     public $valor_solicitado;
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         $pregaoHelper = new PregaoHelper();
-        return $pregaoHelper->convertField($name, $value);
+        $value = $pregaoHelper->convert($name, $value, $newObject);
+        parent::convertField($name, $value, $newObject);
     }
 }

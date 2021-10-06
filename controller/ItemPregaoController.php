@@ -53,7 +53,7 @@ class ItemPregaoController extends BasicController
     {
         $item_id = $this->view->dataGet()['item_id'];
         $del_item = $this->item_pregao_map_item_pregao_list->domain()->findById($item_id);
-        $this->item_pregao_map_item_pregao_list->domain()->delete($del_item);
+        $this->item_pregao_map_item_pregao_list->domain()->delete($item_id);
         $this->view->redirect('ItemPregao', "index", array('pregao_id' => $del_item->pregao_id));
     }
 

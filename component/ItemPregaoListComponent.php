@@ -12,9 +12,9 @@ class ItemPregaoListComponent extends BasicComponent
     public $valor_unitario;
     public $qtd_disponivel;
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         $helper = new ItemPregaoHelper();
-        return $helper->convertField($name, $value);
+        parent::convertField($name, $helper->convert($name, $value), $newObject);
     }
 
 }

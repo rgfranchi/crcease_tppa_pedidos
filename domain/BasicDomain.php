@@ -18,15 +18,15 @@ class BasicDomain implements BasicRawObject
      * Save 1.1 
      * Converte apenas para criação do registro
      */
-    function convertFieldCreate($name, $value) {
-        return $value;
+    function convertFieldCreate($name, $value, &$newObject) {
+        $newObject->{$name} = $value;
     }
     /**
      * Save 1.2
      * Converte apenas para atualização registro
      */
-    function convertFieldUpdate($name, $value) {
-        return $value;
+    function convertFieldUpdate($name, $value, &$newObject) {
+        $newObject->{$name} = $value;
     }
 
     /**
@@ -48,8 +48,8 @@ class BasicDomain implements BasicRawObject
      * Save 3
      * Aplicar para classe instanciada a conversão do campo.
      */
-    function convertField($name, $value) {
-        return $value;
+    function convertField($name, $value, &$newObject) {
+        $newObject->{$name} = $value;
     }
     /**
      * Save 3

@@ -16,8 +16,9 @@ class PregaoInfoComponent extends BasicComponent
     public $url_anexo;
     public $url_siasg_net;
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         $pregaoHelper = new PregaoHelper();
-        return $pregaoHelper->convertField($name, $value);
+        $value = $pregaoHelper->convert($name, $value, $newObject);
+        parent::convertField($name, $value, $newObject);
     }
 }

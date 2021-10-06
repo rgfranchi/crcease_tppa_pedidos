@@ -28,9 +28,9 @@ class ItemPregaoFormComponent extends BasicComponent
     // Objeto Pregoes.php
     public $pregao_id;
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         $helper = new ItemPregaoHelper();
-        return $helper->convertField($name, $value);
+        parent::convertField($name, $helper->convert($name, $value), $newObject);
     }
 
 }

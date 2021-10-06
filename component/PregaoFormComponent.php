@@ -22,8 +22,9 @@ class PregaoFormComponent extends BasicComponent
     public $url_siasg_net;
     public $ativo;
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         $pregaoHelper = new PregaoHelper();
-        return $pregaoHelper->convertField($name, $value);
+        $value = $pregaoHelper->convert($name, $value, $newObject);
+        parent::convertField($name, $value, $newObject);
     }
 }

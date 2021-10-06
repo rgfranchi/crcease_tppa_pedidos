@@ -49,7 +49,7 @@ class PedidoPregaoDomain extends BasicDomain
     }
 
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         switch($name) {
             case 'itens_pedido' :
                 foreach ($value as &$qtd) {
@@ -58,7 +58,7 @@ class PedidoPregaoDomain extends BasicDomain
                     }
                 }
         }
-        return $value;
+        parent::convertField($name, $value, $newObject);
     }
 
 }

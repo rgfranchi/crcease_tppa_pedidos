@@ -17,8 +17,8 @@ class BasicComponent implements BasicRawObject
     /**
      * Aplicar para classe instanciada a conversão do campo.
      */
-    function convertField($name, $value) {
-        return $value;
+    function convertField($name, $value, &$newObject) {
+        $newObject->{$name} = $value;
     }
     /**
      * Aplicar validação de conversão do campo.

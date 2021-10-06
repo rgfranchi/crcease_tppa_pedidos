@@ -58,22 +58,24 @@ class BasicStore extends BasicSystem
             if($data['_id'] > 0) { $isNew = false; }
             if($data['_id'] == 0) { unset($data['_id']); }
         } 
-
+        // verificar todos os valores.
         $data = $this->domain->beforeSave($data);
-        $saveObject = new $this->domain;
+        $newObject = new $this->domain;
+        // verifica cada um dos campos.
         foreach($data as $key => &$value) {
-            if(!property_exists($saveObject,$key)) {
+            if(!property_exists($newObject,$key)) {
                 loadException("Valor '$key' enviados não consta no objeto");
             }
             if($isNew) {
-                $value = $saveObject->convertFieldCreate($key, $value);
-                $saveObject->validateFieldCreate($key, $value);
+                $this->domain->convertFieldCreate($key, $value, $newObject);
+                $this->domain->validateFieldCreate($key, $newObject->{$key});
             } else {
-                $saveObject->{$key} = $saveObject->convertFieldUpdate($key, $value);
-                $saveObject->validateFieldCreate($key, $saveObject->{$key});
+                $this->domain->convertFieldUpdate($key, $value, $newObject);
+                $this->domain->validateFieldUpdate($key, $newObject->{$key});
             }
-            $value = $saveObject->convertField($key, $value);
-            $saveObject->validateField($key, $value);
+            $this->domain->convertField($key, $value, $newObject);
+            $this->domain->validateField($key, $newObject->{$key});
+            $value = $newObject->{$key};
         }
         if ($isNew) {
             return $this->create($data);

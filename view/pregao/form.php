@@ -46,7 +46,7 @@
         <div class="col">
             <div class="form-group">
                 <label for="termo_referencia_origem">Termo de Referência / TOD:</label>
-                <input type="text" id="termo_referencia_origem" name="valor_solicitado" class="form-control" aria-describedby="termo_referencia_origemHelp" value="<?= $this->data->termo_referencia_origem ?>">
+                <input type="text" id="termo_referencia_origem" name="termo_referencia_origem" class="form-control" aria-describedby="termo_referencia_origemHelp" value="<?= $this->data->termo_referencia_origem ?>">
                 <small id="termo_referencia_origemHelp" class="form-text text-muted">Termo de Referência do processo.</small>
             </div>
         </div>
@@ -76,29 +76,29 @@
         <div class="col">
             <div class="form-group">
                 <label for="valor_total">Valor Total:</label>
-                <input type="text" id="valor_total" name="valor_total" disabled class="form-control money" aria-describedby="valor_totalHelp" value="<?= $this->data->valor_total ?>">
+                <input type="text" id="valor_total" name="valor_total" class="form-control money" aria-describedby="valor_totalHelp" value="<?= $this->data->valor_total ?>">
                 <small id="valor_totalHelp" class="form-text text-muted">'Valor Global da Ata' - 'Resultado por Fornecedor' <a href="http://comprasnet.gov.br/acesso.asp?url=/livre/Pregao/ata0.asp" target="_blank">COMPRAS NET</a>.</small>
             </div>
         </div>       
         <div class="col">
             <div class="form-group">
                 <label for="qtd_total">Quantidade Total:</label>
-                <input type="number" id="qtd_total" name="qtd_total" disabled class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data->qtd_total ?>">
-                <small id="qtd_totalHelp" class="form-text text-muted">Calculado na inserção de itens.</small>
+                <input type="number" id="qtd_total" name="qtd_total" class="form-control" aria-describedby="qtd_totalHelp" value="<?= $this->data->qtd_total ?>">
+                <small id="qtd_totalHelp" class="form-text text-muted">Total de itens.</small>
             </div>
         </div>     
         <div class="col">
             <div class="form-group">
                 <label for="qtd_disponivel">Quantidade Disponível:</label>
-                <input type="number" id="qtd_disponivel" name="qtd_disponivel" disabled class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data->qtd_disponivel ?>">
-                <small id="qtd_disponivelHelp" class="form-text text-muted">Calculado ao realizar pedido.</small>
+                <input type="number" id="qtd_disponivel" name="qtd_disponivel" class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data->qtd_disponivel ?>">
+                <small id="qtd_disponivelHelp" class="form-text text-muted">Total de itens disponiveis.</small>
             </div>
         </div>            
         <div class="col">
             <div class="form-group">
                 <label for="valor_solicitado">Valor Solicitado:</label>
-                <input type="text" id="valor_solicitado" name="valor_solicitado" disabled class="form-control money" aria-describedby="valor_solicitadoHelp" value="<?= $this->data->valor_solicitado ?>">
-                <small id="valor_solicitadoHelp" class="form-text text-muted">Calculado por pedido.</small>
+                <input type="text" id="valor_solicitado" name="valor_solicitado" class="form-control money" aria-describedby="valor_solicitadoHelp" value="<?= $this->data->valor_solicitado ?>">
+                <small id="valor_solicitadoHelp" class="form-text text-muted">Valor solicitado no registro.</small>
             </div>
         </div>
     </div>

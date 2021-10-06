@@ -12,7 +12,7 @@ class PedidoItemPregaoListComponent extends BasicComponent
     public $valor_unitario;
     public $qtd_disponivel;
 
-    function convertField($name, $value){
+    function convertField($name, $value, &$newObject){
         $helper = new ItemPregaoHelper();
 
         switch($name) {
@@ -20,7 +20,10 @@ class PedidoItemPregaoListComponent extends BasicComponent
                 $value = convertToDateTimeBR($value, false);
                 break;                
         }
-        return $helper->convertField($name, $value);
+        $value = $helper->convert($name, $value, $newObject);
+
+        parent::convertField($name, $value, $newObject);
+
     }
 
 }
