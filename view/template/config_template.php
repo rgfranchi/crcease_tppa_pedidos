@@ -1,5 +1,6 @@
 <?php
 include_once __ROOT__ . '/config.php';
+
 $navbar = array(
     array( // obrigatório
         'type' => 'brand',
@@ -7,28 +8,10 @@ $navbar = array(
         'href' => urlController("Pregao", 'index'),
         'icon' => 'fas fa-fighter-jet', // opcional.
     ),
-    array( // link de acesso direto
-        'type' => 'link',
-        'text' => 'Dashboard',
-        'href' => urlController("Dashboard", 'index'),
-        'icon' => 'fas fa-fw fa-tachometer-alt', // opcional
-    ),
     array( // texto de cabeçalho de cada menu
         'type' => 'heading',
         'text' => 'Pregão'
     ),
-    array( // link de acesso direto
-        'type' => 'link',
-        'text' => 'Cadastro',
-        'href' => urlController("Pregao", 'index'),
-        'icon' => 'fas fa-folder-plus text-gray-300', // opcional
-    ),
-    // array( // link de acesso direto
-    //     'type' => 'link',
-    //     'text' => 'Solicitação',
-    //     'href' => urlController("PedidoPregao", 'index'),
-    //     'icon' => 'fas fa-truck-moving text-gray-300', // opcional
-    // ),
     array( // link de acesso direto
         'type' => 'links',
         'text' => 'Solicitação',
@@ -36,26 +19,67 @@ $navbar = array(
         'href' => urlController("PedidoPregao", 'index'),
         'icon' => 'fas fa-truck-moving text-gray-300', // opcional
         'sub_itens' => array(
-                        // array(
-                        //     'type' => 'title',
-                        //     'text' => 'Pedidos:'
-                        // ),
                         array(
                             'type' => 'link',
                             'href' => urlController("PedidoPregao", 'index'),
                             'text' => 'Pedidos',
                         ),
-                        array(
-                            'type' => 'link',
-                            'href' => urlController("PedidoPregao", 'find'),
-                            'text' => 'Pesquisar',
-                        ),                        
                     )
     ),
 
 );
 
 
+if(isset($_SESSION['login']['admin'])) {
+    $navbar = array(
+        array( // obrigatório
+            'type' => 'brand',
+            'text' => 'TPPA CRCEA',
+            'href' => urlController("Pregao", 'index'),
+            'icon' => 'fas fa-fighter-jet', // opcional.
+        ),
+        array( // link de acesso direto
+            'type' => 'link',
+            'text' => 'Dashboard',
+            'href' => urlController("Dashboard", 'index'),
+            'icon' => 'fas fa-fw fa-tachometer-alt', // opcional
+        ),
+        array( // texto de cabeçalho de cada menu
+            'type' => 'heading',
+            'text' => 'Pregão'
+        ),
+        array( // link de acesso direto
+            'type' => 'link',
+            'text' => 'Cadastro',
+            'href' => urlController("Pregao", 'index'),
+            'icon' => 'fas fa-folder-plus text-gray-300', // opcional
+        ),
+        array( // link de acesso direto
+            'type' => 'links',
+            'text' => 'Solicitação',
+            'icon' => 'fas fa-fw fa-cog', // opcional
+            'href' => urlController("PedidoPregao", 'index'),
+            'icon' => 'fas fa-truck-moving text-gray-300', // opcional
+            'sub_itens' => array(
+                            // array(
+                            //     'type' => 'title',
+                            //     'text' => 'Pedidos:'
+                            // ),
+                            array(
+                                'type' => 'link',
+                                'href' => urlController("PedidoPregao", 'index'),
+                                'text' => 'Pedidos',
+                            ),
+                            array(
+                                'type' => 'link',
+                                'href' => urlController("PedidoPregao", 'find'),
+                                'text' => 'Pesquisar',
+                            ),                        
+                        )
+        ),
+
+    );
+}
 
 /**
  * Exemplo sidebar conforme template 

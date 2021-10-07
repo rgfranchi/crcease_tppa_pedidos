@@ -2,6 +2,8 @@
 
 include 'config.php';
 
+session_start();
+
 $params = $_GET;
 if (!isset($params['controller'])) {
     $params['controller'] = $config_index['default_controller'];
@@ -12,6 +14,11 @@ if (!isset($params['controller'])) {
 try {
     $params['controller'] = str_replace(array("'", "\"", "&quot;"), '', $params['controller']);
     $params['action'] = str_replace(array("'", "\"", "&quot;"), '', $params['action']);
+
+    if(!permission($params['controller'], $params['action'])) {
+        $params['controller'] = "PedidoPregao";
+        $params['action'] = "index";
+    }
 
     $className =  $params['controller'] . "Controller";
     // $className = 'PregaoController';
@@ -29,3 +36,5 @@ try {
 } catch (Exception $e) {
     echo '<h1>' . $e->getMessage() . '</h1>';
 }
+// navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled
+// navbar-nav bg-gradient-primary sidebar sidebar-dark accordion

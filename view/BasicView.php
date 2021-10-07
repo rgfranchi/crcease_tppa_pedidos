@@ -94,6 +94,13 @@ class BasicView extends BasicSystem
     }
 
     /**
+     * Redireciona para a URL do histórico.
+     */
+    function reloadHistory() {
+        header("Location: ".$_SERVER['HTTP_REFERER']);
+    }
+
+    /**
      * Download do arquivo e redirecionamento and Redirect.
      */
     function download($path, $controller, $action, $parameter = array())

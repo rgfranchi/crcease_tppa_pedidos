@@ -10,7 +10,7 @@ define('__ROOT__', dirname(__FILE__));
  * Configuração padrão do index.
  */
 $config_index = array(
-    "default_controller" => "Pregao",
+    "default_controller" => "PedidoPregao",
     "default_action" => "index",
 );
 
@@ -113,6 +113,28 @@ function convertToDateTimeSystem($value, $time = true) {
     return date($mask, strtotime($dateTime));
 }
 
+/**
+ * Controla permissão de acesso.
+ */
+function permission($controller, $action) {
+    $permission = array();
+    if(isset($_SESSION['login']['admin'])) {
+        return true;
+    }
+
+    // permissão para usuário não logado.
+    $permission = array(
+        'PedidoPregao' => array(
+            'index' => true,
+            'edit' => true,
+            'edit_itens' => true,
+            'save' => true
+        )
+    );
+
+    return isset($permission[$controller][$action]) ? $permission[$controller][$action] : false;
+
+}
 
 /**
  * Exibe variável na tela (Debug)

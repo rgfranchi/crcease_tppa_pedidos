@@ -1,4 +1,4 @@
-     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar">
+     <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion <?= $_SESSION['menu']['toggled'] == 1 ? "toggled" : ""; ?>" id="accordionSidebar">
          <?php foreach ($navbar as $key_nav => $value_nav) : ?>
              <?php if ($value_nav['type'] === 'brand') : ?>
                  <!-- Sidebar - Brand -->
@@ -61,7 +61,7 @@
          </div>
 
      </ul>
-
+     <?php $this->template_js = array('session') ?>
 
      <!-- Sidebar ORIGINAL -->
      <!-- <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"> -->
