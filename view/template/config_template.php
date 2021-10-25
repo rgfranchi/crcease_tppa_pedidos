@@ -4,82 +4,85 @@ include_once __ROOT__ . '/config.php';
 $navbar = array(
     array( // obrigatório
         'type' => 'brand',
-        'text' => 'TPPA CRCEA',
-        'href' => urlController("Pregao", 'index'),
+        'text' => 'TPPA<br>CRCEA-SE',
+        'href' => array('controller' => CONFIG['HOME_PAGE']['controller'], 'action' => CONFIG['HOME_PAGE']['action']),
+        // urlController("Pregao", 'index'),
         'icon' => 'fas fa-fighter-jet', // opcional.
+    ),
+    array( // link de acesso direto
+        'type' => 'link',
+        'text' => 'Dashboard',
+        'href' => array('controller' => "Dashboard", 'action' => 'index'),
+        // urlController("Dashboard", 'index'),
+        'icon' => 'fas fa-fw fa-tachometer-alt', // opcional
     ),
     array( // texto de cabeçalho de cada menu
         'type' => 'heading',
         'text' => 'Pregão'
     ),
     array( // link de acesso direto
+        'type' => 'link',
+        'text' => 'Cadastro',
+        'href' => array('controller' => "Pregao", 'action' => 'index'),
+        // urlController("Pregao", 'index'),
+        'icon' => 'fas fa-folder-plus text-gray-300', // opcional
+    ),
+    array( // link de acesso direto
         'type' => 'links',
         'text' => 'Solicitação',
         'icon' => 'fas fa-fw fa-cog', // opcional
-        'href' => urlController("PedidoPregao", 'index'),
+        'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
+        // urlController("PedidoPregao", 'index'),
         'icon' => 'fas fa-truck-moving text-gray-300', // opcional
         'sub_itens' => array(
+                        // array(
+                        //     'type' => 'title',
+                        //     'text' => 'Pedidos:'
+                        // ),
                         array(
                             'type' => 'link',
-                            'href' => urlController("PedidoPregao", 'index'),
+                            'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
+                            // urlController("PedidoPregao", "index"),
                             'text' => 'Pedidos',
                         ),
+                        array(
+                            'type' => 'link',
+                            'href' => array('controller' => "PedidoPregao", 'action' => 'find'),
+                            // urlController("PedidoPregao", "find"),
+                            'text' => 'Pesquisar',
+                        ),                        
                     )
     ),
 
 );
 
+/**
+ * Converte href array para string.
+ * Verifica se tem acesso a url (urlController).
+ * Se não exclui valor da url.
+ */
+function navbarConvertHref(&$arrNavbar) {
+    if(!is_array($arrNavbar)) {
+        return;
+    }
+    foreach($arrNavbar as $key => &$valor) {
+        if(is_array($valor)) {
+            if(($key == "href") && isset($valor['controller']) && isset($valor['action'])) {
+                $valor = urlController($valor['controller'], $valor['action']);
+                if(is_null($valor)) {
+                    return false;
+                }
+            } 
+            if(navbarConvertHref($valor) === false) {
+                $valor = null;
+            }
+        }
+    }
 
-if(isset($_SESSION['login']['admin'])) {
-    $navbar = array(
-        array( // obrigatório
-            'type' => 'brand',
-            'text' => 'TPPA CRCEA',
-            'href' => urlController("Pregao", 'index'),
-            'icon' => 'fas fa-fighter-jet', // opcional.
-        ),
-        array( // link de acesso direto
-            'type' => 'link',
-            'text' => 'Dashboard',
-            'href' => urlController("Dashboard", 'index'),
-            'icon' => 'fas fa-fw fa-tachometer-alt', // opcional
-        ),
-        array( // texto de cabeçalho de cada menu
-            'type' => 'heading',
-            'text' => 'Pregão'
-        ),
-        array( // link de acesso direto
-            'type' => 'link',
-            'text' => 'Cadastro',
-            'href' => urlController("Pregao", 'index'),
-            'icon' => 'fas fa-folder-plus text-gray-300', // opcional
-        ),
-        array( // link de acesso direto
-            'type' => 'links',
-            'text' => 'Solicitação',
-            'icon' => 'fas fa-fw fa-cog', // opcional
-            'href' => urlController("PedidoPregao", 'index'),
-            'icon' => 'fas fa-truck-moving text-gray-300', // opcional
-            'sub_itens' => array(
-                            // array(
-                            //     'type' => 'title',
-                            //     'text' => 'Pedidos:'
-                            // ),
-                            array(
-                                'type' => 'link',
-                                'href' => urlController("PedidoPregao", 'index'),
-                                'text' => 'Pedidos',
-                            ),
-                            array(
-                                'type' => 'link',
-                                'href' => urlController("PedidoPregao", 'find'),
-                                'text' => 'Pesquisar',
-                            ),                        
-                        )
-        ),
-
-    );
 }
+
+navbarConvertHref($navbar); 
+
 
 /**
  * Exemplo sidebar conforme template 

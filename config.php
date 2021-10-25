@@ -1,5 +1,5 @@
 <?php
-setlocale(LC_ALL, 'pt_BR');
+
 
 include "BasicSystem.php";
 include "BasicRawObject.php";
@@ -7,47 +7,54 @@ include "BasicRawObject.php";
 define('__ROOT__', dirname(__FILE__));
 
 /**
- * Configuração padrão do index.
- */
-$config_index = array(
-    "default_controller" => "PedidoPregao",
-    "default_action" => "index",
-);
-
-/**
  * Configurações do armazenamento das informações.
  */
-$config_store = array(
-    "path_store" => __DIR__ . "/TPPA_STORE"
+// $config_store = array(
+//     "path_store" => __DIR__ . "/TPPA_STORE"
+// );
+
+/**
+ * array('<nome controller>' => array('<nome action>' = <acesso true ou false>))
+ * Se '*' acessa toda arvore.
+ */
+$config_permission = array(
+    "Session" => array("*" => true),
+    "Dashboard" => array(
+        "index" => true
+    ),
+    "Exception" => array(
+        "access_denied" => true
+    ),
+    "PedidoPregao" => array(
+        "*" => true,
+        // "index" => true,
+        // "find" => true,
+        "edit_solicitado" => false,
+        "edit_aprovado" => false,
+    ),
 );
+
+if(isset($_SESSION['login'])) {
+    if(isset($_SESSION['login']['admin']) && $_SESSION['login']['admin'] == true) {
+        $config_permission["*"] = true;
+    }
+}
+
 
 define('TMP_FOLDER', 'tmp');
 
-define('CONFIG', array('config_store' => $config_store));
-
-
-function urlController($controller, $function, $param = array())
-{
-    $param['controller'] = $controller;
-    $param['action'] = $function;
-    return "index.php?" . http_build_query($param);
-}
-
-function camelToSnakeCase($string)
-{
-    return strtolower(preg_replace('/(?<!^)[A-Z]/', '_$0', $string));
-}
-
-function snakeToCamelCase($string)
-{
-    return str_replace('_', '', ucwords($string, '_'));
-}
-
-
-function snakeToTextCase($string)
-{
-    return str_replace('_', ' ', ucwords($string, '_'));
-}
+define('CONFIG', 
+    array(
+        'PERMISSION' => $config_permission,
+        'STORE' => array(
+            "path_store" => __DIR__ . "/TPPA_STORE"
+        ),         
+        'HOME_PAGE' => array(
+                "controller" => "Dashboard",
+                "action" => "index",
+            )
+        )
+);
 
 /**
  * Retira ',' do valor para conversão em float.
@@ -114,54 +121,8 @@ function convertToDateTimeSystem($value, $time = true) {
 }
 
 /**
- * Controla permissão de acesso.
+ * Setores que são atendidos pelo sistema.
  */
-function permission($controller, $action) {
-    $permission = array();
-    if(isset($_SESSION['login']['admin'])) {
-        return true;
-    }
-
-    // permissão para usuário não logado.
-    $permission = array(
-        'PedidoPregao' => array(
-            'index' => true,
-            'edit' => true,
-            'edit_itens' => true,
-            'save' => true
-        )
-    );
-
-    return isset($permission[$controller][$action]) ? $permission[$controller][$action] : false;
-
-}
-
-/**
- * Exibe variável na tela (Debug)
- * @param type $var -> a ser exibida;
- */
-function pr($var, $die = false)
-{
-    $trace = debug_backtrace();
-    echo "<pre>--- DEBUG --- " . $trace[0]['file'] . "(" . $trace[0]['line'] . ")</br>";
-    print_r($var);
-    echo "</pre>";
-    $die ? die() : '';
-}
-
-function loadException($textException) {
-    $trace = debug_backtrace();
-    foreach($trace as $key => $value) {
-        echo "[" . $key . "]" . $value['file'] . "(" . $value['line'] . ")-".$value['function']."</br>";
-    }
-    throw new Exception($textException);
-}
-
-function navbarActive($active = false)
-{
-    return $active ? 'active' : '';
-}
-
 function setores() {
     return array( // setores que devem ser considerados pelo sistema.
         'DTCEA-SP',
@@ -212,3 +173,5 @@ function setores() {
 		'TTTF',
     );
 }
+
+include "basicFunctions.php";

@@ -67,9 +67,11 @@
                   }
                 ?>                
                 <a href="<?= $this->action("PedidoPregao", "edit_itens", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-<?=$btItensStyle ?> btn-circle" title="EDITAR"><i class="fas fa-list"></i></a>
-                <?php if(isset($_SESSION['login']['admin'])) : ?>
-                  <a href="<?= $this->action("PedidoPregao", "edit_solicitado", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-<?=$btSolicitadoStyle ?> btn-circle" title="ENCAMINHAR"><i class="fas fa-anchor"></i></a>
-                  <a href="<?= $this->action("PedidoPregao", "edit_aprovado", array('pregao_id' => $row->pregao_id, 'pedido_status' => $row->status, 'hash_credito' => empty($row->hashCredito) ? "" : $row->hashCredito )); ?>" class="btn btn-sm btn-<?=$btAprovadoStyle?> btn-circle <?= $hashEnabled  ? '' : 'disabled' ?>" title="APROVADOS ENCAMINHAR"><i class="fas fa-hand-holding-usd"></i></a>
+                <?php if(!is_null($urlSolicitado = urlController("PedidoPregao", "edit_solicitado", array('pedido_pregao_id' => $row->_id)))) : ?>
+                  <a href="<?=$urlSolicitado ?>" class="btn-sm btn-<?=$btSolicitadoStyle ?> btn-circle" title="ENCAMINHAR"><i class="fas fa-anchor"></i></a>
+                <?php endif; ?>
+                <?php if(!is_null($urlAprovado = urlController("PedidoPregao", "edit_aprovado", array('pregao_id' => $row->pregao_id, 'pedido_status' => $row->status, 'hash_credito' => empty($row->hashCredito) ? "" : $row->hashCredito )))) : ?>
+                  <a href="<?=$urlAprovado ?>" class="btn btn-sm btn-<?=$btAprovadoStyle?> btn-circle <?= $hashEnabled  ? '' : 'disabled' ?>" title="APROVADOS ENCAMINHAR"><i class="fas fa-hand-holding-usd"></i></a>
                 <?php endif; ?>
               </td>
             </tr>

@@ -22,7 +22,7 @@ class BasicStore extends BasicSystem
      */
     function __construct($store_name, $domainName)
     {
-        $config_store = CONFIG['config_store'];
+        $config_store = CONFIG['STORE'];
         $this->store = new Store($store_name, $config_store["path_store"]);
         $this->domainName = $domainName;
         $this->domain = $this->loadDomain($domainName);

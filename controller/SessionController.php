@@ -13,12 +13,11 @@ class SessionController extends BasicController
     function menu()
     {
         $_SESSION['menu']['toggled'] = !$_SESSION['menu']['toggled'];
-        pr($_SESSION);
     }
 
     function login()
     {
-        $postLogin = $_POST;
+        $postLogin = $this->view->dataPost();
         if($postLogin['login'] === "admin") {
             $_SESSION['login']['admin'] = true;
         }

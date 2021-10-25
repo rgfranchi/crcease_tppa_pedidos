@@ -122,6 +122,10 @@ class BasicView extends BasicSystem
      */
     function action($controller, $action, $parameter = array())
     {
-        return urlController($controller, $action, $parameter);
+        $urlController = urlController($controller, $action, $parameter);
+        if(is_null($urlController)) {
+            return urlController("Exception", "access_denied");
+        }
+        return $urlController;
     }
 }

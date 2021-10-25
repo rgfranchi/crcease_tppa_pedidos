@@ -1,5 +1,6 @@
      <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion <?= $_SESSION['menu']['toggled'] == 1 ? "toggled" : ""; ?>" id="accordionSidebar">
          <?php foreach ($navbar as $key_nav => $value_nav) : ?>
+            <?php if (empty($value_nav)) {continue;} ?>
              <?php if ($value_nav['type'] === 'brand') : ?>
                  <!-- Sidebar - Brand -->
                  <a class="sidebar-brand d-flex align-items-center justify-content-center" href="<?= $value_nav['href']; ?>">
@@ -37,6 +38,7 @@
                      <div id="collapse<?= $key_nav ?>" class="collapse" aria-labelledby="heading<?= $key_nav ?>" data-parent="#accordionSidebar">
                          <div class="bg-white py-2 collapse-inner rounded">
                              <?php foreach ($value_nav['sub_itens'] as $value_sub) : ?>
+                                <?php if (empty($value_sub)) {continue;} ?>
                                  <?php if ($value_sub['type'] === 'title') : ?>
                                      <div class="collapse-divider"></div>
                                      <h6 class="collapse-header"><?= $value_sub['text'] ?></h6>
