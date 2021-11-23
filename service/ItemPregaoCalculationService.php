@@ -10,7 +10,7 @@ require_once(__ROOT__ . '/config.php');
  */
 class ItemPregaoCalculationService extends BasicSystem {
     
-    // private $objectPregao = null;
+    private $invalidItem = array();
 
     function __construct()
     {
@@ -18,7 +18,9 @@ class ItemPregaoCalculationService extends BasicSystem {
     }
 
     /**
-     * Calcula quantidade de itens disponíveis 
+     * Calcula quantidade de itens disponíveis<br>
+     * Se o valor do item cadastrado for menor que zero, retorna zero.<br>
+     * Preenche variável de controle 
      * @param $pregao_itens itens do objeto pregão
      * @param $pedidos itens pedidos do pregão.
      */
@@ -37,17 +39,30 @@ class ItemPregaoCalculationService extends BasicSystem {
                 }
             }
         }
-        // se não tiver no valores para subtrair.
+        // se não tiver valores para subtrair.
         if(empty($total_itens_pedido)) {
             return $pregao_itens;
         }
-        foreach($pregao_itens as &$values) {
+        //nova variável para processar o array mas não modificar.
+        $ret = array();
+        foreach($pregao_itens as $key => $object) {
+            $values = clone($object);
             if(isset($total_itens_pedido[$values->_id])) {
                 $values->qtd_disponivel -= $total_itens_pedido[$values->_id];
+                if($values->qtd_disponivel < 0) {
+                    $this->invalidItem[$values->_id] = $values;
+                    // $values->qtd_disponivel = 0;
+                }
             }
+            $ret[$key] = $values;
         }
-        return $pregao_itens;
+        return $ret;
     }
+
+    function getInvalidItem() {
+        return $this->invalidItem;
+    }
+
 
     /**
      * Soma a quantidades de itens por pedido.

@@ -13,6 +13,9 @@ class PregaoController extends BasicController
 
     function index()
     {
+
+// VERIFICAR AJUSTES PARA EXIBIR O PREGÃO.
+
         $this->view->setTitle("Lista Pregões");
         $this->view->render("index", $this->pregao_map_pregao_list->component()->findAll(['nome' => 'asc']));
     }

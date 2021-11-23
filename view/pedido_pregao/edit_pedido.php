@@ -1,8 +1,11 @@
 <?php include_once( __ROOT__ . '/view/default/pregao_head.php'); ?>
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary"><a href="<?= $this->action("PedidoPregao", "add", array('pregao_id' => $this->data['pregao']->_id)); ?>">NOVA SOLICITAÇÃO</a> 
-    | Cores: <span class="text-secondary">Não inciado</span>, <span class="text-warning">Aguardando Ação</span>, <span class="text-success">Fim Etapa</span> e <span class="text-info">Finalizado</span>
+    <h6 class="m-0 font-weight-bold text-primary">
+    <?php if($this->data['pregao']->data_vencimento_color != "red") : ?> 
+      <a href="<?= $this->action("PedidoPregao", "add_itens", array('pregao_id' => $this->data['pregao']->_id)); ?>">NOVA SOLICITAÇÃO</a>  | 
+    <?php endif; ?> 
+    Cores: <span class="text-secondary">Não inciado</span>, <span class="text-warning">Aguardando Ação</span>, <span class="text-success">Fim Etapa</span> e <span class="text-info">Finalizado</span>
     </h6>
     
   </div>

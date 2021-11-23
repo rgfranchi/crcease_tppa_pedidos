@@ -4,11 +4,11 @@ class PregaoHelper {
     function convert($name, $value, &$newObject){
 
         switch($name) {
-            case 'valor_solicitado' :
-            case 'valor_total' :
-                $value = convertToMoneyBR($value);
-                break;
-            case 'data_vencimento' :
+            // case 'valor_solicitado' :
+            // case 'valor_total' :
+            //     $value = convertToMoneyBR($value);
+            //     break;
+            case 'data_limite_solicitacao' :
                 $dateNow = new DateTime();
                 $dateVencimento = new DateTime($value); 
                 $diff = $dateNow->diff($dateVencimento);

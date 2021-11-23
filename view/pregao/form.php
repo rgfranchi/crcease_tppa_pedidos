@@ -26,11 +26,18 @@
         </div>        
         <div class="col">
             <div class="form-group">
+                <label for="data_limite_solicitacao">Data Limite Solicitação:</label>
+                <input type="date" id="data_limite_solicitacao" name="data_limite_solicitacao" class="form-control" aria-describedby="data_limite_solicitacaoHelp" value="<?= $this->data->data_limite_solicitacao ?>">
+                <small id="data_limite_solicitacaoHelp" class="form-text text-muted">Data limite para realizar solicitação do pregão.</small>
+            </div>
+        </div>   
+        <!-- <div class="col">
+            <div class="form-group">
                 <label for="data_vencimento">Data Vencimento:</label>
                 <input type="date" id="data_vencimento" name="data_vencimento" class="form-control" aria-describedby="data_vencimentoHelp" value="<?= $this->data->data_vencimento ?>">
                 <small id="data_vencimentoHelp" class="form-text text-muted">Data limite para realizar solicitação do pregão.</small>
             </div>
-        </div>   
+        </div>    -->
         <div class="col">
             <div class="form-group">
                 <label for="ativo">Ativo:</label>
@@ -72,7 +79,7 @@
             </div>
         </div>
     </div>
-    <div class="row">
+    <!-- <div class="row">
         <div class="col">
             <div class="form-group">
                 <label for="valor_total">Valor Total:</label>
@@ -101,7 +108,7 @@
                 <small id="valor_solicitadoHelp" class="form-text text-muted">Valor solicitado no registro.</small>
             </div>
         </div>
-    </div>
+    </div> -->
     <div class="row">
         <div class="col">
             <div class="form-group">

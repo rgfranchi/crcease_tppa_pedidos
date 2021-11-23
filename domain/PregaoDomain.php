@@ -8,12 +8,13 @@ class PregaoDomain extends BasicDomain
     public $nome;
     public $objeto;
     public $termo_referencia_origem;
-    public $valor_total;
-    public $valor_solicitado;
-    public $qtd_total;
-    public $qtd_disponivel;
+    // public $valor_total;
+    // public $valor_solicitado;
+    // public $qtd_total;
+    // public $qtd_disponivel;
+    // public $data_vencimento;
     public $data_homologacao;
-    public $data_vencimento;
+    public $data_limite_solicitacao;
     public $numero_processo_PAG;
     public $url_proposta;
     public $url_anexo;
@@ -27,11 +28,14 @@ class PregaoDomain extends BasicDomain
 
     function convertField($name, $value, &$newObject){
         switch($name) {
-            case 'valor_solicitado' :
-            case 'valor_total' :
-                $value = convertCommaToDot($value);
-                break;
+            // case 'valor_solicitado' :
+            // case 'valor_total' :
+            //     $value = convertCommaToDot($value);
+            //     break;
             case 'data_homologacao' :
+                $value = convertToDateTimeSystem($value, false);
+                break;
+            case 'data_limite_solicitacao' :
                 $value = convertToDateTimeSystem($value, false);
                 break;
         }
@@ -40,16 +44,16 @@ class PregaoDomain extends BasicDomain
 
     function validateField($name, $value)
     {
-        $validate = true;
-        switch($name) {
-            case 'valor_solicitado' :
-            case 'valor_total' :
-                $validate = is_numeric($value);
-                break;
-        }
-        if(!$validate) {
-            loadException("Campo $name com valor $value inválido");
-        } 
+        // $validate = true;
+        // switch($name) {
+        //     case 'valor_solicitado' :
+        //     case 'valor_total' :
+        //         $validate = is_numeric($value);
+        //         break;
+        // }
+        // if(!$validate) {
+        //     loadException("Campo $name com valor $value inválido");
+        // } 
     }
 
     // EXEMPLO DE TRATAMENTO ANTES DE EXCLUIR.

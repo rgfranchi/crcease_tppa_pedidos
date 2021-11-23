@@ -12,8 +12,8 @@
           <tr>
             <th>Nome</th>
             <th>Objeto</th>
-            <th>Valor Solicitado</th>
-            <th>Vencimento</th>
+            <th>Data Homologação</th>
+            <th>Data Limite Solicitação</th>
             <th>Ativo</th>
             <th>Ação</th>
           </tr>
@@ -22,8 +22,8 @@
           <tr>
             <th>Nome</th>
             <th>Objeto</th>
-            <th>Valor Solicitado</th>
-            <th>Vencimento</th>
+            <th>Data Homologação</th>
+            <th>Data Limite Solicitação</th>
             <th>Ativo</th>
             <th>Ação</th>
           </tr>
@@ -33,8 +33,8 @@
             <tr>
               <td><?= $row->nome ?></td>
               <td><?= $row->objeto ?></td>
-              <td><?= $row->valor_solicitado ?></td>
-              <td style="color:<?= $row->data_vencimento_color ?>"><?= $row->data_vencimento ?></td>
+              <td><?= $row->data_homologacao ?></td>
+              <td style="color:<?= $row->data_vencimento_color ?>"><?= $row->data_limite_solicitacao ?></td>
               <td><?= $row->ativo === "true" ? "SIM" : "NÃO" ?></td>
               <td class="table-action">
                 <a href="<?= $this->action("Pregao", "edit", array('id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
