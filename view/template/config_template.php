@@ -4,7 +4,7 @@ include_once __ROOT__ . '/config.php';
 $navbar = array(
     array( // obrigatório
         'type' => 'brand',
-        'text' => 'TPPA<br>CRCEA-SE',
+        'text' => 'CRCEA-SE<br>TPPA',
         'href' => array('controller' => CONFIG['HOME_PAGE']['controller'], 'action' => CONFIG['HOME_PAGE']['action']),
         // urlController("Pregao", 'index'),
         'icon' => 'fas fa-fighter-jet', // opcional.

@@ -24,7 +24,13 @@
     <!-- Basic Card Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">TOTAL PEDIDOS R$ <?= convertToMoneyBR($this->data['pedidos']['VALOR_TOTAL']) ?></h6>
+            <h6 class="m-0 font-weight-bold text-primary">
+                TOTAL PEDIDOS R$ <?= convertToMoneyBR($this->data['pedidos']['VALOR_TOTAL']) ?>
+                | <a href="<?= $this->action("PedidoPregao", "download_edit_aprovado", array(
+                    "pregao_id" => $this->data['pregao']->_id,
+                    "hash_credito" => $this->data['hash_credito']
+                    )); ?>" >Exportar</a>
+            </h6>
         </div>
         <div class="card-body">
             <div class="table-responsive scrollTopTable">

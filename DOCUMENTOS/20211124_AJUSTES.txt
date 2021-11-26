@@ -1,0 +1,35 @@
+Alterações na página de Cadastro:
+    Campo "Valor Solicitado" sempre aparece zerado
+    - RETIRADO
+    Vincular o campo "Ativo" com "Vencimento"
+    - CRIADO CAMPO 'DATA LIMITE SOLICITAÇÃO'
+    Colocar fórmula pra "Data de Vencimento" conforme valor inserido na "Data de Homologação"
+    - VENCIMENTO CALCULADO 'DATA LIMITE SOLICITAÇÃO'
+    Campo "Quantidade Total" do PE poderia ser excluído, já que não há o valor em ATA
+    - RETIRADO CAMPOS: valor_total, valor_solicitado, qtd_total, qtd_disponivel e data_vencimento (substituida por 'data limite solicitação');
+    Colocar URL SIASG NET não seria melhor colocar URL RESULTADO POR FORNECEDOR?
+    - Resultado por fornecedor do compras governamentais não é possível utilizar a URL.
+    - O sistema SIASG NET deve apontar para as quantidades disponíveis após pesquisa do pregão.
+
+Alterações na página Solicitação:
+    Vincular a tecla "Nova Solicitação" com a data de vencimento
+    - NOVA SOLICITAÇÃO não é exibido quando o a 'Data Limite Solicitação' é ultrapassada. 
+    Exibir apenas NOME ou DESCRIÇÃO
+    - São campos distintos: 
+        - Nome: "Tinta"  
+        - Descrição: "Acrilica na cor azul"
+    Exibir links do ComprasNet na "Descrição do PE" em vez de: quantidade total, quantidade disponível, valor solicitado
+    - Retirado campos.
+
+Alterações na página de processo da solicitação
+    Colocar coluna de "Nº ITEM PREGÃO" e organizar a ordem por ele, se possível deixar a coluna COD oculta (solicitação> pedido com o status de aprovado> icone mãozinha)
+    - Foi alterado o nome da coluna COD para Nº.
+
+Implementações:
+    Colocar caixa de texto para que possamos alimentar com informações do tipo SOL NC, NC, SOL NE e NE(solicitação> pedido com o status de aprovado> icone mãozinha)
+    
+    Deixar as informações de  SOL NC, NC, SOL NE e NE visíveis para todos na parte de resumo (solicitação> icone de lista> Pedido Pregão Itens )
+    
+    Deixar somente a descrição da ata na parte de resumo (solicitação> ícone de âncora> Pedidos SOLICITADOS )
+
+    Colocar opção de cancelar pedido junto com as opções de solicitado, aguardando aprovação e aprovado.

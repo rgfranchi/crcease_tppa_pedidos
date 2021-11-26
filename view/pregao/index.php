@@ -3,7 +3,10 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-4">
   <div class="card-header py-3">
-    <h6 class="m-0 font-weight-bold text-primary"><a href="<?= urlController("Pregao", 'add') ?>">Adicionar</a></h6>
+    <h6 class="m-0 font-weight-bold text-primary">
+      <a href="<?= urlController("Pregao", 'add') ?>">Adicionar</a> |
+      <a href="<?= $this->action("Pregao", "download_file"); ?>" >Exportar</a>
+    </h6>
   </div>
   <div class="card-body">
     <div class="table-responsive">

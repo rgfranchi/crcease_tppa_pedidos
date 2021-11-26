@@ -24,7 +24,13 @@ class ItemPregaoController extends BasicController
         $this->view->setTitle("Lista Itens Pregões");
         $this->view->render("index", $data);
     }
-
+    function download_index()
+    {
+        $pregao_id = $this->view->dataGet()['pregao_id'];
+        $obj = $this->item_pregao_map_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
+        $file_path = $this->php_spreadsheet->saveFile($obj, 'pregao_itens');
+        $this->view->download($file_path);
+    }
 
     function add()
     {
@@ -95,11 +101,5 @@ class ItemPregaoController extends BasicController
         $this->view->redirect("ItemPregao", "index", array('pregao_id' => $post['pregao_id']));
     }
 
-    function download_file()
-    {
-        $pregao_id = $this->view->dataGet()['pregao_id'];
-        $obj = $this->item_pregao_map_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
-        $file_path = $this->php_spreadsheet->saveFile($obj, 'tmp_file');
-        $this->view->download($file_path, "ItemPregao", "index", array('pregao_id' => $pregao_id));
-    }
+
 }

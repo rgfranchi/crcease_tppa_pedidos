@@ -103,7 +103,7 @@ class BasicView extends BasicSystem
     /**
      * Download do arquivo e redirecionamento and Redirect.
      */
-    function download($path, $controller, $action, $parameter = array())
+    function download($path)
     {
         header('Content-Description: File Transfer');
         header('Content-Disposition: attachment; filename='.basename($path));

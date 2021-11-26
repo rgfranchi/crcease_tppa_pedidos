@@ -9,13 +9,13 @@ class PregaoController extends BasicController
         $this->loadView('pregao');
         $this->loadBasicMapper("Pregao", "PregaoList");
         $this->loadBasicMapper("Pregao", "PregaoForm");
+        $this->loadService(array(
+            'PhpSpreadsheet',
+        ));        
     }
 
     function index()
     {
-
-// VERIFICAR AJUSTES PARA EXIBIR O PREGÃO.
-
         $this->view->setTitle("Lista Pregões");
         $this->view->render("index", $this->pregao_map_pregao_list->component()->findAll(['nome' => 'asc']));
     }
@@ -43,4 +43,12 @@ class PregaoController extends BasicController
         $this->pregao_map_pregao_list->domain()->delete($this->view->dataGet()['id']);
         $this->view->redirect("Pregao", "index");
     }
+
+    function download_file()
+    {
+        $obj = $this->loadBasicStores("Pregao")->findAll(['nome' => 'asc']);
+        $file_path = $this->php_spreadsheet->saveFile($obj, 'tmp_file');
+        $this->view->download($file_path, "Pregao", "index");
+    }
+
 }

@@ -5,7 +5,8 @@
     <?php if($this->data['pregao']->data_vencimento_color != "red") : ?> 
       <a href="<?= $this->action("PedidoPregao", "add_itens", array('pregao_id' => $this->data['pregao']->_id)); ?>">NOVA SOLICITAÇÃO</a>  | 
     <?php endif; ?> 
-    Cores: <span class="text-secondary">Não inciado</span>, <span class="text-warning">Aguardando Ação</span>, <span class="text-success">Fim Etapa</span> e <span class="text-info">Finalizado</span>
+    Cores: <span class="text-secondary">Não inciado</span>, <span class="text-warning">Aguardando Ação</span>, <span class="text-success">Fim Etapa</span> e <span class="text-info">Finalizado</span> 
+    | <a href="<?= $this->action("PedidoPregao", "download_edit_pedido", array("pregao_id" => $this->data['pregao']->_id)); ?>" >Exportar</a>
     </h6>
     
   </div>

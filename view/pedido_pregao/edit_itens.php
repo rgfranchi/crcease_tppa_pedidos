@@ -18,6 +18,7 @@
             Solicitante: <?= $solicitante; ?> |
             Status: <?= $this->data['pedido']->status; ?> 
             <?=$enableEdit ? " | <input type='submit'  value='SALVAR' />" : "" ?> 
+            | <a href="<?= $this->action("PedidoPregao", "download_edit_itens", array("pedido_pregao_id" => $this->data['pedido']->_id)); ?>" >Exportar</a>
           </div>
         <?php else : ?>
           <div class="input-group">
@@ -28,7 +29,7 @@
                   <?php if($value ===  $setor) : ?>
                     <option selected value="<?=$value?>"><?=$value?></option>
                   <?php else : ?>
-                    <option value="<?=$value?>"><?=$value?></option>  
+                    <option value="<?=$value?>"><?=$value?></option>   
                   <?php endif; ?>                
                 <?php endforeach; ?>
               </select>
@@ -47,13 +48,14 @@
 
           </div>          
         <?php endif; ?>
+        
       </h6>
     </div>
     <div class="card-body">
       <div class="table-responsive">
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
-            <th>COD</th>
+            <th>Nº</th>
             <th>Nome</th>
             <th>Descrição</th>
             <th>Valor Unitário</th>
@@ -61,7 +63,7 @@
             <th>Quantidade</th>
           </thead>
           <tfoot>
-            <th>COD</th>
+            <th>Nº</th>
             <th>Nome</th>
             <th>Descrição</th>
             <th>Valor Unitário</th>

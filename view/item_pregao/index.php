@@ -4,7 +4,7 @@
     <h6 class="m-0 font-weight-bold text-primary">
       <a href="<?= $this->action("ItemPregao", "add", array('pregao_id' => $this->data['pregao']->_id)); ?>">Adicionar</a> |
       <a href="<?= $this->action("ItemPregao", "upload_file", array('pregao_id' => $this->data['pregao']->_id)); ?>">Carregar Arquivo</a> |
-      <a href="<?= $this->action("ItemPregao", "download_file", array('pregao_id' => $this->data['pregao']->_id)); ?>" >Gerar Arquivo</a> |
+      <a href="<?= $this->action("ItemPregao", "download_index", array('pregao_id' => $this->data['pregao']->_id)); ?>" >Gerar Arquivo</a> |
       <a href="<?= $this->action("ItemPregao", "delete_all", array('pregao_id' => $this->data['pregao']->_id)); ?>" class="deleteAll" >Excluir Todos</a> |
     </h6>
   </div>
@@ -12,7 +12,7 @@
     <div class="table-responsive">
       <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
         <thead>
-          <th>COD</th>
+          <th>Nº</th>
           <th>Nome</th>
           <th>Descrição</th>
           <th>Fornecedor</th>
@@ -21,7 +21,7 @@
           <th>Ação</th>
         </thead>
         <tfoot>
-          <th>COD</th>
+          <th>Nº</th>
           <th>Nome</th>
           <th>Descrição</th>
           <th>Fornecedor</th>
