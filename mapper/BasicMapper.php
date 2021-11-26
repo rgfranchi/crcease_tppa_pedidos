@@ -1,7 +1,7 @@
 <?php
 
 /**
- * Operações de transição entre domain e componet.
+ * Operações de transição entre domain e component.
  */
 class BasicMapper extends BasicSystem
 {
@@ -25,56 +25,6 @@ class BasicMapper extends BasicSystem
             $this->store = $this->loadStores($store);
         }
     }
-
-    /**
-     * Carrega instancia do componente e reponde com instancia do domínio
-     * @param object $loadComponent instancia a ser mapeada
-     */
-    // function directDomain($loadComponent)
-    // {
-    //     $this->verifyValue($loadComponent);
-    //     if (empty($loadComponent)) {
-    //         return $this->domain;
-    //     }
-    //     $ret = null;
-    //     if (is_array($loadComponent)) {
-    //         foreach ($loadComponent as $key => $value) {
-    //             $ret[$key] = $this->mapper($value, $this->component, $this->domain);
-    //         }
-    //     } else {
-    //         $ret = $this->mapper($loadComponent, $this->component, $this->domain);
-    //     }
-    //     $this->domain = $ret;
-    // }
-
-    // /**
-    //  * Carrega instancia do domínio e reponde com instancia do componente
-    //  * @param object $loadDomain instancia a ser mapeada
-    //  */
-    // function directComponent($loadDomain = null)
-    // {
-    //     $this->verifyValue($loadDomain);
-    //     if (empty($loadDomain)) {
-    //         return $this->component;
-    //     }
-    //     $ret = null;
-    //     if (is_array($loadDomain)) {
-    //         foreach ($loadDomain as $key => $value) {
-    //             $ret[$key] = $this->mapper($value, $this->domain, $this->component);
-    //         }
-    //     } else {
-    //         $ret = $this->mapper($loadDomain, $this->domain, $this->component);
-    //     }
-    //     $this->component = $ret;
-    // }
-
-    // function directComponentList($loadDomainList)
-    // {
-    //     if (empty($loadDomainList)) {
-    //         $this->component = array();
-    //     }
-    //     $this->directComponent($loadDomainList);
-    // }
 
     /**
      * Retorna componente preenchido com valores de store.
