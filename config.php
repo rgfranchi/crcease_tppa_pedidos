@@ -32,6 +32,9 @@ $config_permission = array(
         "edit_solicitado" => false,
         "edit_aprovado" => false,
     ),
+    "PedidoPregaoPesquisar" => array(
+        "*" => true,
+    ),    
 );
 
 if(isset($_SESSION['login'])) {

@@ -76,7 +76,7 @@ class ItemPregaoDomain extends BasicDomain
             case 'cod_item_pregao' :
             case 'qtd_disponivel' :
             case 'nome' :
-                $validate = !is_null($value) && !empty($value);
+                $validate = !is_null($value);
                 break;
         }
         if(!$validate) {

@@ -1,7 +1,5 @@
 <?php
-
 require_once(__ROOT__ . '/config.php');
-
 
 /**
  * Atualiza valores (qtd_disponivel, qtd_solicitada, valor_solicitado) dos Itens do pregão.
@@ -28,6 +26,9 @@ class ItemPregaoCalculationService extends BasicSystem {
         $total_itens_pedido = array();
         foreach($pedidos as $pedido) {
             if($pedido->status === "EMPENHADO") {
+                continue;
+            }
+            if(empty($pedido->itens_pedido)) {
                 continue;
             }
             foreach($pedido->itens_pedido as $key => $values) {
@@ -83,7 +84,8 @@ class ItemPregaoCalculationService extends BasicSystem {
         );
         $itens_in = array();
         foreach($pedido_pregao as $value) {
-            $itens_in = array_unique(array_merge($itens_in,array_keys($value->itens_pedido)));
+            $currKeys = empty($value->itens_pedido) ? array() : array_keys($value->itens_pedido);
+            $itens_in = array_unique(array_merge($itens_in, $currKeys));
         }
         // recuperar todos os itens do pregão. 
         $find_itens_pregao = $this->item_pregao->findBy(
@@ -138,15 +140,16 @@ class ItemPregaoCalculationService extends BasicSystem {
     function solicitados($pedido) {
         $pedido_valor_total = 0;
         $pedido_quantidade_total = 0;
-        foreach($pedido->itens_pedido as $key => &$value) {
-            $item = $this->item_pregao->findById($key);
+
+        $pedido->itens_pedido = array_filter($pedido->itens_pedido);
+        $item_pregao_pedido = $this->item_pregao->findBy(["_id", "IN", array_keys($pedido->itens_pedido)],['cod_item_pregao' => 'asc']);
+
+        $tmpItemPedido = array();
+        foreach($item_pregao_pedido as $item) {
             if(empty($item)) {
                 continue;
             }
-            if($value == 0) {
-                unset($pedido->itens_pedido[$key]);
-                continue;
-            }
+            $value = $pedido->itens_pedido[$item->_id];
             $item->pedido_valor = $value * $item->valor_unitario;
             $pedido_valor_total += $item->pedido_valor;
             $pedido_quantidade_total += $value;
@@ -154,117 +157,12 @@ class ItemPregaoCalculationService extends BasicSystem {
             $item->pedido_valor = convertToMoneyBR($item->pedido_valor);
             $item->valor_unitario = convertToMoneyBR($item->valor_unitario);
             $item->valor_solicitado = convertToMoneyBR($item->valor_solicitado);
-            $value = $item;
+            $tmpItemPedido[$item->_id] = $item;
         }
+        $pedido->itens_pedido = $tmpItemPedido;
         $pedido->pedido_valor_total = convertToMoneyBR($pedido_valor_total);
         $pedido->pedido_quantidade_total =  $pedido_quantidade_total;
+
         return $pedido;
     }
-
-    /**
-     * Atualiza pregão item quando salva pedido
-     */
-    // function savePedido($itens_pedido) {
-    //     pr($itens_pedido);
-    //     die;
-    //     $saveAll = array();
-    //     foreach($itens_pedido as $item_id => $quantidade) {
-    //         $item = $this->itemPregao->findById($item_id);
-    //         $item->qtd_disponivel -= $quantidade;
-    //         $item->qtd_solicitada += $quantidade;
-    //         $item->valor_solicitado += $quantidade * $item->valor_unitario;
-    //         if($item->qtd_disponivel < 0) {
-    //             loadException("QUANTIDADE DO ITEM $item->nome INDISPONÍVEL");
-    //         } else {
-    //             $saveAll[] = $item;
-    //         }
-    //     }
-    //     pr($saveAll);
-    //     die;
-    //     if(count($saveAll) > 0) {
-    //         $this->itemPregao->saveAll($saveAll);
-    //     }
-    // }
-
-    // /**
-    //  * Soma um único item do pregão
-    //  */
-    // function sumItemPregao($item) {
-    //     $this->objectPregao = $this->pregao->findById($item->pregao_id);
-    //     $this->sumPregao($item);
-    //     $this->pregao->save((array) $this->objectPregao);
-    // }
-
-    // /**
-    //  * Subtrai um único item do pregão
-    //  */
-    // function subtractItemPregao($item) {
-    //     $this->objectPregao = $this->pregao->findById($item->pregao_id);
-    //     $this->subtractPregao($item);
-    //     $this->pregao->save((array) $this->objectPregao);
-    // }
-
-    // /**
-    //  * Atualiza um único item do pregão
-    //  */
-    // function updateItemPregao($item) {
-    //     $this->objectPregao = $this->pregao->findById($item->pregao_id);
-    //     $this->subtractPregao($item);
-    //     $this->sumPregao($item);
-    //     $this->pregao->save((array) $this->objectPregao);
-    // }
-
-    // /**
-    //  * Zera valor dos itens do pregão.
-    //  */
-    // function resetItensPregao($pregao_id) {
-    //     $this->objectPregao = $this->pregao->findById($pregao_id);
-    //     $this->objectPregao->valor_total = 0.0;
-    //     $this->objectPregao->qtd_total = 0;
-    //     $this->objectPregao->qtd_disponivel = 0;
-    //     $this->objectPregao->valor_solicitado = 0;
-    //     $this->pregao->save((array) $this->objectPregao);
-    // }
-
-    // /**
-    //  * Soma respectivamente:
-    //  * ItemPregao qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
-    //  * Pregao     qtd_total, qtd_disponivel, valor_total
-    //  */
-    // function sumPregao($item) {
-    //     if(empty($this->objectPregao)) {
-    //         loadException("'objectPregao' não definido");
-    //     }
-    //     $this->objectPregao->valor_total += (convertCommaToDot($item->valor_unitario) * $item->qtd_total);
-    //     $this->objectPregao->qtd_total += $item->qtd_total;
-    //     if($item->qtd_disponivel > 0) {
-    //         $this->objectPregao->qtd_disponivel += $item->qtd_disponivel;
-    //     } else {
-    //         $this->objectPregao->qtd_disponivel += $item->qtd_total;
-    //     }
-    //     if($item->qtd_solicitada > 0) {
-    //         $this->objectPregao->valor_solicitado += ($item->qtd_solicitada * $item->valor_unitario);
-    //     } else {
-    //         $this->objectPregao->valor_solicitado += $item->valor_solicitado;
-    //     }
-    // }
-
-    // /**
-    //  * Subtrai respectivamente:
-    //  * ItemPregao qtd_total, qtd_disponivel, (valor_unitario * qtd_total) com 
-    //  * Pregao     qtd_total, qtd_disponivel, valor_total
-    //  */
-    // function subtractPregao($item) {
-    //     if(empty($this->objectPregao)) {
-    //         loadException("Pregão não definido incluir 'setPregao(pregao)'");
-    //     }
-    //     $this->objectPregao->valor_total -= (convertCommaToDot($item->valor_unitario) * $item->qtd_total);
-    //     $this->objectPregao->qtd_total -= $item->qtd_total;
-    //     if($item->qtd_disponivel > 0) {
-    //         $this->objectPregao->qtd_disponivel -= $item->qtd_disponivel;
-    //     } else {
-    //         $this->objectPregao->qtd_disponivel -= $item->qtd_total;
-    //     }        
-    //     $this->objectPregao->valor_solicitado -= ($item->qtd_solicitada * $item->valor_unitario);
-    // }
 }

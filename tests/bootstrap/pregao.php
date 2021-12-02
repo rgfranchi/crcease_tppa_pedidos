@@ -44,7 +44,7 @@ $pregoes_2->numero_processo_PAG = "67617016410201913";
 $pregoes_2->url_proposta = "http://comprasnet.gov.br/livre/Pregao/anexosPropostaHabilitacao.asp?prgCod=877391";
 $pregoes_2->url_anexo= "http://comprasnet.gov.br/livre/Pregao/anexosDosItens.asp?uasg=120633&numprp=822020&prgcod=877391";
 $pregoes_2->url_siasg_net = "https://www2.comprasnet.gov.br/siasgnet-atasrp/public/pesquisarItemSRP.do?method=iniciar&parametro.identificacaoCompra.numeroUasg=120633&parametro.identificacaoCompra.modalidadeCompra=5&parametro.identificacaoCompra.numeroCompra=00082&parametro.identificacaoCompra.anoCompra=2020";
-$pregoes_1->ativo = "true";
+$pregoes_2->ativo = "true";
 
 pr($pregoes_2);
 $pregao_store->create_update_object((array) $pregoes_2);

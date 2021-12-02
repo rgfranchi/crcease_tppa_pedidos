@@ -47,7 +47,7 @@ $navbar = array(
                         ),
                         array(
                             'type' => 'link',
-                            'href' => array('controller' => "PedidoPregao", 'action' => 'find'),
+                            'href' => array('controller' => "PedidoPregaoPesquisar", 'action' => 'index'),
                             // urlController("PedidoPregao", "find"),
                             'text' => 'Pesquisar',
                         ),                        

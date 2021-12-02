@@ -3,6 +3,7 @@
     <?php if (in_array($this->data['pedido']->status,$this->data['status'])) : ?>
         <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
             <input type="hidden" id="_id" name="_id" value="<?= $this->data['pedido']->_id ?>">
+            <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pedido']->pregao_id ?>">
             <div class="input-group">
                 <div class="input-group-prepend">
                     <select class="custom-select" name="status" required="required">

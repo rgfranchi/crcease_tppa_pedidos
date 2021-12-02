@@ -24,6 +24,9 @@ class BasicSystem
         return $this->{camelToSnakeCase($storeName)};
     }
 
+    /**
+     * inicializa store
+     */
     function loadStores($store)
     {
         return $this->instantiateClass('Store', $store);
