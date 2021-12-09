@@ -29,7 +29,7 @@ class PedidoPregaoPesquisarService extends BasicSystem
     /**
      * busca por "find_value".
      * PregaoDomain - nome / objeto / termo_referencia_origem / numero_processo_PAG
-     * ItemPregaoDomain - cod_item_pregao / nome / descricao / fornecedor
+     * ItemPregaoDomain - cod_item_pregao / descricao / fornecedor
      * PedidoPregaoDomain - setor / solicitante
      */
     function findPregao($find,  $where_pregao = ['ativo', '==', 'true']) {
@@ -44,7 +44,10 @@ class PedidoPregaoPesquisarService extends BasicSystem
                 return $this->item_pregao_store->findBy(["pregao_id", "==", $pregao["_id"]]);
             } ,"item_pregao")
             ->join(function($pregao) {
-                return $this->pedido_pregao_store->findBy(["pregao_id", "==", $pregao["_id"]]);
+                return $this->pedido_pregao_store->findBy([
+                    ["pregao_id", "==", $pregao["_id"]],
+                    ["status", "!=", "EXCLUIDO"]
+                ]);
             },"pedido_pregao")
             ->where([
                 ['nome', 'LIKE', $find],
@@ -72,8 +75,6 @@ class PedidoPregaoPesquisarService extends BasicSystem
                 return $this->item_pregao_store->createQueryBuilder()
                     ->where(["pregao_id", "==", $pregao["_id"]])
                     ->where([
-                        ['nome', 'LIKE', $find],
-                        'OR',
                         ['descricao', 'LIKE', $find],
                         'OR',
                         ['fornecedor', 'LIKE', $find],
@@ -83,7 +84,10 @@ class PedidoPregaoPesquisarService extends BasicSystem
                     ->fetch();
             } ,"item_pregao")
             ->join(function($pregao) {
-                return $this->pedido_pregao_store->findBy(["pregao_id", "==", $pregao["_id"]]);
+                return $this->pedido_pregao_store->findBy([
+                    ["pregao_id", "==", $pregao["_id"]], 
+                    ["status", "!=", "EXCLUIDO"]
+                ]);
             },"pedido_pregao")
             ->where($where_pregao)
             ->getQuery()
@@ -110,6 +114,7 @@ class PedidoPregaoPesquisarService extends BasicSystem
             ->join(function($pregao) use ($find) {
                 return $this->pedido_pregao_store->createQueryBuilder()
                     ->where(["pregao_id", "==", $pregao["_id"]])
+                    ->where(["status", "!=", "EXCLUIDO"])
                     ->where([
                         ['setor', 'LIKE', $find],
                         'OR',

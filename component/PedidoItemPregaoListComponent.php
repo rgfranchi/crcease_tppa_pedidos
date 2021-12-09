@@ -7,7 +7,7 @@ class PedidoItemPregaoListComponent extends BasicComponent
 {
     public $_id;
     public $cod_item_pregao;
-    public $nome;
+    public $fornecedor;
     public $descricao;
     public $valor_unitario;
     public $qtd_disponivel;

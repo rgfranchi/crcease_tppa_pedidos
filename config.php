@@ -31,6 +31,7 @@ $config_permission = array(
         // "find" => true,
         "edit_solicitado" => false,
         "edit_aprovado" => false,
+        "delete" => false,
     ),
     "PedidoPregaoPesquisar" => array(
         "*" => true,

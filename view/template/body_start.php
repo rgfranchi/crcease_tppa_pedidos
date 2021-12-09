@@ -6,7 +6,7 @@
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
                 <!-- Main Content -->
-                <div id="content">
+                <div id="content" <?= (strpos(__DIR__, 'PRODUCAO') === false) ? 'style="background-color:#070a474d;"' : '' ?>>
                     <!-- Topbar -->
                     <nav class="navbar navbar-expand navbar-light bg-white topbar mb-1 static-top shadow">
                         <button id="backLink" class="btn-sm btn-primary btn-circle"><i class="fas fa-arrow-left"></i></button>

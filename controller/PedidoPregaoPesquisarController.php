@@ -20,9 +20,9 @@ class PedidoPregaoPesquisarController extends BasicController
     {
         $data = $this->view->dataPost();
         $data['find_value'] = isset($data['find_value']) ? $data['find_value'] : "";
-        $where_ativo = isset($data['ativo']) ? $data['ativo'] : "true";
+        $data['ativo'] = isset($data['ativo']) ? $data['ativo'] : "true";
 
-        $where_pregao = ['ativo', '==', $where_ativo];
+        $where_pregao = ['ativo', '==', $data['ativo']];
 
         $data['pregao'] = $this->pedido_pregao_pesquisar->findPregao($data['find_value'], $where_pregao);
         $data['item_pregao'] = $this->pedido_pregao_pesquisar->findItemPregao($data['find_value'],$where_pregao);

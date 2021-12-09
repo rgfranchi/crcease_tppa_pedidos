@@ -41,9 +41,6 @@
                         <?php
                             $px = 100;
                             switch($field) {
-                                case 'nome' :
-                                    $px = 300;
-                                    break;
                                 case 'descricao' :
                                     $px = 800;
                                     break;

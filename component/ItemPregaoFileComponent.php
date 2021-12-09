@@ -6,7 +6,6 @@ class ItemPregaoFileComponent extends BasicComponent
 {
     public $_id;
     public $cod_item_pregao; // código do item no PE.
-    public $nome; 
     public $descricao;
     public $valor_unitario;
     public $valor_solicitado;

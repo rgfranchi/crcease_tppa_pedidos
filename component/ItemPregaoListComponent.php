@@ -6,7 +6,6 @@ class ItemPregaoListComponent extends BasicComponent
 {
     public $_id;
     public $cod_item_pregao;
-    public $nome;
     public $descricao;
     public $fornecedor;
     public $valor_unitario;

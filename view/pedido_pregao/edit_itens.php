@@ -12,7 +12,7 @@
           $setor = isset($this->data['pedido']->setor) ? $this->data['pedido']->setor : "";
         ?>
         <?php if(isset($this->data['pedido']->_id) && $this->data['pedido']->_id > 0) : ?>
-          <?php $enableEdit = $this->data['pedido']->status === 'SOLICITADO' ?>
+          <?php $enableEdit = (isset($_SESSION['login']['admin']) && $_SESSION['login']['admin'] == true) ? $_SESSION['login']['admin'] : false; // $this->data['pedido']->status === 'SOLICITADO' ?>
           <div>
             Setor: <?= $setor; ?> |
             Solicitante: <?= $solicitante; ?> |
@@ -56,16 +56,16 @@
         <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
           <thead>
             <th>Nº</th>
-            <th>Nome</th>
             <th>Descrição</th>
+            <th>Fornecedor</th>
             <th>Valor Unitário</th>
             <th>Qtd Disponível</th>
             <th>Quantidade</th>
           </thead>
           <tfoot>
             <th>Nº</th>
-            <th>Nome</th>
             <th>Descrição</th>
+            <th>Fornecedor</th>
             <th>Valor Unitário</th>
             <th>Qtd Disponível</th>
             <th>Quantidade</th>
@@ -73,8 +73,8 @@
           <?php foreach ($this->data['itens'] as $row) : ?>
             <tr>
               <td><?= $row->cod_item_pregao ?></td>
-              <td><?= $row->nome ?></td>
               <td><?= $row->descricao ?></td>
+              <td><?= $row->fornecedor ?></td>
               <td><?= $row->valor_unitario ?></td>
               <td><?= $row->qtd_disponivel ?></td>
               <td class="table-action">

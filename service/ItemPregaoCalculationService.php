@@ -25,7 +25,7 @@ class ItemPregaoCalculationService extends BasicSystem {
     function disponiveis($pregao_itens, $pedidos) {
         $total_itens_pedido = array();
         foreach($pedidos as $pedido) {
-            if($pedido->status === "EMPENHADO") {
+            if($pedido->status === "EMPENHADO" || $pedido->status === "EXCLUIDO") {
                 continue;
             }
             if(empty($pedido->itens_pedido)) {
@@ -75,7 +75,6 @@ class ItemPregaoCalculationService extends BasicSystem {
             // nome das colunas iniciais.
             'HEADER' => array(
                 'cod_item_pregao' => "COD",
-                'nome' => "NOME",
                 'descricao' => "DESCRIÇÃO",
                 'valor_unitario' => "VALOR UNITARIO",
                 'fornecedor' => "FORNECEDOR",

@@ -40,8 +40,13 @@ class PedidoPregaoController extends BasicController
     function edit_pedido()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
+        
+        $findByPedido = [["pregao_id", "==", $pregao_id], ["status", "!=", "EXCLUIDO" ]];
+        if(isset($_SESSION['login']['admin']) && $_SESSION['login']['admin'] == true) {
+            $findByPedido = ["pregao_id", "==", $pregao_id];
+        }
 
-        $data['pedido'] = $this->pedido_pregao->findBy(["pregao_id", "==", $pregao_id], ["hashCredito" => "DESC"]);
+        $data['pedido'] = $this->pedido_pregao->findBy($findByPedido, ["hashCredito" => "DESC"]);
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
         $this->view->setTitle("Consultar Pedido");
         $this->view->render("edit_pedido", $data);
@@ -269,18 +274,20 @@ class PedidoPregaoController extends BasicController
         $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret[0]->pregao_id));
     }
 
+    function delete()
+    {
+        $get = $this->view->dataGet();
+
+        if($get['pedido_status'] === "EMPENHADO" && isset($get['pedido_status'])) {
+            loadException("PEDIDO NÃO PODE SER EXCLUÍDO");
+        }
 
 
+        $pedido = $this->pedido_pregao->findById($get['pedido_pregao_id']);
+        
+        $pedido->status = "EXCLUIDO";    
+        $ret = $this->pedido_pregao->save((array) $pedido);
 
-
-
-
-
-
-
-    // function delete()
-    // {
-    //     // $this->pregao_map_pregao_list->domain()->delete($this->view->dataGet()['id']);
-    //     // $this->view->redirect("Pregao", "index");
-    // }
+        $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret->pregao_id));
+    }
 }

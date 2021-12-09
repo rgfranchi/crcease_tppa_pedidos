@@ -27,7 +27,7 @@
                 </button>    
             </div>
         </div>                    
-        <small class="text-muted">Pregao (nome objeto TR PAG) Item (código nome descricao fornecedor) Pedido (setor solicitante status)</small>
+        <small class="text-muted">Pregao (nome objeto TR PAG) Item (código descricao fornecedor) Pedido (setor solicitante status)</small>
     </form>
   </div>
   <div class="card-body">
@@ -45,7 +45,7 @@
 
         <div id="item_pregao" class="card border-left-<?=($type == "item_pregao") ? 'success' : 'primary'?>">
           <?php foreach($row['item_pregao'] as $itemPregao) : ?>
-            <?=$itemPregao['cod_item_pregao'] . ' - ' . $itemPregao['nome'] . ' - ' . $itemPregao['descricao'] . ' - ' . $itemPregao['valor_unitario'] . ' - ' . $itemPregao['fornecedor'] . ' - ' . $itemPregao['natureza_despesa'] . '<br>'?>
+            <?=$itemPregao['cod_item_pregao'] . ' - ' . $itemPregao['descricao'] . ' - ' . $itemPregao['valor_unitario'] . ' - ' . $itemPregao['fornecedor'] . ' - ' . $itemPregao['natureza_despesa'] . '<br>'?>
           <?php endforeach; ?>
         </div>
 

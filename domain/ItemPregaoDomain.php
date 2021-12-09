@@ -6,7 +6,6 @@ class ItemPregaoDomain extends BasicDomain
 {
     public $_id;
     public $cod_item_pregao; // código do item no PE.
-    public $nome; 
     public $descricao;
     public $valor_unitario;
     public $valor_solicitado;
@@ -75,7 +74,7 @@ class ItemPregaoDomain extends BasicDomain
                 break;
             case 'cod_item_pregao' :
             case 'qtd_disponivel' :
-            case 'nome' :
+            case 'descricao' :
                 $validate = !is_null($value);
                 break;
         }

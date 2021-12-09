@@ -46,6 +46,7 @@
                   $btItensStyle = 'success';
                   $btSolicitadoStyle = 'warning';
                   $btAprovadoStyle = 'secondary';
+                  $btExcluirStyle = 'danger';
                   //Itens já solicitados
                   if($row->status != 'SOLICITADO') {
                     $btItensStyle = 'info';
@@ -68,6 +69,7 @@
                   // Finalizado o pedido.
                   if($row->status == 'EMPENHADO') {
                     $btAprovadoStyle = 'info';
+                    $btExcluirStyle = 'secondary';
                   }
                 ?>                
                 <a href="<?= $this->action("PedidoPregao", "edit_itens", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-<?=$btItensStyle ?> btn-circle" title="EDITAR"><i class="fas fa-list"></i></a>
@@ -76,6 +78,9 @@
                 <?php endif; ?>
                 <?php if(!is_null($urlAprovado = urlController("PedidoPregao", "edit_aprovado", array('pregao_id' => $row->pregao_id, 'pedido_status' => $row->status, 'hash_credito' => empty($row->hashCredito) ? "" : $row->hashCredito )))) : ?>
                   <a href="<?=$urlAprovado ?>" class="btn btn-sm btn-<?=$btAprovadoStyle?> btn-circle <?= $hashEnabled  ? '' : 'disabled' ?>" title="APROVADOS ENCAMINHAR"><i class="fas fa-hand-holding-usd"></i></a>
+                <?php endif; ?>
+                <?php if(!is_null($urlDelete = urlController("PedidoPregao", "delete", array('pedido_pregao_id' => $row->_id, 'pedido_status' => $row->status, 'hash_credito' => empty($row->hashCredito) ? "" : $row->hashCredito )))) : ?>
+                  <a href="<?=$urlDelete ?>" class="btn btn-sm btn-<?=$btExcluirStyle?> btn-circle delete <?= $btExcluirStyle == "secondary"  ? 'disabled' : '' ?>"  title="EXCLUIR"><i class="fas fa-trash"></i></a>
                 <?php endif; ?>
               </td>
             </tr>

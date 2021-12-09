@@ -73,7 +73,10 @@ class BasicView extends BasicSystem
         include "template/body_start.php"; // importa sidebar.php (menu)
         include $this->folder . "/" . $render . ".php";
         include "template/body_end.php"; // inclui scripts.
-        pr($this->data);
+        if(strpos(__DIR__, 'PRODUCAO') === false) {
+            pr($this->data);
+        }
+        
         // include $this->folder . "/" . $render . ".php";
     }
 

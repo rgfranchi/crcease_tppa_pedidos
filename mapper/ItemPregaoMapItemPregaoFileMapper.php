@@ -30,7 +30,7 @@ class ItemPregaoMapItemPregaoFileMapper extends BasicMapper
                     $newComponent[$keys] = snakeToTextCase($keys)." **";
                     break;
                 case 'cod_item_pregao' :
-                case 'nome' : 
+                case 'descricao' : 
                 case 'valor_unitario' :
                     $newComponent[$keys] = snakeToTextCase($keys)." *";
                     break;          

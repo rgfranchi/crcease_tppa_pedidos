@@ -34,7 +34,6 @@
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                 <thead>
                     <th>COD</th>
-                    <th>Nome</th>
                     <th>Descrição</th>
                     <th>Fornecedor</th>
                     <th>Valor Unitário</th>
@@ -46,7 +45,6 @@
                 </thead>
                 <tfoot>
                     <th>COD</th>
-                    <th>Nome</th>
                     <th>Descrição</th>
                     <th>Fornecedor</th>
                     <th>Valor Unitário</th>
@@ -59,7 +57,6 @@
                 <?php foreach ($this->data['pedido']->itens_pedido as $row) : ?>
                     <tr>
                         <td><?= $row->cod_item_pregao ?></td>
-                        <td><?= $row->nome ?></td>
                         <td><?= $row->descricao ?></td>
                         <td><?= $row->fornecedor ?></td>
                         <td><?= $row->valor_unitario ?></td>
