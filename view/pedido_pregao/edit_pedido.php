@@ -3,10 +3,11 @@
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">
     <?php if($this->data['pregao']->data_vencimento_color != "red") : ?> 
-      <a href="<?= $this->action("PedidoPregao", "add_itens", array('pregao_id' => $this->data['pregao']->_id)); ?>">NOVA SOLICITAÇÃO</a>  | 
+      <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "add_itens", array('pregao_id' => $this->data['pregao']->_id)); ?>">NOVA SOLICITAÇÃO</a> 
     <?php endif; ?> 
+    <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "download_edit_pedido", array("pregao_id" => $this->data['pregao']->_id)); ?>" >Exportar</a>
     Cores: <span class="text-secondary">Não inciado</span>, <span class="text-warning">Aguardando Ação</span>, <span class="text-success">Fim Etapa</span> e <span class="text-info">Finalizado</span> 
-    | <a href="<?= $this->action("PedidoPregao", "download_edit_pedido", array("pregao_id" => $this->data['pregao']->_id)); ?>" >Exportar</a>
+      
     </h6>
     
   </div>

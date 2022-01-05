@@ -25,8 +25,9 @@
     <!-- Basic Card Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">
-            <h6 class="m-0 font-weight-bold text-primary">Itens Solicitados
-            | <a href="<?= $this->action("PedidoPregao", "download_edit_solicitado", array("pedido_pregao_id" => $this->data['pedido']->_id)); ?>" >Exportar</a>
+            <h6 class="m-0 font-weight-bold text-primary">
+                <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "download_edit_solicitado", array("pedido_pregao_id" => $this->data['pedido']->_id)); ?>" >Exportar</a>
+                Itens Solicitados
             </h6>                    
         </div>
         <div class="card-body">

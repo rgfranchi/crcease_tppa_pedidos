@@ -14,11 +14,11 @@
         <?php if(isset($this->data['pedido']->_id) && $this->data['pedido']->_id > 0) : ?>
           <?php $enableEdit = (isset($_SESSION['login']['admin']) && $_SESSION['login']['admin'] == true) ? $_SESSION['login']['admin'] : false; // $this->data['pedido']->status === 'SOLICITADO' ?>
           <div>
+          <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "download_edit_itens", array("pedido_pregao_id" => $this->data['pedido']->_id)); ?>" >Exportar</a>
             Setor: <?= $setor; ?> |
             Solicitante: <?= $solicitante; ?> |
             Status: <?= $this->data['pedido']->status; ?> 
             <?=$enableEdit ? " | <input type='submit'  value='SALVAR' />" : "" ?> 
-            | <a href="<?= $this->action("PedidoPregao", "download_edit_itens", array("pedido_pregao_id" => $this->data['pedido']->_id)); ?>" >Exportar</a>
           </div>
         <?php else : ?>
           <div class="input-group">
