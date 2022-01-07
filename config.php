@@ -47,11 +47,25 @@ if(isset($_SESSION['login'])) {
 
 define('TMP_FOLDER', 'tmp');
 
+$database_path = "../DATABASE_TPPA/DESENVOLVIMENTO";
+// print '<pre>';
+// var_dump($_SERVER);
+// var_dump($_SERVER['SCRIPT_FILENAME']);
+// print '</pre>';
+
+if(strpos($_SERVER['SCRIPT_FILENAME'], "HOMOLOGA") !== false) {
+    $database_path = "../DATABASE_TPPA/HOMOLOGA";
+}
+if(strpos($_SERVER['SCRIPT_FILENAME'], "PRODUCAO") !== false) {
+    $database_path = "../DATABASE_TPPA/PRODUCAO";
+}
+
+
 define('CONFIG', 
     array(
         'PERMISSION' => $config_permission,
         'STORE' => array(
-            "path_store" => __DIR__ . "/TPPA_STORE"
+            "path_store" => $database_path
         ),         
         'HOME_PAGE' => array(
                 "controller" => "Dashboard",
@@ -59,6 +73,9 @@ define('CONFIG',
             )
         )
 );
+
+
+// var_dump(CONFIG);
 
 /**
  * Setores que são atendidos pelo sistema.
