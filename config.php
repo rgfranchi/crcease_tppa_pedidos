@@ -1,17 +1,9 @@
 <?php
+// pasta raiz da aplicação.
 
-
-include "BasicSystem.php";
-include "BasicRawObject.php";
+use function TPPA\logger\pr;
 
 define('__ROOT__', dirname(__FILE__));
-
-/**
- * Configurações do armazenamento das informações.
- */
-// $config_store = array(
-//     "path_store" => __DIR__ . "/TPPA_STORE"
-// );
 
 /**
  * array('<nome controller>' => array('<nome action>' = <acesso true ou false>))
@@ -44,7 +36,6 @@ if(isset($_SESSION['login'])) {
     }
 }
 
-
 define('TMP_FOLDER', 'tmp');
 
 $database_path = "../DATABASE_TPPA/DESENVOLVIMENTO";
@@ -60,7 +51,7 @@ if(strpos($_SERVER['SCRIPT_FILENAME'], "PRODUCAO") !== false) {
     $database_path = "../DATABASE_TPPA/PRODUCAO";
 }
 
-
+// Variáveis de configuração do sistema.
 define('CONFIG', 
     array(
         'PERMISSION' => $config_permission,
@@ -130,5 +121,3 @@ function setores() {
 		'TTTF',
     );
 }
-
-include "basicFunctions.php";

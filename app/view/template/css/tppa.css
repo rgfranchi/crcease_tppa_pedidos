@@ -1,0 +1,14 @@
+.topbar {
+  height: 3rem;
+}
+
+.topbar .topbar-divider {
+  width: 0;
+  border-right: 1px solid #e3e6f0c5;
+  height: calc(2rem - 0.2rem);
+  margin: 0.5rem 0.5rem;
+}
+
+td.table-action {
+  white-space: nowrap;
+}

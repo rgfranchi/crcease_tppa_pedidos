@@ -1,7 +1,18 @@
 <?php
+namespace TPPA;
+
 session_start();
 setlocale(LC_ALL, 'pt_BR');
-include 'config.php';
+
+/**
+ *  realiza operação include para funções quando declaradas.<br>
+ *  Baseado no código PhpSpreedsheet de vendors.
+ **/ 
+include "./core/autoloader.php";
+include "./core/basic.php";
+include "config.php";
+use Exception;
+$basicFunctions = new CORE\BasicFunctions();
 
 $params = $_GET;
 $home_page = CONFIG['HOME_PAGE'];
@@ -15,23 +26,28 @@ try {
     $params['controller'] = str_replace(array("'", "\"", "&quot;"), '', $params['controller']);
     $params['action'] = str_replace(array("'", "\"", "&quot;"), '', $params['action']);
 
-    if(permission($params['controller'], $params['action']) === false) {
+    if($basicFunctions->permission($params['controller'], $params['action']) === false) {
         $params['controller'] = $home_page['controller'];
         $params['action'] = $home_page['action'];
     } 
 
-    $className =  $params['controller'] . "Controller";
-    // $className = 'PregaoController';
-    $pathController = "./controller/" . $className . ".php";
+    $className = $params['controller'] . "Controller";
+
+    
+    $pathController = "./app/controller/" . $className . ".php";
     if (!file_exists($pathController)) {
-        loadException('Falha ao carregar Controller [' . $pathController . ']');
+        $basicFunctions->loadException('Falha ao carregar Controller [' . $pathController . ']');
     }
-    include $pathController;
-    $controller = new $className();
+    $useClassName =  'TPPA\\APP\\controller\\'.$className;
+    $controller = new $useClassName;
+    
+    // include $pathController;
+    
+    // $controller = new $className();
     $action = $params['action'];
     
     if (!method_exists($controller, $action)) {
-        loadException('Falha ao carregar Ação (Método) [' . $pathController . '][' . $action . ']');
+        $basicFunctions->loadException('Falha ao carregar Ação (Método) [' . $pathController . '][' . $action . ']');
     }
     $controller->{$action}($params);
 
@@ -41,3 +57,5 @@ try {
 }
 // navbar-nav bg-gradient-primary sidebar sidebar-dark accordion toggled
 // navbar-nav bg-gradient-primary sidebar sidebar-dark accordion
+
+
