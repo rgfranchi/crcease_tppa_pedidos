@@ -19,8 +19,8 @@
         <p>STATUS: <?=$this->data['pedido']->status ?></p>
     <?php endif; ?>         
     </div>
-    <?php include_once( __ROOT__ . '/app/view/default/pedido_cards.php'); ?>
-    <?php include_once( __ROOT__ . '/app/view/default/pregao_card.php'); ?>
+    <?php include_once(  __APP_VIEW__ . '/default/pedido_cards.php'); ?>
+    <?php include_once(  __APP_VIEW__ . '/default/pregao_card.php'); ?>
 
     <!-- Basic Card Example -->
     <div class="card shadow mb-4">

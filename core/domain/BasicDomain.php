@@ -1,7 +1,5 @@
 <?php
-
 namespace TPPA\CORE\domain;
-
 use TPPA\CORE\BasicRawObject;
 
 class BasicDomain implements BasicRawObject

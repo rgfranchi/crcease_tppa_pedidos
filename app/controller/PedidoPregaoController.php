@@ -5,6 +5,8 @@ use DateTime;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\controller\BasicController;
 
+use function TPPA\CORE\basic\pr;
+
 // include 'BasicController.php';
 
 class PedidoPregaoController extends BasicController
@@ -14,13 +16,16 @@ class PedidoPregaoController extends BasicController
         $this->loadView('pedido_pregao');
         
         $this->loadBasicMapper('Pregao', 'PregaoHead');
-        $this->loadBasicMapper('Pregao', 'PedidoPregaoList');
+        $this->loadBasicMapper('Pregao', 'PregaoList');
         $this->loadBasicMapper("Pregao", "PregaoInfo");
 
         $this->loadBasicMapper('ItemPregao', 'PedidoItemPregaoList');
         $this->loadBasicMapper('ItemPregao', 'ItemPregaoUpdate');
         
-        $this->loadBasicStores('PedidoPregao');
+
+        $this->loadBasicMapper('PedidoPregao', 'PedidoPregaoList');
+
+        // $this->loadBasicStores('PedidoPregao');
 
         $this->loadService(array('PhpSpreadsheet','ItemPregaoCalculation'));
     }
@@ -28,7 +33,7 @@ class PedidoPregaoController extends BasicController
     function index()
     {
         $this->view->setTitle("Pedido Pregão");
-        $this->view->render("index", $this->pregao_map_pedido_pregao_list->component()->findBy(["ativo", "==", "true"]));
+        $this->view->render("index", $this->pregao_map_pregao_list->component()->findBy(["ativo", "==", "true"]));
     }
     function download_index()
     {
@@ -49,7 +54,7 @@ class PedidoPregaoController extends BasicController
             $findByPedido = ["pregao_id", "==", $pregao_id];
         }
 
-        $data['pedido'] = $this->pedido_pregao->findBy($findByPedido, ["hashCredito" => "DESC"]);
+        $data['pedido'] = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy($findByPedido, ["create" => "DESC"]);
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
         $this->view->setTitle("Consultar Pedido");
         $this->view->render("edit_pedido", $data);
@@ -70,7 +75,7 @@ class PedidoPregaoController extends BasicController
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $item_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
-        $pedidos = $this->pedido_pregao->findBy(["pregao_id", "==", $pregao_id]);
+        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id]);
 
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
         $data['itens'] = $this->item_pregao_calculation->disponiveis($item_pregao, $pedidos);
@@ -85,12 +90,12 @@ class PedidoPregaoController extends BasicController
     {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
         // Pedido selecionado.
-        $pedido = $this->pedido_pregao->findById($pedido_pregao_id);
+        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
         $pregao_id = $pedido->pregao_id;
         // Itens do pregão relacionado ao pedido.
         $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
         // Outros pedidos realizados exceto o atual.
-        $pedidos = $this->pedido_pregao->findBy(
+        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy(
             [
                 ["pregao_id", "==", $pregao_id],
                 "AND",
@@ -107,7 +112,7 @@ class PedidoPregaoController extends BasicController
     function download_edit_itens()
     {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        $pedido = $this->pedido_pregao->findById($pedido_pregao_id);
+        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
         $pregao_id = $pedido->pregao_id;
         // Itens do pregão relacionado ao pedido.
         $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
@@ -128,10 +133,10 @@ class PedidoPregaoController extends BasicController
      */
     function edit_solicitado() {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        $pedido = $this->pedido_pregao->findById($pedido_pregao_id);
+        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
         $pregao_id = $pedido->pregao_id;
 
-        $data['status'] = $this->pedido_pregao->getDomain()->statusPedido("PEDIDO");
+        $data['status'] = $this->pedido_pregao_map_pedido_pregao_list->domain()->getDomain()->statusPedido("PEDIDO");
         $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
         $data['pedido'] = $this->item_pregao_calculation->solicitados($pedido);
         
@@ -140,7 +145,7 @@ class PedidoPregaoController extends BasicController
     }
     function download_edit_solicitado() {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        $pedido = $this->pedido_pregao->findById($pedido_pregao_id);
+        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
         $itens_calc = $this->item_pregao_calculation->solicitados($pedido);
         $obj = array();
         foreach($itens_calc->itens_pedido as $value) {
@@ -161,8 +166,8 @@ class PedidoPregaoController extends BasicController
         $getPedido = $this->view->dataGet();
         $pregao_id = $getPedido['pregao_id'];
         $hashCredito = $getPedido['hash_credito'];
-        $status = $this->pedido_pregao->getDomain()->statusPedido("CREDITO");
-        $pedido = $this->pedido_pregao->findBy([
+        $status = $this->pedido_pregao_map_pedido_pregao_list->domain()->getDomain()->statusPedido("CREDITO");
+        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy([
             ["pregao_id", "==", $pregao_id],
             "AND",
             ["status", "IN", $status],
@@ -181,7 +186,7 @@ class PedidoPregaoController extends BasicController
     {
         $basicFunctions = new BasicFunctions();
         $get = $this->view->dataGet();
-        $pedidos = $this->pedido_pregao->findBy([
+        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy([
             ["pregao_id", "==", $get['pregao_id']],
             "AND",
             ["hashCredito", "==", $get['hash_credito']]
@@ -214,7 +219,7 @@ class PedidoPregaoController extends BasicController
         // busca valores existentes
         $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id]);
         $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : 0;
-        $pedidos = $this->pedido_pregao->findBy(
+        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
             [
                 ["pregao_id", "==", $pregao_id],
                 "AND",
@@ -229,7 +234,7 @@ class PedidoPregaoController extends BasicController
 
         // verifica se pedido é valido
         if(empty($invalid)) {
-            $ret = $this->pedido_pregao->save($post);
+            $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->save($post);
             $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret->pregao_id));
         } else {
             $data['pregao'] = $this->pregao_map_pregao_head->domain()->findById($pregao_id);
@@ -260,7 +265,7 @@ class PedidoPregaoController extends BasicController
         }
         if($statusPost === "EMPENHADO") {
             $pregao_itens = $this->item_pregao_map_item_pregao_update->component()->findBy(["pregao_id", "==", $pregao_id]);
-            $pedidos = $this->pedido_pregao->findBy(
+            $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
                 ["_id", "IN", json_decode($idsPost)]
             );
             $new_pregao_itens = $this->item_pregao_calculation->disponiveis($pregao_itens, $pedidos);
@@ -274,23 +279,25 @@ class PedidoPregaoController extends BasicController
                 "hashCredito" => $hashCredito
             );
         }
-        $ret = $this->pedido_pregao->saveAll($postData);
+        $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->saveAll($postData);
         $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret[0]->pregao_id));
     }
 
     function delete()
     {
+        $basicFunctions = new BasicFunctions();
         $get = $this->view->dataGet();
 
+
         if($get['pedido_status'] === "EMPENHADO" && isset($get['pedido_status'])) {
-            loadException("PEDIDO NÃO PODE SER EXCLUÍDO");
+            $basicFunctions->loadException("PEDIDO NÃO PODE SER EXCLUÍDO");
         }
 
 
-        $pedido = $this->pedido_pregao->findById($get['pedido_pregao_id']);
+        $pedido = $this->pedido_pregao_map_pedido_pregao_list->domain()->findById($get['pedido_pregao_id']);
         
         $pedido->status = "EXCLUIDO";    
-        $ret = $this->pedido_pregao->save((array) $pedido);
+        $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->save((array) $pedido);
 
         $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret->pregao_id));
     }

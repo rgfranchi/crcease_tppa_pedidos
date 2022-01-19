@@ -1,7 +1,5 @@
 <?php
-
 namespace TPPA\CORE\mapper;
-
 use TPPA\CORE\BasicSystem;
 
 /**
@@ -14,9 +12,9 @@ class BasicMapper extends BasicSystem
 
     /**
      * Inicializa classe com as estruturas básicas. 
-     * @param string $domain mantem estrutura de dados.
-     * @param string $component mantem estrutura da view
-     * @param string $store mantem store especifico do mapper.
+     * @param string $domain mantém estrutura de dados.
+     * @param string $component mantém estrutura da view
+     * @param string $store mantém store especifico do mapper.
      * @param string|boolean|null $store carrega estore, se falso não carrega, se null mesma store do $domain
      */
     function __construct($domain, $component, $store = null)

@@ -12,21 +12,38 @@ use TPPA\CORE\component\BasicComponent;
 class PedidoPregaoListComponent extends BasicComponent
 {
     public $_id;
-    public $nome;
-    public $objeto;
-    public $data_limite_solicitacao;
+    public $pregao_id;
+    public $setor;
+    public $solicitante;
+    public $status;
+
     public $hashCredito;
 
-    function convertField($name, $value, &$newObject){
-        $helper = new PregaoHelper();
-        $basicFunctions = new BasicFunctions();
-        $helper->convert($name, $value, $newObject);        
-        switch($name) {
-            case 'data_limite_solicitacao' :
-                $value = $basicFunctions->convertToDateTimeBR($value, false);
-                break;   
-        }
+    /**
+     * Array <br>
+     * key -> pregao_item_id<br>
+     * value -> quantidade
+     */
+    public $itens_pedido;
 
+    /**
+     * Data hora que foi criado o registro.
+     */
+    public $create;
+    /**
+     * Data hora que foi atualizado o registro.
+     */
+    public $update;
+
+    function convertField($name, $value, &$newObject){
+        $basicFunctions = new BasicFunctions();
+        switch($name) {
+            case 'create' :
+                $value = $basicFunctions->convertToDateTimeBR(date('Y-m-d H:i:s',$value), false);
+                break;   
+
+
+        }
         parent::convertField($name, $value, $newObject);
     }
 }

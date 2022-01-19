@@ -1,4 +1,4 @@
-<?php include_once( __ROOT__ . '/app/view/default/pregao_head.php'); ?>
+<?php include_once(  __APP_VIEW__ . '/default/pregao_head.php'); ?>
 <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
 <?php
 // cria select para os cabeçalhos

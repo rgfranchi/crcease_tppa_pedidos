@@ -1,4 +1,4 @@
-<?php include_once( __ROOT__ . '/app/view/default/pregao_head.php'); ?>
+<?php include_once( __APP_VIEW__ . '/default/pregao_head.php'); ?>
 <div class="card shadow mb-4">
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">
@@ -19,18 +19,20 @@
             <th>Setor</th>
             <th>Solicitante</th>
             <th>Status</th>
+            <th>Data</th>
             <th>#Credito</th>
             <th>Ação</th>
           </tr>
         </thead>
         <tfoot>
-            <tr>
-                <th>Setor</th>
-                <th>Solicitante</th>
-                <th>Status</th>
-                <th>#Credito</th>
-                <th>Ação</th>
-            </tr>
+          <tr>
+              <th>Setor</th>
+              <th>Solicitante</th>
+              <th>Status</th>
+              <th>Data</th>
+              <th>#Credito</th>
+              <th>Ação</th>
+          </tr>
         </tfoot>
         <tbody>
           <?php foreach ($this->data['pedido'] as $row) : ?>
@@ -38,18 +40,19 @@
               <td><?= $row->setor ?></td>
               <td><?= $row->solicitante ?></td>
               <td><?= $row->status ?></td>
+              <td><?= $row->create ?></td>
               <td>
                 <?= $row->hashCredito ?>
               </td>
               <td class="table-action">
                 <?php 
-                  //Status Solicitado
-                  $btItensStyle = 'success';
+                  //Status Rascunho
+                  $btItensStyle = 'warning';
                   $btSolicitadoStyle = 'warning';
                   $btAprovadoStyle = 'secondary';
                   $btExcluirStyle = 'danger';
                   //Itens já solicitados
-                  if($row->status != 'SOLICITADO') {
+                  if($row->status != 'RASCUNHO') {
                     $btItensStyle = 'info';
                   }
                   // Itens aprovados

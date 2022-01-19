@@ -1,11 +1,7 @@
 <?php
-
 namespace TPPA\CORE\controller;
-
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\BasicSystem;
-
-// require_once(__ROOT__ . '/config.php');
 
 class BasicController extends BasicSystem
 {

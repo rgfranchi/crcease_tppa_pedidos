@@ -20,7 +20,7 @@
         <p>STATUS: <?=$this->data['pedido_status'] ?></p>
     <?php endif; ?>         
     </div>
-    <?php include_once( __ROOT__ . '/app/view/default/pregao_card.php'); ?>
+    <?php include_once(  __APP_VIEW__ . '/default/pregao_card.php'); ?>
     <!-- Basic Card Example -->
     <div class="card shadow mb-4">
         <div class="card-header py-3">

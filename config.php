@@ -4,6 +4,8 @@
 use function TPPA\logger\pr;
 
 define('__ROOT__', dirname(__FILE__));
+define('__APP_VIEW__', __ROOT__.'/app/view');
+define('__APP_VENDOR__', __ROOT__.'/app/vendor');
 
 /**
  * array('<nome controller>' => array('<nome action>' = <acesso true ou false>))

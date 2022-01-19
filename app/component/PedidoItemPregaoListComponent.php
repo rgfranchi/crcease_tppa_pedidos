@@ -2,6 +2,7 @@
 namespace TPPA\APP\component;
 
 use TPPA\APP\component\helper\ItemPregaoHelper;
+use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\component\BasicComponent;
 
 // include_once('BasicComponent.php');
@@ -18,10 +19,10 @@ class PedidoItemPregaoListComponent extends BasicComponent
 
     function convertField($name, $value, &$newObject){
         $helper = new ItemPregaoHelper();
-
+        $basicFunctions = new BasicFunctions();
         switch($name) {
             case 'data_vencimento' :
-                $value = convertToDateTimeBR($value, false);
+                $value = $basicFunctions->convertToDateTimeBR($value, false);
                 break;                
         }
         $value = $helper->convert($name, $value, $newObject);

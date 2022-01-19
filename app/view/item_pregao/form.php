@@ -1,4 +1,4 @@
-<?php include_once( __ROOT__ . '/app/view/default/pregao_head.php'); ?>
+<?php include_once( __APP_VIEW__ . '/default/pregao_head.php'); ?>
 <form action="<?= $this->action("ItemPregao", "save"); ?>" method="post">
     <?php if ($this->data['item']->_id > 0) : ?>
         <input type="hidden" id="_id" name="_id" value="<?= $this->data['item']->_id ?>">

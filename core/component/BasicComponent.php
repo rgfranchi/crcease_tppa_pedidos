@@ -1,7 +1,5 @@
 <?php
-
 namespace TPPA\CORE\component;
-
 use TPPA\CORE\BasicRawObject;
 
 class BasicComponent implements BasicRawObject

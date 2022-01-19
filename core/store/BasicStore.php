@@ -1,17 +1,11 @@
 <?php
 namespace TPPA\CORE\store;
-
-// require_once(__ROOT__ . '/config.php');
-// require_once(__ROOT__ . '/BasicSystem.php');
-
-
 use TPPA\CORE\BasicSystem;
 
 // importa SleekDB diretamente na classe
-include __ROOT__ . '/app/vendor/SleekDB/Store.php';
+include __APP_VENDOR__.'/SleekDB/Store.php';
 use SleekDB\Store;
-
-use function TPPA\CORE\basic\pr;
+use TPPA\CORE\BasicFunctions;
 
 /**
  * Operações CRUD e buscas padrões no banco de dados.
@@ -33,6 +27,7 @@ class BasicStore extends BasicSystem
         $this->store = new Store($store_name, $config_store["path_store"]);
         $this->domainName = $domainName;
         $this->domain = $this->loadDomain($domainName);
+        $this->basicFunctions = new BasicFunctions();
     }
 
     function create($array)
@@ -71,7 +66,7 @@ class BasicStore extends BasicSystem
         // verifica cada um dos campos.
         foreach($data as $key => &$value) {
             if(!property_exists($newObject,$key)) {
-                loadException("Valor '$key' enviados não consta no objeto");
+                $this->basicFunctions->loadException("Valor '$key' enviados não consta no objeto");
             }
             if($isNew) {
                 $this->domain->convertFieldCreate($key, $value, $newObject);
@@ -94,7 +89,7 @@ class BasicStore extends BasicSystem
     function saveAll($arrayObjects)
     {
         if(!is_array($arrayObjects)) {
-            loadException("Array inválido.");
+            $this->basicFunctions->loadException("Array inválido.");
         }
         foreach($arrayObjects as $key => $values) {
             $values = is_object($values) ? (array) $values : $values;

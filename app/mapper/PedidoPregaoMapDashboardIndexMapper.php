@@ -20,7 +20,7 @@ class PedidoPregaoMapDashboardIndexMapper extends BasicMapper
         $data = $this->pedido_pregao->findAll();
 
         $qtdStatus = array(
-            "SOLICITADO" => 0, // Pedido Criado. 
+            "RASCUNHO" => 0, // Pedido Criado. 
             "AGUARDANDO APROVAÇÃO" => 0, // Verificando disponibilidades de valores.
             "APROVADO" => 0, // Gestores da meta
             "CREDITO SOLICITADO" => 0, // Registrada a Solicitação de Crédito ("SIGA")

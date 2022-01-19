@@ -1,24 +1,29 @@
-<?php include_once( __ROOT__ . '/app/view/default/pregao_head.php'); ?>
+<?php
+
+use function TPPA\CORE\basic\pr;
+
+include_once(  __APP_VIEW__ . '/default/pregao_head.php'); ?>
 <div class="card shadow mb-4">
   <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
     <input type="hidden" id="_id" name="_id" value="<?= isset($this->data['pedido']->_id) ? $this->data['pedido']->_id : 0 ?>">
     <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
-    <input type="hidden" id="status" name="status" value="SOLICITADO">
-    <?php $enableEdit = true; ?>
-    <div class="card-header py-3">
+    <?php  ?>
+    <div class="card-header py-3 d-flex flex-row align-items-center justify-content-between">
       <h6 class="m-0 font-weight-bold text-primary">
         <?php
           $solicitante = isset($this->data['pedido']->solicitante) ? $this->data['pedido']->solicitante : "";
           $setor = isset($this->data['pedido']->setor) ? $this->data['pedido']->setor : "";
+          $pedido = isset($this->data['pedido']) ? $this->data['pedido'] : null;
+          $enableEdit = true;
         ?>
-        <?php if(isset($this->data['pedido']->_id) && $this->data['pedido']->_id > 0) : ?>
-          <?php $enableEdit = (isset($_SESSION['login']['admin']) && $_SESSION['login']['admin'] == true) ? $_SESSION['login']['admin'] : false; // $this->data['pedido']->status === 'SOLICITADO' ?>
+        <?php if(isset($pedido->_id) && $pedido->_id > 0 && $pedido->status !== 'RASCUNHO') : ?>
           <div>
-          <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "download_edit_itens", array("pedido_pregao_id" => $this->data['pedido']->_id)); ?>" >Exportar</a>
-            Setor: <?= $setor; ?> |
-            Solicitante: <?= $solicitante; ?> |
-            Status: <?= $this->data['pedido']->status; ?> 
-            <?=$enableEdit ? " | <input type='submit'  value='SALVAR' />" : "" ?> 
+            <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "download_edit_itens", array("pedido_pregao_id" => $this->data['pedido']->_id)); ?>" >Exportar</a>
+              Setor: <?=$setor;?> |
+              Solicitante: <?=$solicitante;?> |
+              Status: <?= $this->data['pedido']->status; ?> 
+            <?php $enableEdit = @$_SESSION['login']['admin']; ?> 
+            <?=$enableEdit ? '<button class="btn btn-success btn-sm" type="submit" name="status" value="'.$pedido->status.'">SALVAR</button>' : ""; ?>
           </div>
         <?php else : ?>
           <div class="input-group">
@@ -44,12 +49,14 @@
               title="Nome do Solicitante"
               placeholder="Solicitante"
               />
-            <input type="submit" value="SALVAR" />
-
-          </div>          
+            <button class="btn btn-primary btn-sm" type="submit" name="status" value="RASCUNHO">SALVAR RASCUNHO</button>
+            <button class="btn btn-success btn-sm" type="submit" name="status" value="AGUARDANDO APROVAÇÃO">SALVAR ENCAMINHAR</button>              
+          </div>      
+              
         <?php endif; ?>
         
       </h6>
+      <div>TOTAL:R$ <span id="total_pedido">XX.XXXX,XX</span></div>
     </div>
     <div class="card-body">
       <div class="table-responsive">
@@ -75,10 +82,10 @@
               <td><?= $row->cod_item_pregao ?></td>
               <td><?= $row->descricao ?></td>
               <td><?= $row->fornecedor ?></td>
-              <td><?= $row->valor_unitario ?></td>
+              <td class="valor_unitario" id='<?=$row->_id?>'><?= $row->valor_unitario ?></td>
               <td><?= $row->qtd_disponivel ?></td>
               <td class="table-action">
-                <input type='number' <?=$enableEdit ? "" : "disabled" ?> name='itens_pedido[<?= $row->_id ?>]' value='<?= isset($this->data['pedido']->itens_pedido[$row->_id]) ? $this->data['pedido']->itens_pedido[$row->_id] : 0 ?>' min=0 max=<?= $row->qtd_disponivel ?>   />
+                <input type='number' <?=$enableEdit ? "" : "disabled" ?> class="itens_pedido" id='item_id_<?= $row->_id ?>' name='itens_pedido[<?= $row->_id ?>]' value='<?= isset($this->data['pedido']->itens_pedido[$row->_id]) ? $this->data['pedido']->itens_pedido[$row->_id] : 0 ?>' min=0 max=<?= $row->qtd_disponivel ?>  onchange="sumPedidos()" />
                 <?php if(isset($this->data['invalid_itens']) && isset($this->data['invalid_itens'][$row->_id])) : ?>
                   <p style="color: red;">QTD. INDISPONÍVEL (<?=$this->data['invalid_itens'][$row->_id]->qtd_disponivel?>)</p>
                 <?php endif; ?>
@@ -91,3 +98,5 @@
     </div>
   </form>
 </div>
+
+<?php $this->template_js[] = 'edit_itens' ?>

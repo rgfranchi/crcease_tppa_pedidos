@@ -88,7 +88,7 @@ class ItemPregaoDomain extends BasicDomain
     }
 
     /**
-     * Verifica a existencia das quantidades total e disponível.<br>
+     * Verifica a existência das quantidades total e disponível.<br>
      * Se uma ausente copia da outra, considera subtrair a quantidade solicitada.
      */
     function beforeSave($data)

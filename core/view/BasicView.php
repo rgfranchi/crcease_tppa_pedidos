@@ -77,11 +77,11 @@ class BasicView extends BasicSystem
     function render($render = "index", $dataComponent = null)
     {
         $this->data = $dataComponent;
-        include "app/view/template/config_template.php";
-        include "app/view/template/header.php";
-        include "app/view/template/body_start.php";
-        include "app/view/" . $this->folder . "/" . $render . ".php";
-        include "app/view/template/body_end.php";
+        include __APP_VIEW__."/template/config_template.php";
+        include __APP_VIEW__."/template/header.php";
+        include __APP_VIEW__."/template/body_start.php";
+        include __APP_VIEW__."/" .  $this->folder . "/" . $render . ".php";
+        include __APP_VIEW__."/template/body_end.php";
         if(strpos(__DIR__, 'PRODUCAO') === false) {
             pr($this->data);
         }
