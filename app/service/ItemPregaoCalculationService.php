@@ -4,7 +4,8 @@ namespace TPPA\APP\service;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\BasicSystem;
 
-// require_once(__ROOT__ . '/config.php');
+
+use function TPPA\CORE\basic\pr;
 
 /**
  * Atualiza valores (qtd_disponivel, qtd_solicitada, valor_solicitado) dos Itens do pregão.
@@ -18,6 +19,7 @@ class ItemPregaoCalculationService extends BasicSystem {
     function __construct()
     {
         $this->loadBasicStores('ItemPregao');
+        $this->loadBasicStores('PedidoPregao');
     }
 
     /**
@@ -147,8 +149,24 @@ class ItemPregaoCalculationService extends BasicSystem {
         $pedido_quantidade_total = 0;
 
         $pedido->itens_pedido = array_filter($pedido->itens_pedido);
+
         $item_pregao_pedido = $this->item_pregao->findBy(["_id", "IN", array_keys($pedido->itens_pedido)],['cod_item_pregao' => 'asc']);
 
+        // pr($item_pregao_pedido);
+        // pedidos já realizado no pregão.
+        $pedido_pregao = $this->pedido_pregao->findBy([["pregao_id","==",$pedido->pregao_id],['status','NOT IN',['RASCUNHO','AGUARDANDO APROVAÇÃO']] ]);
+
+        $total_itens_aprovados = array();
+        foreach($pedido_pregao as $value){
+            $itens = array_filter($value->itens_pedido);
+            array_walk_recursive($itens, function($value, $key) use (&$total_itens_aprovados) {
+                if(isset($total_itens_aprovados[$key])) {
+                    $total_itens_aprovados[$key] += $value;  
+                } else {
+                    $total_itens_aprovados[$key] = $value;
+                }
+            });
+        }
         $tmpItemPedido = array();
         foreach($item_pregao_pedido as $item) {
             if(empty($item)) {
@@ -162,12 +180,14 @@ class ItemPregaoCalculationService extends BasicSystem {
             $item->pedido_valor = $basicFunctions->convertToMoneyBR($item->pedido_valor);
             $item->valor_unitario = $basicFunctions->convertToMoneyBR($item->valor_unitario);
             $item->valor_solicitado = $basicFunctions->convertToMoneyBR($item->valor_solicitado);
+
+            $item->qtd_solicitada = isset($total_itens_aprovados[$item->_id]) ? $total_itens_aprovados[$item->_id] : 0;
+
             $tmpItemPedido[$item->_id] = $item;
         }
         $pedido->itens_pedido = $tmpItemPedido;
         $pedido->pedido_valor_total = $basicFunctions->convertToMoneyBR($pedido_valor_total);
         $pedido->pedido_quantidade_total =  $pedido_quantidade_total;
-
         return $pedido;
     }
 }

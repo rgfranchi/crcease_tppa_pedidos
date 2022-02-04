@@ -14,8 +14,8 @@
                         <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= empty($this->title) ? "TPPA" : $this->title ?></span>
 
                         <div class="navbar-nav ml-auto">
-                    <?php if(isset($_SESSION['login']['admin'])) : ?>
-                        <a class="btn btn-success" href="<?= $this->action("Session", "logout"); ?>">
+                    <?php if(isset($_SESSION['login'])) : ?>
+                        <a class="btn btn-success" href="<?= $this->action("Session", "logout"); ?>" title=<?=key($_SESSION['login']);?> >
                             <i class="fas fa-user-lock"></i>
                         </a>   
                     <?php else : ?>

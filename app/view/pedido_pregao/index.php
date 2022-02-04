@@ -15,6 +15,7 @@
             <th>Nome</th>
             <th>Objeto</th>
             <th>Data Vencimento</th>
+            <th title="Rascunho/Aprovado/Concluído" >Qtd.</th>
             <th>Ação</th>
           </tr>
         </thead>
@@ -22,7 +23,8 @@
           <tr>
             <th>Nome</th>
             <th>Objeto</th>
-            <th>Data Limite Solicitação</th>
+            <th>Data Vencimento</th>
+            <th>Qtd.</th>
             <th>Ação</th>
           </tr>
         </tfoot>
@@ -32,6 +34,7 @@
               <td><?= $row->nome ?></td>
               <td><?= $row->objeto ?></td>
               <td style="color:<?= $row->data_vencimento_color ?>"><?= $row->data_limite_solicitacao ?></td>
+              <td><?= $row->qtd_pedidos ?></td>
               <td class="table-action">
                 <a href="<?= $this->action("PedidoPregao", "edit_pedido", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-warning btn-circle" title="SOLICITAÇÕES"><i class="fas fa-list"></i></a>
               </td>

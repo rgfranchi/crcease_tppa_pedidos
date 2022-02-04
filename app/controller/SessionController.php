@@ -26,6 +26,9 @@ class SessionController extends BasicController
         if($postLogin['login'] === "admin") {
             $_SESSION['login']['admin'] = true;
         }
+        if($postLogin['login'] === "gerente") {
+            $_SESSION['login']['gerente'] = true;
+        }
         $this->view->reloadHistory();
     }
 

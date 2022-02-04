@@ -68,6 +68,8 @@ class PedidoPregaoDomain extends BasicDomain
                 foreach ($value as &$qtd) {
                     if(empty($qtd)) {
                         $qtd = 0;
+                    } else {
+                        $qtd = intval($qtd);
                     }
                 }
         }

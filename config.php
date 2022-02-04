@@ -36,6 +36,9 @@ if(isset($_SESSION['login'])) {
     if(isset($_SESSION['login']['admin']) && $_SESSION['login']['admin'] == true) {
         $config_permission["*"] = true;
     }
+    if(isset($_SESSION['login']['gerente']) && $_SESSION['login']['gerente'] == true) {
+        $config_permission["PedidoPregao"]["edit_solicitado"] = true;
+    }
 }
 
 define('TMP_FOLDER', 'tmp');

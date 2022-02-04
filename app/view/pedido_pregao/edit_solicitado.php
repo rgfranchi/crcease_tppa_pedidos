@@ -1,18 +1,22 @@
 <div class="card shadow mb-4">
     <div class="card-header py-1">
-    <?php if (in_array($this->data['pedido']->status,$this->data['status'])) : ?>
+    <?php if($this->data['pedido']->status == 'AGUARDANDO APROVAÇÃO' || @$_SESSION['login']['admin']) : ?>
         <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
             <input type="hidden" id="_id" name="_id" value="<?= $this->data['pedido']->_id ?>">
             <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pedido']->pregao_id ?>">
             <div class="input-group">
-                <div class="input-group-prepend">
+                <!-- <div class="input-group-prepend">
                     <select class="custom-select" name="status" required="required">
                     <?php foreach ($this->data['status'] as $value) : ?>
                     <option value="<?=$value?>" <?= $value == $this->data['pedido']->status ? "selected" : "" ?>><?=$value?></option>
                     <?php endforeach; ?>
                     </select>
-                </div>
-                <input type="submit" value="ATUALIZAR" />
+                </div> 
+                <input type="submit" value="ATUALIZAR" />-->
+
+                <button class="btn btn-primary btn-sm" type="submit" name="status" value="RASCUNHO">RETORNAR RASCUNHO</button>
+                <button class="btn btn-success btn-sm" type="submit" name="status" value="APROVADO">APROVAR</button> 
+
             </div>
         </form>
     <?php else : ?>
@@ -50,8 +54,8 @@
                     <th>Fornecedor</th>
                     <th>Valor Unitário</th>
                     <th>Valor Solicitado</th>
-                    <th>Qtd Disponível</th>
                     <th>Qtd Solicitada</th>
+                    <th>Qtd Aprovada</th>
                     <th>Qtd Pedido</th>
                     <th>Valor Pedido</th>
                 </tfoot>

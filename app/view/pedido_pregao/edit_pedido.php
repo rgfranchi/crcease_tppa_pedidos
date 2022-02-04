@@ -6,6 +6,7 @@
       <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "add_itens", array('pregao_id' => $this->data['pregao']->_id)); ?>">NOVA SOLICITAÇÃO</a> 
     <?php endif; ?> 
     <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "download_edit_pedido", array("pregao_id" => $this->data['pregao']->_id)); ?>" >Exportar</a>
+    <a class="btn btn-primary btn-sm" href="<?= $this->action("PedidoPregao", "download_edit_aprovado", array("pregao_id" => $this->data['pregao']->_id, "hash_credito" => "")); ?>" >Exportar TOTAL ITENS</a>
     Cores: <span class="text-secondary">Não inciado</span>, <span class="text-warning">Aguardando Ação</span>, <span class="text-success">Fim Etapa</span> e <span class="text-info">Finalizado</span> 
       
     </h6>
@@ -47,44 +48,74 @@
               <td class="table-action">
                 <?php 
                   //Status Rascunho
-                  $btItensStyle = 'warning';
-                  $btSolicitadoStyle = 'warning';
+                  $btRascunhoStyle = 'secondary';
                   $btAprovadoStyle = 'secondary';
+                  $btAprovadoEnabled = false;
+                  $btCreditoStyle = 'secondary';
+                  $btCreditoEnabled = false;
                   $btExcluirStyle = 'danger';
+                  $btExcluirEnabled = true;
                   //Itens já solicitados
-                  if($row->status != 'RASCUNHO') {
-                    $btItensStyle = 'info';
+                  if($row->status == 'RASCUNHO') {
+                    $btRascunhoStyle = 'warning';
                   }
                   // Itens aprovados
-                  if($row->status == 'APROVADO') {
-                    $btSolicitadoStyle = 'success';
+                  if($row->status == 'AGUARDANDO APROVAÇÃO') {
+                    $btRascunhoStyle = 'success';
                     $btAprovadoStyle = 'warning';
+                    $btAprovadoEnabled = true;
+                  }                  
+                  // Itens aprovados
+                  if(
+                    $row->status == 'APROVADO'
+                  ) {
+                    $btRascunhoStyle = 'info';
+                    $btAprovadoStyle = 'success';
+                    $btCreditoStyle = 'warning';
+                    $btAprovadoEnabled = true;
+                    $btCreditoEnabled = true;
                   }
-                  // Habilita para solicitação de crédito.
-                  $hashEnabled = false;
-                  if($row->status == 'APROVADO' || !empty($row->hashCredito)) {
-                    $hashEnabled = true;
-                  } 
-                  // Item já aprovado e com credito em andamento.
-                  if($row->status != 'APROVADO' && $hashEnabled) {
-                    $btSolicitadoStyle = 'info';
-                    $btAprovadoStyle = 'warning';
+
+                  if(
+                    $row->status == 'CREDITO SOLICITADO' ||
+                    $row->status == 'CREDITADO' ||
+                    $row->status == 'EMPENHO SOLICITADO'
+                  ) {
+                    $btRascunhoStyle = 'info';
+                    $btAprovadoStyle = 'info';
+                    $btCreditoStyle = 'warning';
+                    $btAprovadoEnabled = true;
+                    $btCreditoEnabled = true;
                   }
+
                   // Finalizado o pedido.
                   if($row->status == 'EMPENHADO') {
+                    $btRascunhoStyle = 'info';
                     $btAprovadoStyle = 'info';
-                    $btExcluirStyle = 'secondary';
+                    $btCreditoStyle = 'info';
+                    $btAprovadoEnabled = true;
+                    $btCreditoEnabled = true;
+                    $btExcluirEnabled = false;
+                  }
+
+                  if($row->status == 'EXCLUIDO') {
+                    $btRascunhoStyle = 'secondary';
+                    $btAprovadoStyle = 'secondary';
+                    $btCreditoStyle = 'secondary';
+                    $btAprovadoEnabled = false;
+                    $btCreditoEnabled = false;
+                    $btExcluirEnabled = false;
                   }
                 ?>                
-                <a href="<?= $this->action("PedidoPregao", "edit_itens", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-<?=$btItensStyle ?> btn-circle" title="EDITAR"><i class="fas fa-list"></i></a>
+                <a href="<?= $this->action("PedidoPregao", "edit_itens", array('pedido_pregao_id' => $row->_id)); ?>" class="btn-sm btn-<?=$btRascunhoStyle ?> btn-circle" title="RASCUNHO"><i class="fas fa-list"></i></a>
                 <?php if(!is_null($urlSolicitado = $this->basicFunctions->urlController("PedidoPregao", "edit_solicitado", array('pedido_pregao_id' => $row->_id)))) : ?>
-                  <a href="<?=$urlSolicitado ?>" class="btn-sm btn-<?=$btSolicitadoStyle ?> btn-circle" title="ENCAMINHAR"><i class="fas fa-anchor"></i></a>
+                  <a href="<?=$urlSolicitado ?>" class="btn btn-sm btn-<?=$btAprovadoStyle ?> btn-circle <?= $btAprovadoEnabled  ? '' : 'disabled' ?>" title="APROVAR"><i class="fas fa-anchor"></i></a>
                 <?php endif; ?>
                 <?php if(!is_null($urlAprovado = $this->basicFunctions->urlController("PedidoPregao", "edit_aprovado", array('pregao_id' => $row->pregao_id, 'pedido_status' => $row->status, 'hash_credito' => empty($row->hashCredito) ? "" : $row->hashCredito )))) : ?>
-                  <a href="<?=$urlAprovado ?>" class="btn btn-sm btn-<?=$btAprovadoStyle?> btn-circle <?= $hashEnabled  ? '' : 'disabled' ?>" title="APROVADOS ENCAMINHAR"><i class="fas fa-hand-holding-usd"></i></a>
+                  <a href="<?=$urlAprovado ?>" class="btn btn-sm btn-<?=$btCreditoStyle?> btn-circle <?= $btCreditoEnabled  ? '' : 'disabled' ?>" title="CREDITO"><i class="fas fa-hand-holding-usd"></i></a>
                 <?php endif; ?>
                 <?php if(!is_null($urlDelete = $this->basicFunctions->urlController("PedidoPregao", "delete", array('pedido_pregao_id' => $row->_id, 'pedido_status' => $row->status, 'hash_credito' => empty($row->hashCredito) ? "" : $row->hashCredito )))) : ?>
-                  <a href="<?=$urlDelete ?>" class="btn btn-sm btn-<?=$btExcluirStyle?> btn-circle delete <?= $btExcluirStyle == "secondary"  ? 'disabled' : '' ?>"  title="EXCLUIR"><i class="fas fa-trash"></i></a>
+                  <a href="<?=$urlDelete ?>" class="btn btn-sm btn-<?=$btExcluirStyle?> btn-circle delete <?= $btExcluirEnabled  ? '' : 'disabled' ?>"  title="EXCLUIR"><i class="fas fa-trash"></i></a>
                 <?php endif; ?>
               </td>
             </tr>

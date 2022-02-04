@@ -14,7 +14,7 @@ include_once(  __APP_VIEW__ . '/default/pregao_head.php'); ?>
           $solicitante = isset($this->data['pedido']->solicitante) ? $this->data['pedido']->solicitante : "";
           $setor = isset($this->data['pedido']->setor) ? $this->data['pedido']->setor : "";
           $pedido = isset($this->data['pedido']) ? $this->data['pedido'] : null;
-          $enableEdit = true;
+          $enableEdit = isset($pedido->status) ? $pedido->status  === "RASCUNHO" : true;
         ?>
         <?php if(isset($pedido->_id) && $pedido->_id > 0 && $pedido->status !== 'RASCUNHO') : ?>
           <div>
@@ -23,7 +23,12 @@ include_once(  __APP_VIEW__ . '/default/pregao_head.php'); ?>
               Solicitante: <?=$solicitante;?> |
               Status: <?= $this->data['pedido']->status; ?> 
             <?php $enableEdit = @$_SESSION['login']['admin']; ?> 
-            <?=$enableEdit ? '<button class="btn btn-success btn-sm" type="submit" name="status" value="'.$pedido->status.'">SALVAR</button>' : ""; ?>
+            <?php 
+              if($enableEdit) {
+                $status = $pedido->status == "EXCLUIDO" ? "RASCUNHO" : $pedido->status;
+                print '<button class="btn btn-success btn-sm" type="submit" name="status" value="'.$status.'">SALVAR</button>'; 
+              }
+            ?>
           </div>
         <?php else : ?>
           <div class="input-group">

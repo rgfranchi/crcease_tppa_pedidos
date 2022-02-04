@@ -7,8 +7,6 @@ use TPPA\CORE\controller\BasicController;
 
 use function TPPA\CORE\basic\pr;
 
-// include 'BasicController.php';
-
 class PedidoPregaoController extends BasicController
 {
     function __construct()
@@ -33,7 +31,29 @@ class PedidoPregaoController extends BasicController
     function index()
     {
         $this->view->setTitle("Pedido Pregão");
-        $this->view->render("index", $this->pregao_map_pregao_list->component()->findBy(["ativo", "==", "true"]));
+        $pregao = $this->pregao_map_pregao_list->component()->findBy(["ativo", "==", "true"]);
+        foreach($pregao as &$value) {
+            $pedidos = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy(["pregao_id", "==", $value->_id]);
+            $count['rascunho'] = 0;
+            $count['aprovado'] = 0;
+            $count['concluido'] = 0;
+            foreach($pedidos as $valuePedido) {
+                switch($valuePedido->status) {
+                    case "EMPENHADO" :
+                        $count['concluido']++;                    
+                    case "EMPENHO SOLICITADO" :    
+                    case "CREDITADO" :
+                    case "CREDITO SOLICITADO" :                            
+                    case "APROVADO" :
+                        $count['aprovado']++;
+                    case "AGUARDANDO APROVAÇÃO":
+                    case "RASCUNHO" :
+                         $count['rascunho']++;
+                }
+            }
+            $value->qtd_pedidos = $count['rascunho'] . "/" . $count['aprovado'] . "/" . $count['concluido'];
+        }
+        $this->view->render("index", $pregao);
     }
     function download_index()
     {
@@ -139,7 +159,7 @@ class PedidoPregaoController extends BasicController
         $data['status'] = $this->pedido_pregao_map_pedido_pregao_list->domain()->getDomain()->statusPedido("PEDIDO");
         $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
         $data['pedido'] = $this->item_pregao_calculation->solicitados($pedido);
-        
+
         $this->view->setTitle("Pedido SOLICITADOS");
         $this->view->render("edit_solicitado", $data);
     }
@@ -189,9 +209,13 @@ class PedidoPregaoController extends BasicController
         $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy([
             ["pregao_id", "==", $get['pregao_id']],
             "AND",
-            ["hashCredito", "==", $get['hash_credito']]
+            ["hashCredito", "==", $get['hash_credito']],
+            "AND",
+            ["status", "!==", "EXCLUIDO"]
         ]);
+
         $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $get['pregao_id']]);
+
         foreach($pedidos as $pedido) {
             $param = $pedido->setor . '-' . $pedido->solicitante. '(' . $pedido->status . ')';
             foreach($itens_pregao as &$values) {
@@ -208,6 +232,7 @@ class PedidoPregaoController extends BasicController
                 }
             }
         }
+
         $file_path = $this->php_spreadsheet->saveFile($itens_pregao, 'edit_aprovado');
         $this->view->download($file_path, "Pregao", "index");
     }
