@@ -20,10 +20,9 @@ class PedidoPregaoController extends BasicController
         $this->loadBasicMapper('ItemPregao', 'PedidoItemPregaoList');
         $this->loadBasicMapper('ItemPregao', 'ItemPregaoUpdate');
         
-
         $this->loadBasicMapper('PedidoPregao', 'PedidoPregaoList');
 
-        // $this->loadBasicStores('PedidoPregao');
+        $this->loadBasicStores('PedidoPregao');
 
         $this->loadService(array('PhpSpreadsheet','ItemPregaoCalculation'));
     }
@@ -82,6 +81,7 @@ class PedidoPregaoController extends BasicController
     function download_edit_pedido()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
+
         $obj = $this->pedido_pregao->findBy(["pregao_id", "==", $pregao_id], ["hashCredito" => "DESC"]);
 
         foreach($obj as &$values) {
@@ -204,7 +204,6 @@ class PedidoPregaoController extends BasicController
     }
     function download_edit_aprovado()
     {
-        $basicFunctions = new BasicFunctions();
         $get = $this->view->dataGet();
         $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy([
             ["pregao_id", "==", $get['pregao_id']],
@@ -213,29 +212,24 @@ class PedidoPregaoController extends BasicController
             "AND",
             ["status", "!==", "EXCLUIDO"]
         ]);
+        
+        $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->domain()->findBy(["pregao_id", "==", $get['pregao_id']]);
 
-        $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $get['pregao_id']]);
-
-        foreach($pedidos as $pedido) {
-            $param = $pedido->setor . '-' . $pedido->solicitante. '(' . $pedido->status . ')';
-            foreach($itens_pregao as &$values) {
-                if(isset($pedido->itens_pedido[$values->_id])) {
-                    isset($values->sub_total) ? 
-                        $values->sub_total += $basicFunctions->convertCommaToDot($values->valor_unitario) * $pedido->itens_pedido[$values->_id] :
-                        $values->sub_total = $basicFunctions->convertCommaToDot($values->valor_unitario) * $pedido->itens_pedido[$values->_id];
-                    isset($values->total) ? 
-                        $values->total += $pedido->itens_pedido[$values->_id] :
-                        $values->total = $pedido->itens_pedido[$values->_id];
-                    $values->{$param} = $pedido->itens_pedido[$values->_id];
-                } else {
-                    $values->{$param} = 0;
-                }
-            }
+        $export = $this->item_pregao_calculation->joins_itens_pedidos($pedidos, $itens_pregao);
+        // retira valores não utilizados.
+        foreach($export as &$value) {
+            unset($value->qtd_solicitada);
+            unset($value->unidade);
+            unset($value->qtd_minima);
+            unset($value->natureza_despesa);            
+            unset($value->pregao_id);            
+            unset($value->qtd_total);            
         }
-
-        $file_path = $this->php_spreadsheet->saveFile($itens_pregao, 'edit_aprovado');
+        $file_path = $this->php_spreadsheet->saveFile($export, 'edit_aprovado');
         $this->view->download($file_path, "Pregao", "index");
     }
+
+
 
     function save()
     {

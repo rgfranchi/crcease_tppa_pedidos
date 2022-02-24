@@ -1,3 +1,6 @@
+<?php
+use function TPPA\CORE\basic\pr;
+?>
 <div class="card shadow mb-4">
     <div class="card-header py-1">
     <?php if ($this->data['pedido_status'] != "EMPENHADO") : ?>        
@@ -29,14 +32,17 @@
                     "pregao_id" => $this->data['pregao']->_id,
                     "hash_credito" => $this->data['hash_credito']
                     )); ?>" >Exportar</a>    
-                TOTAL PEDIDOS R$ <?= $basicFunctions->convertToMoneyBR($this->data['pedidos']['VALOR_TOTAL']) ?>
+                TOTAL R$ <?= $basicFunctions->convertToMoneyBR($this->data['pedidos']['total_valor']) ?> | UN <?= $this->data['pedidos']['total_quantidade']; ?>
             </h6>
         </div>
+        <?php if(empty($this->data['pedidos']['BODY'])) : ?>
+            <div> NÃO POSSUI ITENS PARA EXIBIR. </div>
+        <?php endif; ?>
         <div class="card-body">
             <div class="table-responsive scrollTopTable">
                 <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
                     <thead>
-                    <?php foreach ($this->data['pedidos']['HEADER'] as $field => $field_value) : ?>
+                    <?php foreach ((array) $this->data['pedidos']['BODY'][0] as $field => $field_value) : ?>
                         
                         <?php
                             $px = 100;
@@ -50,24 +56,39 @@
                                 case 'fornecedor' :
                                     $px = 400;
                                     break;
-                                case 'sub_total' :
+                                case 'sub_total_valor' :
+                                    $px = 170;
+                                    break;
+                                case 'sub_total_quantidade' :
                                     $px = 170;
                                     break;
                             }
+                            if($field == "_id") {
+                                continue;
+                            }
                         ?>
+                        <?php if(key_exists($field, $this->data['pedidos']['HEADER'])) : ?>
+                            <th style="min-width: <?=$px?>px;" field='<?=$field?>' ><?=$this->data['pedidos']['HEADER'][$field] ?></th>
+                        <?php else: ?>
+                            <?php preg_match('#(.*?)-(.*?)\(#', $field, $match); ?>                        
+                            <th style="min-width: 100px;" field="<?=$field?>">
+                                <small>
+                                <?=$match[1];?>
+                                </small><br>
+                                <small style="font-size: xx-small;">
+                                <?=$match[2]?>
+                                </small>
+                            </th>
+                        <?php endif; ?>
                         
-                        <th style="min-width: <?=$px?>px;" field='<?=$field?>' ><?=$field_value ?></th>
                     <?php endforeach; ?>
                     </thead>
                     <tbody>
-                    <?php foreach ($this->data['pedidos']['BODY'] as $id => $field_value) : ?>
-                        <tr id='<?=$id?>' >
-                        <?php foreach (array_keys($this->data['pedidos']['HEADER']) as $field_name) : ?>
-                            <?php 
-                                $valor = isset($field_value[$field_name]) ? $field_value[$field_name] : "-";
-                                $valor = in_array($field_name,array('sub_total','valor_unitario')) ?  $basicFunctions->convertToMoneyBR($valor) : $valor; 
-                            ?>
-                            <td field='<?=$field_name?>' ><?= $valor ?></td>
+                    <?php foreach ($this->data['pedidos']['BODY'] as $fields) : ?>
+                        <tr id='<?=$fields->_id?>' >
+                        <?php unset($fields->_id) ?>
+                        <?php foreach ($fields as $field_key => $field_value ) : ?>
+                            <td field='<?=$field_key?>' ><?= $field_key === "sub_total_valor" ? $basicFunctions->convertToMoneyBR($field_value) : $field_value ?></td>
                         <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>

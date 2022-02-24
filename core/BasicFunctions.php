@@ -76,19 +76,6 @@ class BasicFunctions {
         return str_replace('_', ' ', ucwords($string, '_'));
     }
 
-    // /**
-    //  * Exibe variável na tela (Debug)
-    //  * @param type $var -> a ser exibida;
-    //  */
-    // function pr($var, $die = false)
-    // {
-    //     $trace = debug_backtrace();
-    //     echo "<pre>--- DEBUG --- " . $trace[0]['file'] . "(" . $trace[0]['line'] . ")</br>";
-    //     print_r($var);
-    //     echo "</pre>";
-    //     $die ? die() : '';
-    // }
-
     /**
      * Carrega exceções no sistema
      * @todo redirecionar para página de erro.
@@ -132,7 +119,7 @@ class BasicFunctions {
         if(is_numeric($value)) {
             return number_format($value, 2,'.','');
         } else {
-            loadException(sprintf("Não foi possível converter o valor '%s' em numero",$value));
+            $this->loadException(sprintf("Não foi possível converter o valor '%s' em numero",$value));
         }
     }
 

@@ -85,9 +85,15 @@ class ItemPregaoCalculationService extends BasicSystem {
                 'descricao' => "DESCRIÇÃO",
                 'valor_unitario' => "VALOR UNITARIO",
                 'fornecedor' => "FORNECEDOR",
+                'sub_total_valor' => 'SUB TOTAL (R$)',
+                'sub_total_quantidade' => 'SUB TOTAL (UN)',
             ),
-            'BODY' => array()
+            'BODY' => array(),
+            'total_valor' => 0,
+            'total_quantidade' => 0
         );
+
+        // recupera _id dos itens do pedido.
         $itens_in = array();
         foreach($pedido_pregao as $value) {
             $currKeys = empty($value->itens_pedido) ? array() : array_keys($value->itens_pedido);
@@ -101,43 +107,64 @@ class ItemPregaoCalculationService extends BasicSystem {
                 ["_id", "IN", $itens_in]
             ],
             ["cod_item_pregao" => "ASC"]
-        );        
-        // altera chave do array para id e inclui valores conforme HEADER
-        foreach($find_itens_pregao as $value) {
-            foreach(array_keys($res['HEADER']) as $param) {
-                $res["BODY"][$value->_id][$param] = $value->{$param};
-            }
+        ); 
+
+        $join = $this->joins_itens_pedidos($pedido_pregao, $find_itens_pregao);
+        // retira valores que não será exibido.
+        foreach($join as $key => &$pedidos) {
+            unset($pedidos->valor_solicitado);
+            unset($pedidos->qtd_total);
+            unset($pedidos->qtd_disponivel);
+            unset($pedidos->qtd_solicitada);
+            unset($pedidos->unidade);
+            unset($pedidos->qtd_minima);
+            unset($pedidos->natureza_despesa);
+            unset($pedidos->pregao_id);
+            $res['total_valor'] += $pedidos->sub_total_valor;
+            $res['total_quantidade'] += $pedidos->sub_total_quantidade;
         }
-        $res['VALOR_TOTAL'] = 0;
-        // Lê cada pedidos, e inclui no corpo o valor.
-        foreach($pedido_pregao as $pedidos) {
-            $pedido_key = 'pedido_' . $pedidos->_id;
-            // nome das colunas pedido
-            $res['HEADER'][$pedido_key] = '<small>' . $pedidos->setor . '</small></br><small style="font-size: xx-small;">' . $pedidos->solicitante . '</small>';
-            // preenche os itens do pedido.
-            foreach($pedidos->itens_pedido as $key_item => $qtd_item) {
-                if(isset($res["BODY"][$key_item]['total'])) {
-                    $res["BODY"][$key_item]['total'] += $qtd_item;
-                } else {
-                    $res["BODY"][$key_item]['total'] = $qtd_item;
-                }                 
-                $res["BODY"][$key_item]['sub_total'] = $res["BODY"][$key_item]['total'] * $res["BODY"][$key_item]['valor_unitario'];
-                $res["BODY"][$key_item][$pedido_key] = $qtd_item;
-                $res['VALOR_TOTAL'] += $res["BODY"][$key_item]['sub_total'];
-             }
-             $res['pedidos_id'][] = $pedidos->_id;   
-        }
-        foreach($res["BODY"] as $key => $value){
-            if($value['total'] == 0) {
-                unset($res["BODY"][$key]);
-            }
-        }
-        // nome das colunas TOTAIS.
-        $res['HEADER']['sub_total'] = 'SUB TOTAL';
-        $res['HEADER']['total'] = "TOTAL";
+
+        $res['BODY'] = $join;
         return $res;
     }
     
+    /**
+     * Realiza a junção do array dos ItemPregão com PedidoPregao.
+     * Acrescenta e calcula colunas sub_total_valor e sub_total_quantidade
+     * 
+     * @param $pedido_pregao array com objetos PedidoPregao, 
+     * @param $item_pregao array com objetos ItemPregão, 
+     * @return array com objetos item pregão adicionado dos pedidos.
+     */
+    function joins_itens_pedidos($pedido_pregao, $item_pregao) {
+        $export = null;
+        foreach($item_pregao as $item_key => $item) {
+            // informações do item.
+            $val_unitario = $item->valor_unitario;
+            $item->sub_total_valor = 0.0;
+            $item->sub_total_quantidade = 0;
+            // leitura dos pedidos.
+            foreach($pedido_pregao as $pedido) {
+                // título com nome do pedido.
+                $param = $pedido->setor . '-' . $pedido->solicitante. '(' . $pedido->status . ' [' .$pedido->_id. '])';
+                if(isset($pedido->itens_pedido[$item->_id])) {
+                    $qtd_solicitada = $pedido->itens_pedido[$item->_id];
+                    $tmp_sub_total_valor = $item->sub_total_valor;
+                    unset($item->sub_total_valor);
+                    $tmp_sub_total_quantidade = $item->sub_total_quantidade;
+                    unset($item->sub_total_quantidade);
+                    
+                    $item->{$param} = $pedido->itens_pedido[$item->_id];
+                    $item->sub_total_valor = $tmp_sub_total_valor + ($qtd_solicitada * $val_unitario);
+                    $item->sub_total_quantidade = $tmp_sub_total_quantidade + $qtd_solicitada;
+                } 
+            }
+            $export[$item_key] = $item;
+        }   
+        return $export;     
+    }
+
+
     /**
      * Recebe pedidos e inclui informação dos itens solicitados.<br>
      * Totaliza quantidade e valores por item e total.

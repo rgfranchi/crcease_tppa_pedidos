@@ -117,7 +117,7 @@ class BasicStore extends BasicSystem
      * Excluir um registro.<br>
      * Verifica cada objeto antes de excluir.
      * @param int $limit
-     * @return objeto excluido.
+     * @return objeto excluído.
      */
     function delete($id)
     {
@@ -144,7 +144,7 @@ class BasicStore extends BasicSystem
     }
 
     /** 
-     * Elimina campos do domínio não utilizado no componente.
+     * Carrega objeto para o domínio.
      */
     function loadObject($newObject) {
         $this->domain = $newObject;
