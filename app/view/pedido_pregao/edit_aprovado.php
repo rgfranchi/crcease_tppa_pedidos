@@ -1,12 +1,14 @@
 <?php
-use function TPPA\CORE\basic\pr;
+// use function TPPA\CORE\basic\pr;
+// pr($this->data);
+// die;
 ?>
 <div class="card shadow mb-4">
     <div class="card-header py-1">
     <?php if ($this->data['pedido_status'] != "EMPENHADO") : ?>        
         <form action="<?= $this->action("PedidoPregao", "saveMany"); ?>" method="post">
             <input type="hidden" id="pregao_id" name="pregao_id" value="<?= json_encode($this->data['pregao']->_id) ?>">
-            <input type="hidden" id="_ids" name="_ids" value="<?= json_encode($this->data['pedidos']['pedidos_id']) ?>">
+            <input type="hidden" id="_ids" name="_ids" value="<?= json_encode($this->data['pedidos']['pedidos_ids']) ?>">
             <input type="hidden" id="hash_credito" name="hash_credito" value="<?= $this->data['hash_credito'] ?>">
             <div class="input-group">
                 <div class="input-group-prepend">

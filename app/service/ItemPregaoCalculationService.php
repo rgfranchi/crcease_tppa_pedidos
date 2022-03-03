@@ -94,10 +94,12 @@ class ItemPregaoCalculationService extends BasicSystem {
         );
 
         // recupera _id dos itens do pedido.
+        $pedidos_ids = array();
         $itens_in = array();
         foreach($pedido_pregao as $value) {
             $currKeys = empty($value->itens_pedido) ? array() : array_keys($value->itens_pedido);
             $itens_in = array_unique(array_merge($itens_in, $currKeys));
+            $pedidos_ids[] = $value->_id;
         }
         // recuperar todos os itens do pregão. 
         $find_itens_pregao = $this->item_pregao->findBy(
@@ -125,6 +127,7 @@ class ItemPregaoCalculationService extends BasicSystem {
         }
 
         $res['BODY'] = $join;
+        $res['pedidos_ids'] = $pedidos_ids;
         return $res;
     }
     
