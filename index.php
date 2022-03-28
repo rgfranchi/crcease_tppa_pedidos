@@ -12,6 +12,9 @@ include "./core/autoloader.php";
 include "./core/basic.php";
 include "config.php";
 use Exception;
+
+use function TPPA\CORE\basic\pr;
+
 $basicFunctions = new CORE\BasicFunctions();
 
 $params = $_GET;
@@ -21,7 +24,7 @@ if (!isset($params['controller'])) {
     $params['action'] = $home_page['action'];
 }
 
-// direciona para controller e ação (metodo).
+// direciona para controller e ação (método).
 try {
     $params['controller'] = str_replace(array("'", "\"", "&quot;"), '', $params['controller']);
     $params['action'] = str_replace(array("'", "\"", "&quot;"), '', $params['action']);
@@ -41,9 +44,6 @@ try {
     $useClassName =  'TPPA\\APP\\controller\\'.$className;
     $controller = new $useClassName;
     
-    // include $pathController;
-    
-    // $controller = new $className();
     $action = $params['action'];
     
     if (!method_exists($controller, $action)) {

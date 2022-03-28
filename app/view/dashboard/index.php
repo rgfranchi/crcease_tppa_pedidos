@@ -113,6 +113,13 @@
             </div>
             <!-- Card Body -->
             <div class="card-body">
+                <a href="<?= $this->action("User", "add_externo"); ?>" class="btn btn-primary btn-icon-split btn-sm">
+                    <span class="icon text-white-50">
+                        <i class="fas fa-info-circle"></i>
+                    </span>
+                    <span class="text">Usuário sem acesso a rede do CRCEA-SE (Solicitar acesso)</span>
+                </a>
+                <div class="my-1"></div>
                 <a target="_blank" href="http://ftp.crcease.intraer/DT/PLT/TPPA/" class="btn btn-info btn-icon-split btn-sm">
                     <span class="icon text-white-50">
                         <i class="fas fa-info-circle"></i>

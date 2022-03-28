@@ -82,3 +82,15 @@ class BasicDomain implements BasicRawObject
         return false;
     }
 }
+
+
+interface iBasicDomain {
+    public function convertFieldCreate($name, $value, &$newObject);
+    public function convertFieldUpdate($name, $value, &$newObject);
+    public function validateFieldCreate($name, $value);
+    public function validateFieldUpdate($name, $value);
+    public function convertField($name, $value, &$newObject);
+    public function validateField($name, $value);
+    public function beforeSave($data);
+    public function beforeDelete($deleteId);
+}

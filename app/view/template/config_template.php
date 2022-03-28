@@ -33,6 +33,13 @@ $navbar = array(
         'icon' => 'fas fa-folder-plus text-gray-300', // opcional
     ),
     array( // link de acesso direto
+        'type' => 'link',
+        'text' => 'Demanda',
+        'href' => array('controller' => "Demanda", 'action' => 'index'),
+        // urlController("Pregao", 'index'),
+        'icon' => 'far fa-play-circle text-gray-300', // opcional
+    ),    
+    array( // link de acesso direto
         'type' => 'links',
         'text' => 'Solicitação',
         'icon' => 'fas fa-fw fa-cog', // opcional
@@ -58,6 +65,20 @@ $navbar = array(
                         ),                        
                     )
     ),
+    array( // link de acesso direto
+        'type' => 'link',
+        'text' => 'Usuários',
+        'href' => array('controller' => "User", 'action' => 'index'),
+        // urlController("Dashboard", 'index'),
+        'icon' => 'fas fa-fw fa-user-tag', // opcional
+    ),    
+    array( // link de acesso direto
+        'type' => 'link',
+        'text' => 'Minhas Informações',
+        'href' => array('controller' => "User", 'action' => 'my_info'),
+        // urlController("Dashboard", 'index'),
+        'icon' => 'fas fa-fw fa-user-tag', // opcional
+    ),    
 
 );
 

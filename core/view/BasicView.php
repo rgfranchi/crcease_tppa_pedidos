@@ -74,13 +74,16 @@ class BasicView extends BasicSystem
      * @param string $render nome da view que será carregada
      * @param string/object $dataComponent sobrescreve componente a ser carregado
      */
-    function render($render = "index", $dataComponent = null)
+    function render($render = "index", $dataComponent = null, $folder = null)
     {
+        if(is_null($folder)) {
+            $folder = $this->folder;
+        }
         $this->data = $dataComponent;
         include __APP_VIEW__."/template/config_template.php";
         include __APP_VIEW__."/template/header.php";
         include __APP_VIEW__."/template/body_start.php";
-        include __APP_VIEW__."/" .  $this->folder . "/" . $render . ".php";
+        include __APP_VIEW__."/" .  $folder . "/" . $render . ".php";
         include __APP_VIEW__."/template/body_end.php";
         if(strpos(__DIR__, 'PRODUCAO') === false) {
             pr($this->data);
@@ -107,6 +110,7 @@ class BasicView extends BasicSystem
      * Redireciona para a URL do histórico.
      */
     function reloadHistory() {
+        pr("reloadHistory");
         header("Location: ".$_SERVER['HTTP_REFERER']);
     }
 

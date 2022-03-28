@@ -19,17 +19,22 @@ $config_permission = array(
     "Exception" => array(
         "access_denied" => true
     ),
-    "PedidoPregao" => array(
-        "*" => true,
-        // "index" => true,
-        // "find" => true,
-        "edit_solicitado" => false,
-        "edit_aprovado" => false,
-        "delete" => false,
-    ),
+    // "PedidoPregao" => array(
+    //     "*" => true,
+    //     // "index" => true,
+    //     // "find" => true,
+    //     "edit_solicitado" => false,
+    //     "edit_aprovado" => false,
+    //     "delete" => false,
+    // ),
     "PedidoPregaoPesquisar" => array(
         "*" => true,
     ),    
+    "User" => array(
+        'add_lpad' => true, 
+        'add_externo' => true,
+        'save_externo' => true,
+    )
 );
 
 if(isset($_SESSION['login'])) {
@@ -38,6 +43,23 @@ if(isset($_SESSION['login'])) {
     }
     if(isset($_SESSION['login']['gerente']) && $_SESSION['login']['gerente'] == true) {
         $config_permission["PedidoPregao"]["edit_solicitado"] = true;
+    }
+    if(isset($_SESSION['login']['create_user']) && $_SESSION['login']['create_user'] == true) {
+        $config_permission['User']['save_lpad'] = true;
+    }
+    if(isset($_SESSION['login']['basico']) && $_SESSION['login']['basico'] == true) {
+        $config_permission['PedidoPregao'] = array(
+            "*" => true,
+            // "index" => true,
+            // "find" => true,
+            "edit_solicitado" => false,
+            "edit_aprovado" => false,
+            "delete" => false,
+        );
+        $config_permission['User'] = array(
+            'my_info' => true, 
+            'update' => true
+        );
     }
 }
 
@@ -72,6 +94,15 @@ define('CONFIG',
 
 
 // var_dump(CONFIG);
+
+// configuração para acesso a rede de usuário do CRCEASE
+function lpad_config() {
+    return array(
+        'server' => "crcease.intraer",
+        'port' => "389",
+        'domain' => "@crcease.intraer" 
+    );
+}
 
 /**
  * Setores que são atendidos pelo sistema.
@@ -124,5 +155,13 @@ function setores() {
 		'TTSA',
 		'TTST',
 		'TTTF',
+    );
+}
+
+function grupos() {
+    return array( // setores que devem ser considerados pelo sistema.
+        'BASICO' => "BÁSICO",
+        'ADMIN' => "ADMINISTRADOR",
+        'GERENTE' => "GERENTE",
     );
 }

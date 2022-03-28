@@ -2,7 +2,11 @@
         <!-- Page Wrapper -->
         <div id="wrapper">
             <!-- Sidebar sidebar.php -->
-            <?php include 'sidebar.php'; ?>
+            <?php
+
+use function TPPA\CORE\basic\pr;
+
+ include 'sidebar.php'; ?>
             <!-- Content Wrapper -->
             <div id="content-wrapper" class="d-flex flex-column">
                 <!-- Main Content -->
@@ -15,13 +19,17 @@
 
                         <div class="navbar-nav ml-auto">
                     <?php if(isset($_SESSION['login'])) : ?>
+                        <?php if(isset($_SESSION['user'])) : ?>
+                            <span class="mr-2 d-none d-lg-inline text-gray-600 small"><?= $_SESSION['user']['nome']; ?></span>
+                        <?php endif; ?>    
                         <a class="btn btn-success" href="<?= $this->action("Session", "logout"); ?>" title=<?=key($_SESSION['login']);?> >
                             <i class="fas fa-user-lock"></i>
                         </a>   
                     <?php else : ?>
                         <form class="d-none d-sm-inline-block form-inline mr-auto ml-md-3 my-2 my-md-0 mw-100 navbar-search" action="<?= $this->action("Session", "login"); ?>" method="post">
                             <div class="input-group">
-                                <input name="login" class="form-control bg-light border-0 small" placeholder="LOGIN" aria-label="Search" aria-describedby="basic-addon2" type="text">
+                                <input type="text" name="login" required="required" class="form-control bg-light border-0 small" placeholder="LOGIN CRCEA-SE" aria-label="Search" aria-describedby="basic-addon2">
+                                <input type="password" name="password" required="required" class="form-control bg-light border-0 small" placeholder="SENHA" aria-label="Search" aria-describedby="basic-addon2">
                                 <div class="input-group-append">
                                     <button class="btn btn-primary" type="submit">
                                         <i class="fas fa-user-circle"></i>
