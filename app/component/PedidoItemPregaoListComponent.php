@@ -15,7 +15,8 @@ class PedidoItemPregaoListComponent extends BasicComponent
     public $fornecedor;
     public $descricao;
     public $valor_unitario;
-    public $qtd_disponivel;
+    public $qtd_total;
+    public $qtd_disponivel; // campo calculado.
 
     function convertField($name, $value, &$newObject){
         $helper = new ItemPregaoHelper();

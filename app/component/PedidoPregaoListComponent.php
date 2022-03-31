@@ -15,6 +15,7 @@ class PedidoPregaoListComponent extends BasicComponent
     public $pregao_id;
     public $setor;
     public $solicitante;
+    public $aprovador;
     public $status;
 
     public $hashCredito;

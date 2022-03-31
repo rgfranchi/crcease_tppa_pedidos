@@ -70,7 +70,7 @@ $navbar = array(
         'text' => 'Usuários',
         'href' => array('controller' => "User", 'action' => 'index'),
         // urlController("Dashboard", 'index'),
-        'icon' => 'fas fa-fw fa-user-tag', // opcional
+        'icon' => 'fas fa-fw fa-users', // opcional
     ),    
     array( // link de acesso direto
         'type' => 'link',

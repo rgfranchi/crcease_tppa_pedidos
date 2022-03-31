@@ -74,7 +74,8 @@
                 <small id="qtd_totalHelp" class="form-text text-muted">Quantidade total disponibilizada.</small>
             </div>
         </div>
-        <div class="col">
+
+        <!-- <div class="col">
             <div class="form-group">
                 <label for="qtd_solicitada">Quantidade Solicitada:</label>
                 <input type="number" placeholder="0" id="qtd_solicitada" name="qtd_solicitada" class="form-control" aria-describedby="qtd_solicitadaHelp" value="<?= $this->data['item']->qtd_solicitada ?>">
@@ -87,7 +88,7 @@
                 <input type="number" placeholder="0" id="qtd_disponivel" name="qtd_disponivel" class="form-control" aria-describedby="qtd_disponivelHelp" value="<?= $this->data['item']->qtd_disponivel ?>">
                 <small id="qtd_disponivelHelp" class="form-text text-muted">Calculado a cada pedido.</small>
             </div>
-        </div>
+        </div> -->
         <div class="col">
             <div class="form-group">
                 <label for="qtd_minima">Quantidade minima:</label>

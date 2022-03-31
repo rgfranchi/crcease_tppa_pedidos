@@ -3,9 +3,8 @@
 // pr($this->data);
 ?>
 
-<form action="<?= $this->action("User", "my_info_update"); ?>" method="post">
+<form action="<?= $this->action("User", "edit_update"); ?>" method="post">
     <input type="hidden" id="_id" name="_id" value="<?= $this->data->_id ?>">
-    <input type="hidden" name="ativo" value='true' />
     <input type="hidden" name="tipo_cadastro" value='<?= $this->data->tipo_cadastro ?>' />
     <input type="hidden" name="grupo" value='<?= $this->data->grupo ?>' />
     <div class="row">
@@ -53,7 +52,7 @@
         <div class="col">            
             <div class="form-group">
                 <label for="grupo">Grupo:</label>
-                <select disabled="disabled" class="custom-select" name="grupo" required="required"  >
+                <select class="custom-select" name="grupo" required="required"  >
                     <option value="">Selecione um Grupo</option>
                     <?php foreach (grupos() as $key => $value) : ?>
                         <?php if($key === $this->data->grupo) : ?>
@@ -66,25 +65,26 @@
                 <small id="grupoHelp" class="form-text text-muted">Grupo de acesso.</small>
             </div>           
         </div>
-        
     </div>
+    <div class="row">
+        <div class="col">
+            <div class="form-check">
+                <input class="form-check-input" type="checkbox" value="true" id="ativo" name="ativo" <?= $this->data->ativo ? "checked" : "" ?>  >
+                <label class="form-check-label" for="ativo">
+                    Ativo
+                </label>
+            </div>
+        </div>
+    </div>    
     <div class="row">
         <div class="col">
             <div class="form-group">
                 <label for="observacao">Observação:</label>
-                <textarea class="form-control" id="observacao" name="observacao" class="form-control" aria-describedby="observacaoHelp" rows="5" ><?= $this->data->observacao ?></textarea>
+                <textarea class="form-control" id="observacao" name="observacao" aria-describedby="observacaoHelp" rows="5" ><?= $this->data->observacao ?></textarea>
                 <small id="observacaoHelp" class="form-text text-muted">Informações se necessário.</small>
             </div>
         </div>
     </div>
-
-
-        
-
-   
-    
-        
-
     <button type="submit" class="btn btn-success btn-icon-split" value="Enviar"><span class="icon text-white-50">
         <i class="fas fa-check"></i>
         </span>

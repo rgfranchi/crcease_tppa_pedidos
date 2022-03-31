@@ -12,8 +12,8 @@ class ItemPregaoFileComponent extends BasicComponent
     public $valor_unitario;
     public $valor_solicitado;
     public $qtd_total;
-    public $qtd_disponivel; // qtd disponível para solicitação
-    public $qtd_solicitada; // quantidade solicitada do PE
+    // public $qtd_disponivel; // qtd disponível para solicitação
+    // public $qtd_solicitada; // quantidade solicitada do PE
     public $unidade; // unidade de medida.
     public $fornecedor; // fornecedor do item
     public $qtd_minima; 

@@ -13,6 +13,7 @@ class ItemPregaoListComponent extends BasicComponent
     public $descricao;
     public $fornecedor;
     public $valor_unitario;
+    public $qtd_total;
     public $qtd_disponivel;
 
     function convertField($name, $value, &$newObject){

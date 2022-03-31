@@ -12,6 +12,7 @@ class PedidoPregaoDomain extends BasicDomain
     public $pregao_id;
     public $setor;
     public $solicitante;
+    public $aprovador;
     public $status;
     /**
      * Campo gerado com valor unico após fechamento do crédito.<br>

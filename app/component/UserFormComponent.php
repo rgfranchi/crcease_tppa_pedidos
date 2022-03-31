@@ -17,5 +17,6 @@ class UserFormComponent extends BasicComponent
     public $grupo;
     public $ativo;
     public $tipo_cadastro;
+    public $observacao;
 }
  

@@ -16,6 +16,7 @@
           <th>Descrição</th>
           <th>Fornecedor</th>
           <th>Valor Unitário</th>
+          <th>Qtd Total</th>
           <th>Qtd Disponível</th>
           <th>Ação</th>
         </thead>
@@ -24,6 +25,7 @@
           <th>Descrição</th>
           <th>Fornecedor</th>
           <th>Valor Unitário</th>
+          <th>Qtd Total</th>
           <th>Qtd Disponível</th>
           <th>Ação</th>
         </tfoot>
@@ -33,6 +35,7 @@
             <td><?= $row->descricao ?></td>
             <td><?= $row->fornecedor ?></td>
             <td><?= $row->valor_unitario ?></td>
+            <td><?= $row->qtd_total ?></td>
             <td><?= $row->qtd_disponivel ?></td>
             <td class="table-action">
               <a href="<?= $this->action("ItemPregao", "edit", array('item_id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>

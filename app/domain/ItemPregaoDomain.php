@@ -13,8 +13,8 @@ class ItemPregaoDomain extends BasicDomain
     public $valor_unitario;
     public $valor_solicitado;
     public $qtd_total;
-    public $qtd_disponivel; // qtd disponível para solicitação
-    public $qtd_solicitada; // quantidade solicitada do PE
+    // public $qtd_disponivel; // qtd disponível -> campo calculado.
+    // public $qtd_solicitada; // quantidade solicitada do PE
     public $unidade; // unidade de medida.
     public $fornecedor; // fornecedor do item
     public $qtd_minima; 
@@ -77,7 +77,7 @@ class ItemPregaoDomain extends BasicDomain
                 $validate = is_numeric($value);
                 break;
             case 'cod_item_pregao' :
-            case 'qtd_disponivel' :
+            // case 'qtd_disponivel' :
             case 'descricao' :
                 $validate = !is_null($value);
                 break;
@@ -91,14 +91,14 @@ class ItemPregaoDomain extends BasicDomain
      * Verifica a existência das quantidades total e disponível.<br>
      * Se uma ausente copia da outra, considera subtrair a quantidade solicitada.
      */
-    function beforeSave($data)
-    {
-        if(is_null($data['qtd_total']) && !is_null($data['qtd_disponivel'])) {
-            $data['qtd_total'] = $data['qtd_disponivel'] + $data['qtd_solicitada'];
-        }
-        if(is_null($data['qtd_disponivel']) && !is_null($data['qtd_total'])) {
-            $data['qtd_disponivel'] = $data['qtd_total'] - $data['qtd_solicitada'];
-        }
-        return $data;
-    }
+    // function beforeSave($data)
+    // {
+    //     if(is_null($data['qtd_total']) && !is_null($data['qtd_disponivel'])) {
+    //         $data['qtd_total'] = $data['qtd_disponivel'] + $data['qtd_solicitada'];
+    //     }
+    //     if(is_null($data['qtd_disponivel']) && !is_null($data['qtd_total'])) {
+    //         $data['qtd_disponivel'] = $data['qtd_total'] - $data['qtd_solicitada'];
+    //     }
+    //     return $data;
+    // }
 }

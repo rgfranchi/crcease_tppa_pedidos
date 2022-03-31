@@ -2,6 +2,7 @@
 namespace TPPA\APP\controller;
 
 use DateTime;
+use TPPA\APP\domain\PedidoPregaoDomain;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\controller\BasicController;
 
@@ -96,9 +97,15 @@ class PedidoPregaoController extends BasicController
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $item_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
         $pedidos = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id]);
-
+       
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
         $data['itens'] = $this->item_pregao_calculation->disponiveis($item_pregao, $pedidos);
+
+        $data['pedido'] = new PedidoPregaoDomain();
+        $data['pedido']->setor = $_SESSION['user']['setor'];
+        $data['pedido']->solicitante = $_SESSION['user']['nome'];
+        $data['pedido']->status = "RASCUNHO";
+        // pr($data,true);
         $this->view->setTitle("Criar Pedido Pregão Itens");
         $this->view->render("edit_itens", $data);
     }
@@ -156,10 +163,13 @@ class PedidoPregaoController extends BasicController
         $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
         $pregao_id = $pedido->pregao_id;
 
+        if(empty($pedido->aprovador)) {
+            $pedido->aprovador = $_SESSION['user']['nome'];
+        }
+
         $data['status'] = $this->pedido_pregao_map_pedido_pregao_list->domain()->getDomain()->statusPedido("PEDIDO");
         $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
         $data['pedido'] = $this->item_pregao_calculation->solicitados($pedido);
-
         $this->view->setTitle("Pedido SOLICITADOS");
         $this->view->render("edit_solicitado", $data);
     }
@@ -234,6 +244,10 @@ class PedidoPregaoController extends BasicController
     function save()
     {
         $post = $this->view->dataPost();
+        if($post['status'] === "RASCUNHO") {
+            $post['aprovador'] = '';
+        }
+        // pr($post, true);
         $pregao_id = $post['pregao_id'];
         // busca valores existentes
         $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id]);
@@ -282,14 +296,18 @@ class PedidoPregaoController extends BasicController
         if($statusPost === "APROVADO") {
             $hashCredito = "";
         }
-        if($statusPost === "EMPENHADO") {
-            $pregao_itens = $this->item_pregao_map_item_pregao_update->component()->findBy(["pregao_id", "==", $pregao_id]);
-            $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
-                ["_id", "IN", json_decode($idsPost)]
-            );
-            $new_pregao_itens = $this->item_pregao_calculation->disponiveis($pregao_itens, $pedidos);
-            $ret = $this->item_pregao_map_item_pregao_update->domain()->saveAll($new_pregao_itens);
+        if($statusPost === "AGUARDANDO APROVAÇÃO") {
+            $hashCredito = "";
         }
+        
+        // if($statusPost === "EMPENHADO") {
+        //     $pregao_itens = $this->item_pregao_map_item_pregao_update->component()->findBy(["pregao_id", "==", $pregao_id]);
+        //     $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
+        //         ["_id", "IN", json_decode($idsPost)]
+        //     );
+        //     $new_pregao_itens = $this->item_pregao_calculation->disponiveis($pregao_itens, $pedidos);
+        //     $ret = $this->item_pregao_map_item_pregao_update->domain()->saveAll($new_pregao_itens);
+        // }
         $postData = array();
         foreach(json_decode($idsPost) as $id) {
             $postData[] = array(

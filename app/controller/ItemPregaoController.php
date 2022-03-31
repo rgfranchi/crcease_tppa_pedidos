@@ -16,10 +16,12 @@ class ItemPregaoController extends BasicController
         $this->loadBasicMapper('ItemPregao','ItemPregaoList','ItemPregao');
         $this->loadBasicMapper('ItemPregao','ItemPregaoForm','ItemPregao');
         
+        $this->loadBasicStores("PedidoPregao");
+
         $this->loadMapper('ItemPregaoMapItemPregaoFile');
         
         $this->loadService(array(
-            'PhpSpreadsheet',
+            'PhpSpreadsheet','ItemPregaoCalculation'
         ));
     }
 
@@ -27,7 +29,11 @@ class ItemPregaoController extends BasicController
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-        $data['itens'] = $this->item_pregao_map_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
+        $itens_pregao = $this->item_pregao_map_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
+        $pedidos = $this->pedido_pregao->findBy(
+            ["pregao_id", "==", $pregao_id]
+        );
+        $data['itens'] = $this->item_pregao_calculation->disponiveis($itens_pregao, $pedidos);
         $this->view->setTitle("Lista Itens Pregões");
         $this->view->render("index", $data);
     }

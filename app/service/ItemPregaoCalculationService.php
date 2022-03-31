@@ -25,14 +25,16 @@ class ItemPregaoCalculationService extends BasicSystem {
     /**
      * Calcula quantidade de itens disponíveis<br>
      * Se o valor do item cadastrado for menor que zero, retorna zero.<br>
-     * Preenche variável de controle 
+     * Inclui parâmetro qtd_disponível = qtd_total + SOMA(pedidos)
      * @param $pregao_itens itens do objeto pregão
      * @param $pedidos itens pedidos do pregão.
      */
     function disponiveis($pregao_itens, $pedidos) {
         $total_itens_pedido = array();
+        // Seleciona o total de itens dos pregão que já foi solicitado.
         foreach($pedidos as $pedido) {
-            if($pedido->status === "EMPENHADO" || $pedido->status === "EXCLUIDO") {
+            // if($pedido->status === "EMPENHADO" || $pedido->status === "EXCLUIDO") {
+            if($pedido->status === "EXCLUIDO") {
                 continue;
             }
             if(empty($pedido->itens_pedido)) {
@@ -49,6 +51,9 @@ class ItemPregaoCalculationService extends BasicSystem {
         }
         // se não tiver valores para subtrair.
         if(empty($total_itens_pedido)) {
+            foreach($pregao_itens as &$value) {
+                $value->qtd_disponivel = $value->qtd_total;
+            }
             return $pregao_itens;
         }
         //nova variável para processar o array mas não modificar.
@@ -56,10 +61,13 @@ class ItemPregaoCalculationService extends BasicSystem {
         foreach($pregao_itens as $key => $object) {
             $values = clone($object);
             if(isset($total_itens_pedido[$values->_id])) {
+                if(!isset($values->qtd_disponivel)) {
+                    $values->qtd_disponivel = $values->qtd_total;
+                }
                 $values->qtd_disponivel -= $total_itens_pedido[$values->_id];
                 if($values->qtd_disponivel < 0) {
                     $this->invalidItem[$values->_id] = $values;
-                    // $values->qtd_disponivel = 0;
+                   // $values->qtd_disponivel = 0;
                 }
             }
             $ret[$key] = $values;
@@ -181,10 +189,16 @@ class ItemPregaoCalculationService extends BasicSystem {
         $pedido->itens_pedido = array_filter($pedido->itens_pedido);
 
         $item_pregao_pedido = $this->item_pregao->findBy(["_id", "IN", array_keys($pedido->itens_pedido)],['cod_item_pregao' => 'asc']);
+        //pr($item_pregao_pedido);
 
-        // pr($item_pregao_pedido);
         // pedidos já realizado no pregão.
-        $pedido_pregao = $this->pedido_pregao->findBy([["pregao_id","==",$pedido->pregao_id],['status','NOT IN',['RASCUNHO','AGUARDANDO APROVAÇÃO']] ]);
+        // $pedido_pregao = $this->pedido_pregao->findBy([["pregao_id","==",$pedido->pregao_id],['status','NOT IN',['RASCUNHO','AGUARDANDO APROVAÇÃO']] ]);
+        $pedido_pregao = $this->pedido_pregao->findBy([["pregao_id","==",$pedido->pregao_id] ,['status','NOT IN',['EXCLUIDO', 'RASCUNHO', 'AGUARDANDO APROVAÇÃO']] ]);
+        // pr($pedido_pregao);
+        // inclui coluna disponíveis.
+        $item_pregao_pedido = $this->disponiveis($item_pregao_pedido, $pedido_pregao);
+
+// pr($item_pregao_pedido,true);
 
         $total_itens_aprovados = array();
         foreach($pedido_pregao as $value){

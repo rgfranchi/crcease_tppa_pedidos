@@ -16,7 +16,7 @@ $select .= sprintf('%s</select>',$options);
   <div class="card-header py-3">
     <h6 class="m-0 font-weight-bold text-primary">
       <form enctype="multipart/form-data" id="file_form" action='<?= $this->action("ItemPregao", "upload_file"); ?>' method="post">
-        <input type='file' name="spreadsheet" id="file_spreadsheet"> | * é Obrigatório | ** um é Obrigatório 
+        <input type='file' name="spreadsheet" id="file_spreadsheet"> | * é Obrigatório 
         <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
       </form>
     </h6>

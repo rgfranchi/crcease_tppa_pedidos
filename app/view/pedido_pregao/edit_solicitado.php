@@ -1,27 +1,19 @@
 <div class="card shadow mb-4">
     <div class="card-header py-1">
-    <?php if($this->data['pedido']->status == 'AGUARDANDO APROVAÇÃO' || @$_SESSION['login']['admin']) : ?>
-        <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
-            <input type="hidden" id="_id" name="_id" value="<?= $this->data['pedido']->_id ?>">
-            <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pedido']->pregao_id ?>">
-            <div class="input-group">
-                <!-- <div class="input-group-prepend">
-                    <select class="custom-select" name="status" required="required">
-                    <?php foreach ($this->data['status'] as $value) : ?>
-                    <option value="<?=$value?>" <?= $value == $this->data['pedido']->status ? "selected" : "" ?>><?=$value?></option>
-                    <?php endforeach; ?>
-                    </select>
-                </div> 
-                <input type="submit" value="ATUALIZAR" />-->
-
-                <button class="btn btn-primary btn-sm" type="submit" name="status" value="RASCUNHO">RETORNAR RASCUNHO</button>
-                <button class="btn btn-success btn-sm" type="submit" name="status" value="APROVADO">APROVAR</button> 
-
-            </div>
-        </form>
-    <?php else : ?>
-        <p>STATUS: <?=$this->data['pedido']->status ?></p>
-    <?php endif; ?>         
+        <h6 class="m-0 font-weight-bold text-primary">
+            <?php if($this->data['pedido']->status == 'AGUARDANDO APROVAÇÃO') : ?>
+                <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
+                    <input type="hidden" id="_id" name="_id" value="<?= $this->data['pedido']->_id ?>">
+                    <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pedido']->pregao_id ?>">
+                    <input type="hidden" id="aprovador" name="aprovador" value="<?= $this->data['pedido']->aprovador ?>">
+                    <button class="btn btn-primary btn-sm" type="submit" name="status" value="RASCUNHO">RETORNAR RASCUNHO</button>
+                    <button class="btn btn-success btn-sm" type="submit" name="status" value="APROVADO">APROVAR</button> 
+                    Aprovador: <?= $this->data['pedido']->aprovador ?>
+                </form>
+            <?php else : ?>
+                STATUS: <?=$this->data['pedido']->status ?> | Aprovado por: <?= $this->data['pedido']->aprovador ?>
+            <?php endif; ?>         
+        </h6>
     </div>
     <?php include_once(  __APP_VIEW__ . '/default/pedido_cards.php'); ?>
     <?php include_once(  __APP_VIEW__ . '/default/pregao_card.php'); ?>

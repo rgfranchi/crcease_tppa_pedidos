@@ -31,10 +31,7 @@ class ItemPregaoMapItemPregaoFileMapper extends BasicMapper
                     $newComponent[$keys] = "_ID DO SISTEMA";
                 case "pregao_id":
                     continue;
-                case 'qtd_disponivel' :                    
                 case 'qtd_total':
-                    $newComponent[$keys] = $basicFunctions->snakeToTextCase($keys)." **";
-                    break;
                 case 'cod_item_pregao' :
                 case 'descricao' : 
                 case 'valor_unitario' :

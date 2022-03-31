@@ -100,8 +100,28 @@ class UserController extends BasicController
         $this->view->render("form_my_info", $data);
     }
 
+    function my_info_update() {
+        $this->update();
+        $this->view->redirect("Dashboard", "index");
+    }
+
+    function edit()
+    {
+        $this->view->setTitle("Atualizar informações do usuário");
+        $data = $this->user_map_user_form->component()->findById($this->view->dataGet()['id']);
+        $this->view->render("form", $data);
+    }
+
+    function edit_update() {
+        $this->update();
+        $this->view->redirect("User", "index");
+    }
+
     function update() {
         $data = $this->view->dataPost();
+        if(!isset($data['ativo'])) {
+            $data['ativo'] = false;
+        }
         if(empty($data['password'])) {
             unset($data['password']);
         } else {
@@ -110,29 +130,13 @@ class UserController extends BasicController
         $this->user_map_user_form->domain()->update($data);
         
         $this->session->user_session($data);
-        $this->view->redirect("Dashboard", "index");
     }
 
-
-    function edit()
+    function delete()
     {
-
-criar edit e delete;
-
-        // $this->view->setTitle("Atualizar informações do usuário");
-
-        // $data = $this->user_map_user_form->component()->findById($this->view->dataGet()['id']);
-        // pr($data);
-        // die;
-
-        // $this->view->render("form", $this->user_map_user_form->component()->findById($this->view->dataGet()['id']));
+        $this->user_map_user_form->domain()->delete($this->view->dataGet()['id']);
+        $this->view->redirect("User", "index");
     }
-
-    // function delete()
-    // {
-    //     $this->pregao_map_pregao_list->domain()->delete($this->view->dataGet()['id']);
-    //     $this->view->redirect("Pregao", "index");
-    // }
 
     // function download_file()
     // {
