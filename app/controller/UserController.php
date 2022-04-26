@@ -101,7 +101,7 @@ class UserController extends BasicController
     }
 
     function my_info_update() {
-        $this->update();
+        $this->update(true);
         $this->view->redirect("Dashboard", "index");
     }
 
@@ -117,7 +117,7 @@ class UserController extends BasicController
         $this->view->redirect("User", "index");
     }
 
-    function update() {
+    function update($update_session = false) {
         $data = $this->view->dataPost();
         if(!isset($data['ativo'])) {
             $data['ativo'] = false;
@@ -128,8 +128,7 @@ class UserController extends BasicController
             $data['password'] = $this->session->encryptPassword($data['login'], $data['password']);
         }
         $this->user_map_user_form->domain()->update($data);
-        
-        $this->session->user_session($data);
+        $update_session ? $this->session->user_session($data) : null;
     }
 
     function delete()

@@ -66,11 +66,13 @@ class PedidoPregaoDomain extends BasicDomain
     function convertField($name, $value, &$newObject){
         switch($name) {
             case 'itens_pedido' :
-                foreach ($value as &$qtd) {
-                    if(empty($qtd)) {
-                        $qtd = 0;
-                    } else {
-                        $qtd = intval($qtd);
+                if(!empty($value)){
+                    foreach ($value as &$qtd) {
+                        if(empty($qtd)) {
+                            $qtd = 0;
+                        } else {
+                            $qtd = intval($qtd);
+                        }
                     }
                 }
         }

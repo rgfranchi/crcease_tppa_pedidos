@@ -13,7 +13,6 @@ class ProdutosRepositorioDomain extends BasicDomain implements iBasicDomain {
     public $aplicacao;
     public $catmat;
     public $continuado;
-    public $media_consumo;
+    public $media_consumo_ano;
     public $observacao;
-
 }

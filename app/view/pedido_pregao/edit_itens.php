@@ -21,7 +21,7 @@
               Setor: <?=$this->data['pedido']->setor;?> |
               Solicitante: <?=$this->data['pedido']->solicitante;?> |
               Status: <?= $this->data['pedido']->status; ?> 
-            <?php $enableEdit = @$_SESSION['login']['admin']; ?> 
+            <?php $enableEdit = @$_SESSION['login']['admin'] ? true : $enableEdit; ?> 
           </row>
         </div>
       </h6>

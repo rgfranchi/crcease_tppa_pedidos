@@ -4,49 +4,47 @@ namespace TPPA\APP\view\template;
 
 use TPPA\CORE\BasicFunctions;
 
+// use function TPPA\CORE\basic\pr;
+
 // include_once __ROOT__ . '/config.php';
 
 $navbar = array(
-    array( // obrigatório
+    array( // obrigatório apenas 1 por array
         'type' => 'brand',
         'text' => 'CRCEA-SE<br>TPPA',
         'href' => array('controller' => CONFIG['HOME_PAGE']['controller'], 'action' => CONFIG['HOME_PAGE']['action']),
-        // urlController("Pregao", 'index'),
         'icon' => 'fas fa-fighter-jet', // opcional.
     ),
     array( // link de acesso direto
         'type' => 'link',
         'text' => 'Dashboard',
         'href' => array('controller' => "Dashboard", 'action' => 'index'),
-        // urlController("Dashboard", 'index'),
         'icon' => 'fas fa-fw fa-tachometer-alt', // opcional
     ),
     array( // texto de cabeçalho de cada menu
         'type' => 'heading',
-        'text' => 'Pregão'
-    ),
-    array( // link de acesso direto
-        'type' => 'link',
-        'text' => 'Cadastro',
-        'href' => array('controller' => "Pregao", 'action' => 'index'),
-        // urlController("Pregao", 'index'),
-        'icon' => 'fas fa-folder-plus text-gray-300', // opcional
-    ),
-    array( // link de acesso direto
-        'type' => 'link',
-        'text' => 'Demanda',
-        'href' => array('controller' => "Demanda", 'action' => 'index'),
-        // urlController("Pregao", 'index'),
-        'icon' => 'far fa-play-circle text-gray-300', // opcional
-    ),    
-    array( // link de acesso direto
-        'type' => 'links',
-        'text' => 'Solicitação',
-        'icon' => 'fas fa-fw fa-cog', // opcional
-        'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
-        // urlController("PedidoPregao", 'index'),
-        'icon' => 'fas fa-truck-moving text-gray-300', // opcional
-        'sub_itens' => array(
+        'text' => 'Pregão',
+        'itens' => array(
+            array( // link de acesso direto
+                'type' => 'link',
+                'text' => 'Cadastro',
+                'href' => array('controller' => "Pregao", 'action' => 'index'),
+        
+                'icon' => 'fas fa-folder-plus text-gray-300', // opcional
+            ),
+            array( // link de acesso direto
+                'type' => 'link',
+                'text' => 'Demanda',
+                'href' => array('controller' => "Demanda", 'action' => 'index'),
+                'icon' => 'far fa-play-circle text-gray-300', // opcional
+            ),   
+            array( // link de acesso direto
+                'type' => 'links',
+                'text' => 'Solicitação',
+                'icon' => 'fas fa-fw fa-cog', // opcional
+                'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
+                'icon' => 'fas fa-truck-moving text-gray-300', // opcional
+                'sub_itens' => array(
                         // array(
                         //     'type' => 'title',
                         //     'text' => 'Pedidos:'
@@ -54,31 +52,83 @@ $navbar = array(
                         array(
                             'type' => 'link',
                             'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
-                            // urlController("PedidoPregao", "index"),
                             'text' => 'Pedidos',
                         ),
                         array(
                             'type' => 'link',
                             'href' => array('controller' => "PedidoPregaoPesquisar", 'action' => 'index'),
-                            // urlController("PedidoPregao", "find"),
                             'text' => 'Pesquisar',
                         ),                        
                     )
+            ),                     
+        )
     ),
-    array( // link de acesso direto
-        'type' => 'link',
-        'text' => 'Usuários',
-        'href' => array('controller' => "User", 'action' => 'index'),
-        // urlController("Dashboard", 'index'),
-        'icon' => 'fas fa-fw fa-users', // opcional
-    ),    
-    array( // link de acesso direto
-        'type' => 'link',
-        'text' => 'Minhas Informações',
-        'href' => array('controller' => "User", 'action' => 'my_info'),
-        // urlController("Dashboard", 'index'),
-        'icon' => 'fas fa-fw fa-user-tag', // opcional
-    ),    
+    // array( // link de acesso direto
+    //     'type' => 'link',
+    //     'text' => 'Cadastro',
+    //     'href' => array('controller' => "Pregao", 'action' => 'index'),
+
+    //     'icon' => 'fas fa-folder-plus text-gray-300', // opcional
+    // ),
+    // array( // link de acesso direto
+    //     'type' => 'link',
+    //     'text' => 'Demanda',
+    //     'href' => array('controller' => "Demanda", 'action' => 'index'),
+    //     'icon' => 'far fa-play-circle text-gray-300', // opcional
+    // ),    
+    // array( // link de acesso direto
+    //     'type' => 'links',
+    //     'text' => 'Solicitação',
+    //     'icon' => 'fas fa-fw fa-cog', // opcional
+    //     'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
+    //     'icon' => 'fas fa-truck-moving text-gray-300', // opcional
+    //     'sub_itens' => array(
+    //             // array(
+    //             //     'type' => 'title',
+    //             //     'text' => 'Pedidos:'
+    //             // ),
+    //             array(
+    //                 'type' => 'link',
+    //                 'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
+    //                 'text' => 'Pedidos',
+    //             ),
+    //             array(
+    //                 'type' => 'link',
+    //                 'href' => array('controller' => "PedidoPregaoPesquisar", 'action' => 'index'),
+    //                 'text' => 'Pesquisar',
+    //             ),                        
+    //         )
+    // ),
+    array( // texto de cabeçalho de cada menu
+        'type' => 'heading',
+        'text' => 'Usuário',
+        'itens' => array(
+            array( // link de acesso direto
+                'type' => 'link',
+                'text' => 'Usuários',
+                'href' => array('controller' => "User", 'action' => 'index'),
+                'icon' => 'fas fa-fw fa-users', // opcional
+            ),    
+            array( // link de acesso direto
+                'type' => 'link',
+                'text' => 'Minhas Informações',
+                'href' => array('controller' => "User", 'action' => 'my_info'),
+                'icon' => 'fas fa-fw fa-user-tag', // opcional
+            ),   
+        )
+    ),
+    // array( // link de acesso direto
+    //     'type' => 'link',
+    //     'text' => 'Usuários',
+    //     'href' => array('controller' => "User", 'action' => 'index'),
+    //     'icon' => 'fas fa-fw fa-users', // opcional
+    // ),    
+    // array( // link de acesso direto
+    //     'type' => 'link',
+    //     'text' => 'Minhas Informações',
+    //     'href' => array('controller' => "User", 'action' => 'my_info'),
+    //     'icon' => 'fas fa-fw fa-user-tag', // opcional
+    // ),    
 
 );
 
@@ -104,7 +154,7 @@ function navbarConvertHref(&$arrNavbar) {
                 }
             } 
             if(navbarConvertHref($valor) === false) {
-                $valor = null;
+                unset($arrNavbar[$key]);
             }
         }
     }
@@ -113,6 +163,9 @@ function navbarConvertHref(&$arrNavbar) {
 
 navbarConvertHref($navbar); 
 
+
+// pr($navbar);
+// die;
 /**
  * Exemplo sidebar conforme template 
  * https://startbootstrap.com/theme/sb-admin-2.

@@ -5,7 +5,7 @@ use TPPA\CORE\BasicFunctions;
 
 use function TPPA\CORE\basic\pr;
 
-$basicFunctions = new BasicFunctions();
+// $basicFunctions = new BasicFunctions();
     // function navbarActive($active = false) {
     //     $basicFunctions = new BasicFunctions(); 
     //     var_dump($basicFunctions);
@@ -25,47 +25,21 @@ $basicFunctions = new BasicFunctions();
                  <!-- Divider -->
                  <hr class="sidebar-divider my-0">
              <?php endif ?>
-             <?php if ($value_nav['type'] === 'link') : ?>
-                 <!-- Sidebar - Link -->
-                 <li class="nav-item <?= $basicFunctions->navbarActive(false) ?>">
-                     <?php $basicFunctions->navbarActive($value_nav['href']); ?>
-                     <a class="nav-link" href=<?= $value_nav['href'] ?>>
-                         <?= isset($value_nav['icon']) ? sprintf('<i class="%s"></i>', $value_nav['icon']) : ""; ?>
-                         <span><?= $value_nav['text'] ?></span>
-                     </a>
-                 </li>
-             <?php endif ?>
+             <?php htmlLinks($value_nav, $key_nav); ?>
              <?php if ($value_nav['type'] === 'heading') : ?>
-                 <!-- Divider -->
-                 <hr class="sidebar-divider">
-                 <!-- Heading -->
-                 <div class="sidebar-heading">
-                     <?= $value_nav['text'] ?>
-                 </div>
+                <?php if (isset($value_nav['itens']) && !empty($value_nav['itens'])) : ?>
+                    <!-- Divider -->
+                    <hr class="sidebar-divider">
+                    <!-- Heading -->
+                    <div class="sidebar-heading">
+                        <?= $value_nav['text'] ?>
+                    </div>
+                    <?php foreach($value_nav['itens'] as $key_itens => $value_itens ) : ?>
+                        <?php htmlLinks($value_itens); ?>
+                    <?php endforeach ?>    
+                <?php endif ?>       
              <?php endif ?>
-             <?php if ($value_nav['type'] === 'links') : ?>
-                 <!-- Nav Item - Pages Collapse Menu -->
-                 <li class="nav-item">
-                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse<?= $key_nav ?>" aria-expanded="true" aria-controls="collapseTwo">
-                         <?= isset($value_nav['icon']) ? sprintf('<i class="%s"></i>', $value_nav['icon']) : ""; ?>
-                         <span><?= $value_nav['text'] ?></span>
-                     </a>
-                     <div id="collapse<?= $key_nav ?>" class="collapse" aria-labelledby="heading<?= $key_nav ?>" data-parent="#accordionSidebar">
-                         <div class="bg-white py-2 collapse-inner rounded">
-                             <?php foreach ($value_nav['sub_itens'] as $value_sub) : ?>
-                                <?php if (empty($value_sub)) {continue;} ?>
-                                 <?php if ($value_sub['type'] === 'title') : ?>
-                                     <div class="collapse-divider"></div>
-                                     <h6 class="collapse-header"><?= $value_sub['text'] ?></h6>
-                                 <?php endif ?>
-                                 <?php if ($value_sub['type'] === 'link') : ?>
-                                     <a class="collapse-item" href="<?= $value_sub['href'] ?>"><?= $value_sub['text'] ?></a>
-                                 <?php endif ?>
-                             <?php endforeach ?>
-                         </div>
-                     </div>
-                 </li>
-             <?php endif ?>
+
          <?php endforeach; ?>
          <!-- foreach $navbar;  -->
 
@@ -79,6 +53,43 @@ $basicFunctions = new BasicFunctions();
 
      </ul>
      <?php $this->template_js = array('session') ?>
+
+    <?php function htmlLinks($arr_links, $arr_key = "") { ?> 
+        <?php $basicFunctions = new BasicFunctions(); ?>
+        <?php if ($arr_links['type'] === 'link') : ?>
+            <!-- Sidebar - Link -->
+            <li class="nav-item <?= $basicFunctions->navbarActive(false) ?>">
+                <?php $basicFunctions->navbarActive($arr_links['href']); ?>
+                <a class="nav-link" href=<?= $arr_links['href'] ?>>
+                    <?= isset($arr_links['icon']) ? sprintf('<i class="%s"></i>', $arr_links['icon']) : ""; ?>
+                    <span><?= $arr_links['text'] ?></span>
+                </a>
+            </li>
+        <?php endif ?>
+        <?php if ($arr_links['type'] === 'links') : ?>
+                 <!-- Nav Item - Pages Collapse Menu -->
+                 <li class="nav-item">
+                     <a class="nav-link collapsed" href="#" data-toggle="collapse" data-target="#collapse<?= $arr_key ?>" aria-expanded="true" aria-controls="collapseTwo">
+                         <?= isset($value_nav['icon']) ? sprintf('<i class="%s"></i>', $value_nav['icon']) : ""; ?>
+                         <span><?= $arr_links['text'] ?></span>
+                     </a>
+                     <div id="collapse<?= $arr_key ?>" class="collapse" aria-labelledby="heading<?= $arr_key ?>" data-parent="#accordionSidebar">
+                         <div class="bg-white py-2 collapse-inner rounded">
+                             <?php foreach ($arr_links['sub_itens'] as $value_sub) : ?>
+                                <?php if (empty($value_sub)) {continue;} ?>
+                                 <?php if ($value_sub['type'] === 'title') : ?>
+                                     <div class="collapse-divider"></div>
+                                     <h6 class="collapse-header"><?= $value_sub['text'] ?></h6>
+                                 <?php endif ?>
+                                 <?php if ($value_sub['type'] === 'link') : ?>
+                                     <a class="collapse-item" href="<?= $value_sub['href'] ?>"><?= $value_sub['text'] ?></a>
+                                 <?php endif ?>
+                             <?php endforeach ?>
+                         </div>
+                     </div>
+                 </li>
+             <?php endif ?>        
+    <?php } ?>                        
 
      <!-- Sidebar ORIGINAL -->
      <!-- <ul class="navbar-nav bg-gradient-primary sidebar sidebar-dark accordion" id="accordionSidebar"> -->

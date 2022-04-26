@@ -1,9 +1,6 @@
 <?php
-
-use function TPPA\CORE\basic\pr;
-
-pr($this->data);
-
+// use function TPPA\CORE\basic\pr;
+// pr($this->data);
 ?>
 
 <form action="<?= $this->action("User", "save_externo"); ?>" method="post">
@@ -22,7 +19,7 @@ pr($this->data);
         <div class="col">
             <div class="form-group">
                 <label for="nome">Nome:</label>
-                <input type="text" id="nome" name="nome" class="form-control" required="required" aria-describedby="nomeHelp" value="<?= $this->data->nome ?>">
+                <input type="text" id="nome" name="nome" class="form-control" required="required" aria-describedby="nomeHelp" value="">
                 <small id="nomeHelp" class="form-text text-muted">Ex: 1T Rafael GUERRA Franchi.</small>
             </div>
         </div>
@@ -32,11 +29,7 @@ pr($this->data);
                 <select class="custom-select" name="setor" required="required" aria-describedby="setorHelp">
                     <option value="">Selecione um setor</option>
                     <?php foreach (setores() as $value) : ?>
-                        <?php if($value ===  $this->data->setor) : ?>
-                            <option selected value="<?=$value?>"><?=$value?></option>
-                        <?php else : ?>
-                            <option value="<?=$value?>"><?=$value?></option>   
-                        <?php endif; ?>                
+                        <option value="<?=$value?>"><?=$value?></option>   
                     <?php endforeach; ?>
                 </select>
                 <small id="setorHelp" class="form-text text-muted">Setor do usuário.</small>
@@ -47,7 +40,7 @@ pr($this->data);
         <div class="col">
             <div class="form-group">
                 <label for="password">Senha:</label>
-                <input required="required" type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp" value='<?= $this->data->password ?>' />
+                <input required="required" type="password" class="form-control" id="password" name="password" aria-describedby="passwordHelp" value="" />
                 <small id="passwordHelp" class="form-text text-muted">Se não acessa a rede do CRCEA-SE.</small>
             </div>
         </div>    
@@ -56,7 +49,7 @@ pr($this->data);
         <div class="col">
             <div class="form-group">
                 <label for="observacao">Observação:</label>
-                <textarea class="form-control" id="observacao" name="observacao" class="form-control" aria-describedby="observacaoHelp" rows="5" ><?= $this->data->observacao ?></textarea>
+                <textarea class="form-control" id="observacao" name="observacao" class="form-control" aria-describedby="observacaoHelp" rows="5" ></textarea>
                 <small id="observacaoHelp" class="form-text text-muted">Informações se necessário.</small>
             </div>
         </div>

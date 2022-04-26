@@ -42,7 +42,18 @@ if(isset($_SESSION['login'])) {
         $config_permission["*"] = true;
     }
     if(isset($_SESSION['login']['gerente']) && $_SESSION['login']['gerente'] == true) {
-        $config_permission["PedidoPregao"]["edit_solicitado"] = true;
+        $config_permission['PedidoPregao'] = array(
+            "*" => true,
+            // "index" => true,
+            // "find" => true,
+            "edit_solicitado" => true,
+            "edit_aprovado" => false,
+            "delete" => false,
+        );
+        $config_permission['User'] = array(
+            'my_info' => true, 
+            'save_externo' => true
+        );        
     }
     if(isset($_SESSION['login']['create_user']) && $_SESSION['login']['create_user'] == true) {
         $config_permission['User']['save_lpad'] = true;
@@ -58,7 +69,7 @@ if(isset($_SESSION['login'])) {
         );
         $config_permission['User'] = array(
             'my_info' => true, 
-            'update' => true
+            'save_externo' => true
         );
     }
 }
