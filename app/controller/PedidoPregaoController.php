@@ -6,7 +6,7 @@ use TPPA\APP\domain\PedidoPregaoDomain;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\controller\BasicController;
 
-use function TPPA\CORE\basic\pr;
+// use function TPPA\CORE\basic\pr;
 
 class PedidoPregaoController extends BasicController
 {
@@ -130,6 +130,11 @@ class PedidoPregaoController extends BasicController
             ]
         );
         $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
+
+        if($pedido->solicitante != $_SESSION['user']['nome'] && $pedido->status == 'RASCUNHO') {
+            $pedido->solicitante = $_SESSION['user']['nome'];
+        }
+
         $data['pedido'] = $pedido;
         // Calcula quantidade disponível.
         $data['itens'] = $this->item_pregao_calculation->disponiveis($itens_pregao, $pedidos);

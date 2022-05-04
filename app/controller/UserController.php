@@ -29,6 +29,9 @@ class UserController extends BasicController
 
     function add_lpad()
     {
+        if(isset($_SESSION['user'])) {
+            $this->view->redirect('Dashboard','index');
+        }        
         $data = $this->view->dataGet();
         $this->view->setTitle("Cadastro primeiro acesso");
         $this->view->render("form_lpad", (Object) $data);
@@ -36,6 +39,9 @@ class UserController extends BasicController
 
     function save_lpad()
     {
+        if(isset($_SESSION['user'])) {
+            $this->view->redirect('Dashboard','index');
+        }        
         $data = $this->view->dataPost();
         $data['ativo'] = true;
         $this->save($data);
@@ -45,11 +51,21 @@ class UserController extends BasicController
 
     function add_externo()
     {
+        if(isset($_SESSION['user'])) {
+            $this->view->render("info_cadastro", 
+                array(
+                    'Para criar cadastro EXTERNO é necessário realizar "LOGOUT"',
+                )
+            );
+        }
         $this->view->setTitle("Solicitação de cadastro");
         $this->view->render("form_externo");
     }
 
     function save_externo() {
+        if(isset($_SESSION['user'])) {
+            $this->view->redirect('Dashboard','index');
+        }        
         $data = $this->view->dataPost();
         $data['ativo'] = false;
         $data['password'] = $this->session->encryptPassword($data['login'], $data['password']);

@@ -1,6 +1,7 @@
 <?php
 namespace TPPA\APP\domain;
 
+use TPPA\APP\component\helper\ParseFunctions;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\domain\BasicDomain;
 // include_once('BasicDomain.php');
@@ -32,6 +33,7 @@ class ItemPregaoDomain extends BasicDomain
 
     function convertField($name, $value, &$newObject){
         $basicFunction = new BasicFunctions();
+        $parseFunctions = new ParseFunctions();
         switch($name) {
             case 'valor_unitario' :
                 if(is_null($value)) break;
@@ -39,31 +41,31 @@ class ItemPregaoDomain extends BasicDomain
                 $value = $basicFunction->convertCommaToDot($value);
                 break;
             case 'natureza_despesa' :
-                $value = $this->convertNaturezaDespesa($value);
+                $value = $parseFunctions->convertNaturezaDespesa($value);
                 break;
         }
         parent::convertField($name, $value, $newObject);
     }
 
-    function convertNaturezaDespesa($value) {
-        $value = strtolower($value);
-        if($value == '30' || (strpos($value, 'material') && strpos($value, 'consumo')) || $value == '339030') {
-            $value = '33.90.30';
-        }
-        if($value == '39' || strpos($value, 'serviços') || strpos($value, 'servicos') || $value == '339039') {
-            $value = '33.90.39';
-        }
-        if($value == '52' || (strpos($value, 'material') && strpos($value, 'permanente')) || $value == '449052') {
-            $value = '44.90.52';
-        }
-        if($value == '40' || $value == '449040') {
-            $value = '44.90.40';
-        }
-        if($value == '339040') {
-            $value = '33.90.40';
-        }
-        return $value;
-    }
+    // function convertNaturezaDespesa($value) {
+    //     $value = strtolower($value);
+    //     if($value == '30' || (strpos($value, 'material') && strpos($value, 'consumo')) || $value == '339030') {
+    //         $value = '33.90.30';
+    //     }
+    //     if($value == '39' || strpos($value, 'serviços') || strpos($value, 'servicos') || $value == '339039') {
+    //         $value = '33.90.39';
+    //     }
+    //     if($value == '52' || (strpos($value, 'material') && strpos($value, 'permanente')) || $value == '449052') {
+    //         $value = '44.90.52';
+    //     }
+    //     if($value == '40' || $value == '449040') {
+    //         $value = '44.90.40';
+    //     }
+    //     if($value == '339040') {
+    //         $value = '33.90.40';
+    //     }
+    //     return $value;
+    // }
 
     function validateField($name, $value)
     {

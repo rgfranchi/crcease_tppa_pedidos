@@ -19,6 +19,9 @@ class SessionController extends BasicController
 
     function login()
     {
+        if(isset($_SESSION['user'])) {
+            $this->view->redirect('Dashboard','index');
+        }         
         $postLogin = $this->view->dataPost();
         if($this->lpad_login($postLogin['login'],$postLogin['password'])) {
             $data = $this->user_map_user_form->domain()->findBy(["login", "==", $postLogin['login']]);

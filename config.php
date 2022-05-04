@@ -52,6 +52,7 @@ if(isset($_SESSION['login'])) {
         );
         $config_permission['User'] = array(
             'my_info' => true, 
+            'my_info_update' => true, 
             'save_externo' => true
         );        
     }
@@ -69,6 +70,7 @@ if(isset($_SESSION['login'])) {
         );
         $config_permission['User'] = array(
             'my_info' => true, 
+            'my_info_update' => true, 
             'save_externo' => true
         );
     }

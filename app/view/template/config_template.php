@@ -39,6 +39,12 @@ $navbar = array(
                 'icon' => 'far fa-play-circle text-gray-300', // opcional
             ),   
             array( // link de acesso direto
+                'type' => 'link',
+                'text' => 'Repositorio',
+                'href' => array('controller' => "Repositorio", 'action' => 'index'),
+                'icon' => 'far fa-folder text-gray-300', // opcional
+            ),   
+            array( // link de acesso direto
                 'type' => 'links',
                 'text' => 'Solicitação',
                 'icon' => 'fas fa-fw fa-cog', // opcional

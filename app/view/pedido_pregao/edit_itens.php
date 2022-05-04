@@ -1,5 +1,5 @@
 <?php
-  use function TPPA\CORE\basic\pr;
+  // use function TPPA\CORE\basic\pr;
   $enableEdit = $this->data['pedido']->status  === "RASCUNHO";
   include_once(  __APP_VIEW__ . '/default/pregao_head.php'); 
 ?>
@@ -58,7 +58,6 @@
                 <?php if(isset($this->data['invalid_itens']) && isset($this->data['invalid_itens'][$row->_id])) : ?>
                   <p style="color: red;">QTD. INDISPONÍVEL (<?=$this->data['invalid_itens'][$row->_id]->qtd_disponivel?>)</p>
                 <?php endif; ?>
-
               </td>              
             </tr>
           <?php endforeach; ?>

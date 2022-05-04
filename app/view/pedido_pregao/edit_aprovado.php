@@ -36,7 +36,7 @@
                     "pregao_id" => $this->data['pregao']->_id,
                     "hash_credito" => $this->data['hash_credito']
                     )); ?>" >Exportar</a>    
-                TOTAL R$ <?= $basicFunctions->convertToMoneyBR($this->data['pedidos']['total_valor']) ?> | UN <?= $this->data['pedidos']['total_quantidade']; ?>
+                TOTAL R$ <?= $this->basicFunctions->convertToMoneyBR($this->data['pedidos']['total_valor']) ?> | UN <?= $this->data['pedidos']['total_quantidade']; ?>
             </h6>
         </div>
         <?php if(empty($this->data['pedidos']['BODY'])) : ?>
@@ -92,7 +92,7 @@
                         <tr id='<?=$fields->_id?>' >
                         <?php unset($fields->_id) ?>
                         <?php foreach ($fields as $field_key => $field_value ) : ?>
-                            <td field='<?=$field_key?>' ><?= $field_key === "sub_total_valor" ? $basicFunctions->convertToMoneyBR($field_value) : $field_value ?></td>
+                            <td field='<?=$field_key?>' ><?= $field_key === "sub_total_valor" ? $this->basicFunctions->convertToMoneyBR($field_value) : $field_value ?></td>
                         <?php endforeach; ?>
                         </tr>
                     <?php endforeach; ?>

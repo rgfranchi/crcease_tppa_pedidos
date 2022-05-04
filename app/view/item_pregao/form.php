@@ -1,4 +1,7 @@
-<?php include_once( __APP_VIEW__ . '/default/pregao_head.php'); ?>
+<?php 
+include_once( __APP_VIEW__ . '/default/natureza_despesa.php'); 
+include_once( __APP_VIEW__ . '/default/pregao_head.php'); 
+?>
 <form action="<?= $this->action("ItemPregao", "save"); ?>" method="post">
     <?php if ($this->data['item']->_id > 0) : ?>
         <input type="hidden" id="_id" name="_id" value="<?= $this->data['item']->_id ?>">
@@ -30,19 +33,7 @@
         </div>
     </div>    
     <div class="row">        
-        <div class="col">
-            <div class="form-group">
-                <label for="natureza_despesa">Natureza de Despesa (ND):</label>
-                <select id="natureza_despesa" name="natureza_despesa" class="form-control" aria-describedby="natureza_despesaHelp">
-                    <option value="33.90.30" <?= $this->data['item']->natureza_despesa == '33.90.30' ? "selected" : "" ?>>Material de Consumo</option>
-                    <option value="33.90.39" <?= $this->data['item']->natureza_despesa == '33.90.39' ? "selected" : "" ?>>Serviços de Terceiros Pessoa Jurídica</option>
-                    <option value="44.90.52" <?= $this->data['item']->natureza_despesa == '44.90.52' ? "selected" : "" ?>>Material Permanente</option>
-                    <option value="44.90.40" <?= $this->data['item']->natureza_despesa == '44.90.40' ? "selected" : "" ?>>Serviços de Tecnologia da Informação e Comunicação</option>
-                    <option value="33.90.40" <?= $this->data['item']->natureza_despesa == '33.90.40' ? "selected" : "" ?>>Comunicação de Dados</option>
-                </select>
-                <small id="natureza_despesaHelp" class="form-text text-muted">Classificação</small>
-            </div>
-        </div>             
+        <?php natureza_despesa($this->data['item']->natureza_despesa); ?> 
         <div class="col">
             <div class="form-group">
                 <label for="valor_unitario">Valor Unitário:</label>
