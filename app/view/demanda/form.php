@@ -16,7 +16,6 @@ use function TPPA\CORE\basic\pr;
             </div>
         </div>
     </div>
-
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -26,7 +25,6 @@ use function TPPA\CORE\basic\pr;
             </div>
         </div>
     </div>
-
     <div class="row">        
         <div class="col">
             <div class="form-group">
@@ -49,8 +47,8 @@ use function TPPA\CORE\basic\pr;
                 <small id="naturezaHelp" class="form-text text-muted">Continuado (Atividade) ou Unica Execução (Projeto).</small>
             </div>
         </div>   
-        
     </div>
+
     <div class="row">
         <div class="col">
             <div class="form-group">
@@ -61,7 +59,27 @@ use function TPPA\CORE\basic\pr;
         </div>
     </div>
 
-    <button type="submit" class="btn btn-success btn-icon-split" value="Enviar"><span class="icon text-white-50">
+    <div class="row">
+        <div class="col-3" >
+            <div class="form-group">
+                <div class="form-check">
+                    <input class="form-check-input" type="checkbox" name="filtro_natureza_despesa" id="filtro_natureza_despesa" aria-describedby="filtro_natureza_despesaHelp" value="1" <?= $this->data->filtro_natureza_despesa == 1 ? "checked" : "" ?>>
+                    <label class="form-check-label" for="filtro_natureza_despesa">Natureza de Despesa</label>
+                </div>
+                <small id="filtro_natureza_despesaHelp" class="form-text text-muted">Itens da mesma Natureza de Despesa.</small>
+            </div>
+        </div>    
+        <div class="col">    
+            <div class="form-group">
+                <label for="filtro_repositorio">Filtro Repositorio:</label>
+                <input type="text" id="filtro_repositorio" name="filtro_repositorio" class="form-control" aria-describedby="filtro_repositorioHelp" value="<?= $this->data->filtro_repositorio ?>">
+                <small id="filtro_repositorioHelp" class="form-text text-muted">Filtra TAGs do repositório, incluir valores separados por ";" Ex: elétrica;bateria;consumo.</small>
+            </div>
+        </div>
+    </div>
+
+    <button type="submit" class="btn btn-success btn-icon-split" value="Enviar">
+        <span class="icon text-white-50">
             <i class="fas fa-check"></i>
         </span>
         <span class="text">Salvar</span>

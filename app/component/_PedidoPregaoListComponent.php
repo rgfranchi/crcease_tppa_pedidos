@@ -36,7 +36,7 @@ class PedidoPregaoListComponent extends BasicComponent
      */
     public $update;
 
-    function convertField($name, $value, &$newObject){
+    function convertFieldRead($name, $value, &$newObject){
         $basicFunctions = new BasicFunctions();
         switch($name) {
             case 'create' :
@@ -45,6 +45,6 @@ class PedidoPregaoListComponent extends BasicComponent
 
 
         }
-        parent::convertField($name, $value, $newObject);
+        parent::convertFieldRead($name, $value, $newObject);
     }
 }

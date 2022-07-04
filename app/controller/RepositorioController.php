@@ -17,7 +17,7 @@ class RepositorioController extends BasicController {
 
     function index($data) {
 
-        pr($data);
+        // pr($data);
 
         // $array = [
         //     (object) array(

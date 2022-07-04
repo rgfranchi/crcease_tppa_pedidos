@@ -41,7 +41,9 @@ if(strpos($currentDir, 'HOMOLOGA') > 0) {
 
 if(strpos($currentDir, 'PRODUCAO') > 0) {
     echo "<br><h1>COMANDO NÃO DEVE SER EXECUTADO EM PRODUÇÃO</h1>";
-    die;
+    $dir = "../../../DATABASE_TPPA/PRODUCAO";
+    echo "EXECUTA:" . $dir;    
+    // die;
 }
 
 

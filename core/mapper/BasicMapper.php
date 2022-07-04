@@ -2,6 +2,8 @@
 namespace TPPA\CORE\mapper;
 use TPPA\CORE\BasicSystem;
 
+use function TPPA\CORE\basic\pr;
+
 /**
  * Operações de transição entre domain e component.
  */

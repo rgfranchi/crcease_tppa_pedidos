@@ -1,5 +1,5 @@
 <?php include_once(  __APP_VIEW__ . '/default/pregao_head.php'); ?>
-<input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
+<input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']['_id'] ?>">
 <?php
 // cria select para os cabeçalhos
 $select = '<select id="typeField" class="typeField" name="typeField[%s]"><option value="null" selected>Não Selecionado</option>';
@@ -17,7 +17,7 @@ $select .= sprintf('%s</select>',$options);
     <h6 class="m-0 font-weight-bold text-primary">
       <form enctype="multipart/form-data" id="file_form" action='<?= $this->action("ItemPregao", "upload_file"); ?>' method="post">
         <input type='file' name="spreadsheet" id="file_spreadsheet"> | * é Obrigatório 
-        <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
+        <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']['_id'] ?>">
       </form>
     </h6>
   </div>
@@ -27,7 +27,7 @@ $select .= sprintf('%s</select>',$options);
     <?php else : ?>
       <div class="table-responsive scrollTopTable">
         <form id="file_form" action='<?= $this->action("ItemPregao", "file_save"); ?>' method="post"> 
-          <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']->_id ?>">
+          <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $this->data['pregao']['_id'] ?>">
           <table class="table table-bordered" id="dataTable" width="100%" cellspacing="0">
             <thead>
               <th><button type="submit" class="btn-sm btn-success btn-circle" title="Enviar"><i class="fas fa-check"></i></a></th>

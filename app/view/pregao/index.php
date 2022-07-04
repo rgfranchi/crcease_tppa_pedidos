@@ -34,15 +34,15 @@
         <tbody>
           <?php foreach ($this->data as $row) : ?>
             <tr>
-              <td><?= $row->nome ?></td>
-              <td><?= $row->objeto ?></td>
-              <td><?= $row->data_homologacao ?></td>
-              <td style="color:<?= $row->data_vencimento_color ?>"><?= $row->data_limite_solicitacao ?></td>
-              <td><?= $row->ativo === "true" ? "SIM" : "NÃO" ?></td>
+              <td><?= $row['nome'] ?></td>
+              <td><?= $row['objeto'] ?></td>
+              <td><?= $row['data_homologacao'] ?></td>
+              <td style="color:<?= $row['data_vencimento_color'] ?>"><?= $row['data_limite_solicitacao'] ?></td>
+              <td><?= $row['ativo'] === "true" ? "SIM" : "NÃO" ?></td>
               <td class="table-action">
-                <a href="<?= $this->action("Pregao", "edit", array('id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
-                <a href="<?= $this->action("Pregao", "delete", array('id' => $row->_id)); ?>" class="btn-sm btn-danger btn-circle delete" title="EXCLUIR"><i class="fas fa-trash"></i></a>
-                <a href="<?= $this->action("ItemPregao", "index", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-warning btn-circle" title="ITENS"><i class="fas fa-list"></i></a>
+                <a href="<?= $this->action("Pregao", "edit", array('id' => $row['_id'])); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
+                <a href="<?= $this->action("Pregao", "delete", array('id' => $row['_id'])); ?>" class="btn-sm btn-danger btn-circle delete_others" related="Pedidos e Itens" title="EXCLUIR"><i class="fas fa-trash"></i></a>
+                <a href="<?= $this->action("ItemPregao", "index", array('pregao_id' => $row['_id'])); ?>" class="btn-sm btn-warning btn-circle" title="ITENS"><i class="fas fa-list"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>

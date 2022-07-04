@@ -21,6 +21,15 @@ $(document).ready(function () {
     return confirm("Excluir registro?");
   });
 
+  $("a.delete_others").click(function () {
+    var related = $(this).attr('related');
+    let bool = confirm("Exclui registros relacionados ? (" + related + ")");
+    if(bool) {
+      return !confirm("Clique em CANCELAR para confirmar.")
+    }
+    return false;
+  });
+
   $("a.deleteAll").click(function () {
     let bool = confirm("Excluir TODOS os Registros?");
     if(bool) {

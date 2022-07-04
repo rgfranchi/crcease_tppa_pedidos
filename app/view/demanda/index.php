@@ -1,4 +1,5 @@
 <?php
+use TPPA\APP\view\demanda\IndexComponent;
 use function TPPA\CORE\basic\pr;
 ?>
 
@@ -22,7 +23,7 @@ use function TPPA\CORE\basic\pr;
                     <tr>
                         <td><?=$row->nome?></td>
                         <td class="table-action">
-                            <a href="<?= $this->action("Repositorio", "index", array('id' => $row->_id)); ?>" class="btn-sm btn-warning btn-circle" title="Repositorio"  >
+                            <a href="<?= $this->action("PedidoDemanda", "index", array('demanda_id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="Pedido" >
                                 <i class="fas fa-list"></i>
                             </a>
                             <a href="<?= $this->action("Demanda", "update", array('id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR" >

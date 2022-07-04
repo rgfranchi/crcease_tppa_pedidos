@@ -4,6 +4,8 @@ namespace TPPA\APP\domain;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\domain\BasicDomain;
 
+use function TPPA\CORE\basic\pr;
+
 // include_once('BasicDomain.php');
 
 class PregaoDomain extends BasicDomain
@@ -12,11 +14,6 @@ class PregaoDomain extends BasicDomain
     public $nome;
     public $objeto;
     public $termo_referencia_origem;
-    // public $valor_total;
-    // public $valor_solicitado;
-    // public $qtd_total;
-    // public $qtd_disponivel;
-    // public $data_vencimento;
     public $data_homologacao;
     public $data_limite_solicitacao;
     public $numero_processo_PAG;
@@ -30,41 +27,35 @@ class PregaoDomain extends BasicDomain
     //  */
     // public $pregoes_itens = array(); 
 
-    function convertField($name, $value, &$newObject){
-        $basicFunctions = new BasicFunctions();
-        switch($name) {
-            // case 'valor_solicitado' :
-            // case 'valor_total' :
-            //     $value = convertCommaToDot($value);
-            //     break;
-            case 'data_homologacao' :
-                $value = $basicFunctions->convertToDateTimeSystem($value, false);
-                break;
-            case 'data_limite_solicitacao' :
-                $value = $basicFunctions->convertToDateTimeSystem($value, false);
-                break;
-        }
-        parent::convertField($name, $value, $newObject);
-    }
-
-    function validateField($name, $value)
-    {
-        // $validate = true;
-        // switch($name) {
-        //     case 'valor_solicitado' :
-        //     case 'valor_total' :
-        //         $validate = is_numeric($value);
-        //         break;
-        // }
-        // if(!$validate) {
-        //     loadException("Campo $name com valor $value inválido");
-        // } 
-    }
-
-    // EXEMPLO DE TRATAMENTO ANTES DE EXCLUIR.
-    // function beforeDelete($deleteId) {
-    //     pr($deleteId . " TESTE");
-    //     return "REGISTRO NÃO PODE SER EXCLUÍDO";
+    // function convertFieldRead($name, $value, &$newObject){
+    //     $basicFunctions = new BasicFunctions();
+    //     switch($name) {
+    //         case 'data_homologacao' :
+    //             $value = $basicFunctions->convertToDateTimeBR($value, false);
+    //             break;
+    //         case 'data_limite_solicitacao' :
+    //             $value = $basicFunctions->convertToDateTimeBR($value, false);
+    //             break;
+    //     }
+    //     parent::convertFieldRead($name, $value, $newObject);
     // }
+    function afterRead($data){
+        $basicFunctions = new BasicFunctions();
+        $data['data_homologacao'] = $basicFunctions->convertToDateTimeBR($data['data_homologacao'], false);
+        $data['data_limite_solicitacao'] = $basicFunctions->convertToDateTimeBR($data['data_limite_solicitacao'], false);
+        return parent::afterRead($data);
+    }
 
+    function beforeSave($data)
+    {
+        $basicFunctions = new BasicFunctions();
+        $data['data_homologacao'] = $basicFunctions->convertToDateTimeSystem($data['data_homologacao'], false);
+        $data['data_limite_solicitacao'] = $basicFunctions->convertToDateTimeSystem($data['data_limite_solicitacao'], false);
+        return parent::beforeSave($data);
+    }
+
+    function beforeDelete($deleteId)
+    {
+        return parent::beforeDelete($deleteId);
+    }
 }

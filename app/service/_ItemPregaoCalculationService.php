@@ -192,13 +192,10 @@ class ItemPregaoCalculationService extends BasicSystem {
         //pr($item_pregao_pedido);
 
         // pedidos já realizado no pregão.
-        // $pedido_pregao = $this->pedido_pregao->findBy([["pregao_id","==",$pedido->pregao_id],['status','NOT IN',['RASCUNHO','AGUARDANDO APROVAÇÃO']] ]);
         $pedido_pregao = $this->pedido_pregao->findBy([["pregao_id","==",$pedido->pregao_id] ,['status','NOT IN',['EXCLUIDO', 'RASCUNHO', 'AGUARDANDO APROVAÇÃO']] ]);
         // pr($pedido_pregao);
         // inclui coluna disponíveis.
         $item_pregao_pedido = $this->disponiveis($item_pregao_pedido, $pedido_pregao);
-
-// pr($item_pregao_pedido,true);
 
         $total_itens_aprovados = array();
         foreach($pedido_pregao as $value){

@@ -4,6 +4,9 @@ namespace TPPA\APP\domain;
 use TPPA\APP\component\helper\ParseFunctions;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\domain\BasicDomain;
+
+use function TPPA\CORE\basic\pr;
+
 // include_once('BasicDomain.php');
 
 class ItemPregaoDomain extends BasicDomain
@@ -12,13 +15,10 @@ class ItemPregaoDomain extends BasicDomain
     public $cod_item_pregao; // código do item no PE.
     public $descricao;
     public $valor_unitario;
-    public $valor_solicitado;
     public $qtd_total;
-    // public $qtd_disponivel; // qtd disponível -> campo calculado.
-    // public $qtd_solicitada; // quantidade solicitada do PE
     public $unidade; // unidade de medida.
     public $fornecedor; // fornecedor do item
-    public $qtd_minima; 
+    // public $qtd_minima; 
     /**
      * 33.90.30 - Material de Consumo
      * 33.90.39 - Outros Serviços de Terceiros - Pessoa Jurídica
@@ -28,43 +28,38 @@ class ItemPregaoDomain extends BasicDomain
     */
     public $natureza_despesa;  
 
+    public $observacao;
+
     // id do Objeto Pregoes.php
     public $pregao_id;
 
-    function convertField($name, $value, &$newObject){
+
+    function afterRead($data)
+    {
         $basicFunction = new BasicFunctions();
         $parseFunctions = new ParseFunctions();
-        switch($name) {
-            case 'valor_unitario' :
-                if(is_null($value)) break;
-            case 'valor_solicitado' :
-                $value = $basicFunction->convertCommaToDot($value);
-                break;
-            case 'natureza_despesa' :
-                $value = $parseFunctions->convertNaturezaDespesa($value);
-                break;
-        }
-        parent::convertField($name, $value, $newObject);
+        $data['valor_unitario'] = $basicFunction->convertToMoneyBR($data['valor_unitario']);
+        $data['natureza_despesa'] = $parseFunctions->convertNaturezaDespesa($data['natureza_despesa']);
+        return parent::afterRead($data);
     }
 
-    // function convertNaturezaDespesa($value) {
-    //     $value = strtolower($value);
-    //     if($value == '30' || (strpos($value, 'material') && strpos($value, 'consumo')) || $value == '339030') {
-    //         $value = '33.90.30';
+    // function convertFieldRead($name, $value, &$newObject){
+    //     $basicFunction = new BasicFunctions();
+    //     $parseFunctions = new ParseFunctions();
+
+
+
+    //     switch($name) {
+    //         case 'valor_unitario' :
+    //             if(is_null($value)) break;
+    //         case 'valor_solicitado' :
+    //             $value = $value = $basicFunction->convertToMoneyBR($value);
+    //             break;
+    //         case 'natureza_despesa' :
+    //             $value = $parseFunctions->convertNaturezaDespesa($value);
+    //             break;
     //     }
-    //     if($value == '39' || strpos($value, 'serviços') || strpos($value, 'servicos') || $value == '339039') {
-    //         $value = '33.90.39';
-    //     }
-    //     if($value == '52' || (strpos($value, 'material') && strpos($value, 'permanente')) || $value == '449052') {
-    //         $value = '44.90.52';
-    //     }
-    //     if($value == '40' || $value == '449040') {
-    //         $value = '44.90.40';
-    //     }
-    //     if($value == '339040') {
-    //         $value = '33.90.40';
-    //     }
-    //     return $value;
+    //     parent::convertFieldRead($name, $value, $newObject);
     // }
 
     function validateField($name, $value)
@@ -75,11 +70,7 @@ class ItemPregaoDomain extends BasicDomain
             case 'valor_unitario' :
                 if($validate = !is_null($value)) 
                 break;
-            case 'valor_solicitado' :
-                $validate = is_numeric($value);
-                break;
             case 'cod_item_pregao' :
-            // case 'qtd_disponivel' :
             case 'descricao' :
                 $validate = !is_null($value);
                 break;
@@ -89,18 +80,12 @@ class ItemPregaoDomain extends BasicDomain
         } 
     }
 
-    /**
-     * Verifica a existência das quantidades total e disponível.<br>
-     * Se uma ausente copia da outra, considera subtrair a quantidade solicitada.
-     */
-    // function beforeSave($data)
-    // {
-    //     if(is_null($data['qtd_total']) && !is_null($data['qtd_disponivel'])) {
-    //         $data['qtd_total'] = $data['qtd_disponivel'] + $data['qtd_solicitada'];
-    //     }
-    //     if(is_null($data['qtd_disponivel']) && !is_null($data['qtd_total'])) {
-    //         $data['qtd_disponivel'] = $data['qtd_total'] - $data['qtd_solicitada'];
-    //     }
-    //     return $data;
-    // }
+    function beforeSave($data)
+    {
+        $basicFunction = new BasicFunctions();
+        $parseFunctions = new ParseFunctions();
+        $data['valor_unitario'] = $basicFunction->convertCommaToDot($data['valor_unitario']);
+        $data['natureza_despesa'] = $parseFunctions->convertNaturezaDespesa($data['natureza_despesa']);
+        return parent::beforeSave($data);
+    }
 }

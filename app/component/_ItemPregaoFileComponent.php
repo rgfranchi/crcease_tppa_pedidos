@@ -1,20 +1,19 @@
 <?php
 namespace TPPA\APP\component;
-
-use TPPA\APP\component\helper\ItemPregaoHelper;
 use TPPA\CORE\component\BasicComponent;
-// include_once('helper/ItemPregaoHelper.php');
 
-class ItemPregaoFormComponent extends BasicComponent
+// include_once('BasicComponent.php');
+
+class ItemPregaoFileComponent extends BasicComponent
 {
     public $_id;
-    public $cod_item_pregao; // codigo do item no PE.
+    public $cod_item_pregao; // código do item no PE.
     public $descricao;
     public $valor_unitario;
     public $valor_solicitado;
     public $qtd_total;
-    public $qtd_disponivel; // qtd disponível para solicitação
-    public $qtd_solicitada; // quantidade solicitada do PE
+    // public $qtd_disponivel; // qtd disponível para solicitação
+    // public $qtd_solicitada; // quantidade solicitada do PE
     public $unidade; // unidade de medida.
     public $fornecedor; // fornecedor do item
     public $qtd_minima; 
@@ -27,12 +26,9 @@ class ItemPregaoFormComponent extends BasicComponent
     */
     public $natureza_despesa;  
 
-    // Objeto Pregoes.php
+    // id do Objeto Pregoes.php
     public $pregao_id;
 
-    function convertField($name, $value, &$newObject){
-        $helper = new ItemPregaoHelper();
-        parent::convertField($name, $helper->convert($name, $value), $newObject);
-    }
-
+    // apenas no arquivo.
+    public $cnpj;
 }

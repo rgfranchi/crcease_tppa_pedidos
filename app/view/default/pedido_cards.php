@@ -6,7 +6,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Solicitante</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$this->data['pedido']->solicitante ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$this->data['pedido']['solicitante'] ?></div>
                     </div>
                 </div>
             </div>
@@ -19,7 +19,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Setor</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$this->data['pedido']->setor ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$this->data['pedido']['setor'] ?></div>
                     </div>
                 </div>
             </div>
@@ -32,7 +32,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Valor</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800">R$ <?=$this->data['pedido']->pedido_valor_total ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800">R$ <?=$this->data['pedido']['total_pedido']['valor'] ?></div>
                     </div>
                 </div>
             </div>
@@ -45,7 +45,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             Quantidade</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$this->data['pedido']->pedido_quantidade_total ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?=$this->data['pedido']['total_pedido']['quantidade'] ?></div>
                     </div>
                 </div>
             </div>

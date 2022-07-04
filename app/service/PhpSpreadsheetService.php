@@ -49,10 +49,12 @@ class PhpSpreadsheetService
         $row = 1;
 
 
+
+
         foreach($data as $key => $value) {
             if($key == 0) {
                 // array com nome das colunas.
-                $header = array_keys((array) $value);
+                $header = array_keys($value);
                 $char = 'A';
                 foreach($header as $header_value) {
                     $column[$char] = $header_value;
@@ -62,7 +64,7 @@ class PhpSpreadsheetService
             }
             $row++; // proxima linha
             foreach($column as $column_char => $column_value) {
-                $row_value = isset($value->{$column_value}) ? $value->{$column_value} : "";
+                $row_value = isset($value[$column_value]) ? $value[$column_value] : "";
                 $sheet->setCellValue($column_char.$row, $row_value);
             }
         }

@@ -19,7 +19,7 @@ class BasicComponent implements BasicRawObject
     /**
      * Aplicar para classe instanciada a conversão do campo.
      */
-    function convertField($name, $value, &$newObject) {
+    function convertFieldRead($name, $value, &$newObject) {
         $newObject->{$name} = $value;
     }
     /**
@@ -29,4 +29,5 @@ class BasicComponent implements BasicRawObject
     function validateField($name, $value) {
         return true;
     }    
+
 }

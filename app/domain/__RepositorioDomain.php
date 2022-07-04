@@ -8,7 +8,7 @@ use TPPA\CORE\domain\iBasicDomain;
 
 // include_once('BasicDomain.php');
 
-class RepositorioDomain extends BasicDomain implements iBasicDomain {
+class RepositorioDomain extends BasicDomain {
     public $nome;
     public $descricao;
     /**
@@ -27,14 +27,14 @@ class RepositorioDomain extends BasicDomain implements iBasicDomain {
     public $media_consumo_ano;
     public $observacao;
 
-    function convertField($name, $value, &$newObject){
+    function convertFieldRead($name, $value, &$newObject){
         $parseFunctions = new ParseFunctions();
         switch($name) {
             case 'natureza_despesa' :
                 $value = $parseFunctions->convertNaturezaDespesa($value);
                 break;
         }
-        parent::convertField($name, $value, $newObject);
+        parent::convertFieldRead($name, $value, $newObject);
     }
 
 }

@@ -31,12 +31,12 @@
         <tbody>
           <?php foreach ($this->data as $row) : ?>
             <tr>
-              <td><?= $row->nome ?></td>
-              <td><?= $row->objeto ?></td>
-              <td style="color:<?= $row->data_vencimento_color ?>"><?= $row->data_limite_solicitacao ?></td>
-              <td><?= $row->qtd_pedidos ?></td>
+              <td><?= $row['nome'] ?></td>
+              <td><?= $row['objeto'] ?></td>
+              <td style="color:<?= $row['data_vencimento_color'] ?>"><?= $row['data_limite_solicitacao'] ?></td>
+              <td><?= $row['qtd_pedidos'] ?></td>
               <td class="table-action">
-                <a href="<?= $this->action("PedidoPregao", "edit_pedido", array('pregao_id' => $row->_id)); ?>" class="btn-sm btn-warning btn-circle" title="SOLICITAÇÕES"><i class="fas fa-list"></i></a>
+                <a href="<?= $this->action("PedidoPregao", "edit_pedido", array('pregao_id' => $row['_id'])); ?>" class="btn-sm btn-warning btn-circle" title="SOLICITAÇÕES"><i class="fas fa-list"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>

@@ -13,7 +13,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-primary text-uppercase mb-1">
                             TOTAL</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data->total ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data['total'] ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-list fa-2x text-gray-300"></i>
@@ -30,7 +30,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-warning text-uppercase mb-1">
                             Solicitados</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data->quantidade[0] ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data['quantidade'][0] ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-anchor fa-2x text-gray-300"></i>
@@ -48,7 +48,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-info text-uppercase mb-1">
                             Aprovados</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data->quantidade[2] ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data['quantidade'][2] ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-hand-holding-usd fa-2x text-gray-300"></i>
@@ -66,7 +66,7 @@
                     <div class="col mr-2">
                         <div class="text-xs font-weight-bold text-success text-uppercase mb-1">
                             Empenhados</div>
-                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data->quantidade[6] ?></div>
+                        <div class="h5 mb-0 font-weight-bold text-gray-800"><?= $this->data['quantidade'][6] ?></div>
                     </div>
                     <div class="col-auto">
                         <i class="fas fa-dollar-sign fa-2x text-gray-300"></i>
@@ -91,10 +91,10 @@
             <div class="card-body">
                 <div class="chart-area">
                     <canvas id="pedidosPie" 
-                        total="<?=$this->data->total ?>"
-                        label='<?= json_encode($this->data->status) ?>'
-                        quantidade='<?= json_encode( $this->data->quantidade) ?>'
-                        cores='<?= json_encode( $this->data->cores) ?>'
+                        total="<?=$this->data['total'] ?>"
+                        label='<?= json_encode($this->data['status']) ?>'
+                        quantidade='<?= json_encode( $this->data['quantidade']) ?>'
+                        cores='<?= json_encode( $this->data['cores']) ?>'
                     ></canvas>
                 </div>
             </div>

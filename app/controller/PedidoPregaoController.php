@@ -2,191 +2,150 @@
 namespace TPPA\APP\controller;
 
 use DateTime;
+use TPPA\APP\service\PedidoPregaoService;
 use TPPA\APP\domain\PedidoPregaoDomain;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\controller\BasicController;
+
+use function TPPA\CORE\basic\pr;
 
 // use function TPPA\CORE\basic\pr;
 
 class PedidoPregaoController extends BasicController
 {
+
+    public $pregaoRepository = null;
+    public $itemPregaoRepository = null;
+    public $pedidoPregaoRepository = null; 
+
     function __construct()
     {
         $this->loadView('pedido_pregao');
-        
-        $this->loadBasicMapper('Pregao', 'PregaoHead');
-        $this->loadBasicMapper('Pregao', 'PregaoList');
-        $this->loadBasicMapper("Pregao", "PregaoInfo");
-
-        $this->loadBasicMapper('ItemPregao', 'PedidoItemPregaoList');
-        $this->loadBasicMapper('ItemPregao', 'ItemPregaoUpdate');
-        
-        $this->loadBasicMapper('PedidoPregao', 'PedidoPregaoList');
-
-        $this->loadBasicStores('PedidoPregao');
-
-        $this->loadService(array('PhpSpreadsheet','ItemPregaoCalculation'));
+        $this->pregaoRepository = $this->loadRepository("Pregao");
+        $this->itemPregaoRepository = $this->loadRepository("ItemPregao");
+        $this->pedidoPregaoRepository = $this->loadRepository("PedidoPregao");
+        $this->loadService(array('PhpSpreadsheet'));
     }
 
+    /**
+     * 1 - Exibe os pregões ativos no sistema.
+     */
     function index()
     {
         $this->view->setTitle("Pedido Pregão");
-        $pregao = $this->pregao_map_pregao_list->component()->findBy(["ativo", "==", "true"]);
-        foreach($pregao as &$value) {
-            $pedidos = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy(["pregao_id", "==", $value->_id]);
-            $count['rascunho'] = 0;
-            $count['aprovado'] = 0;
-            $count['concluido'] = 0;
-            foreach($pedidos as $valuePedido) {
-                switch($valuePedido->status) {
-                    case "EMPENHADO" :
-                        $count['concluido']++;                    
-                    case "EMPENHO SOLICITADO" :    
-                    case "CREDITADO" :
-                    case "CREDITO SOLICITADO" :                            
-                    case "APROVADO" :
-                        $count['aprovado']++;
-                    case "AGUARDANDO APROVAÇÃO":
-                    case "RASCUNHO" :
-                         $count['rascunho']++;
-                }
-            }
-            $value->qtd_pedidos = $count['rascunho'] . "/" . $count['aprovado'] . "/" . $count['concluido'];
-        }
+        $pregao = $this->pregaoRepository->joinPedidos();
+        $pregao = $this->pregaoRepository->addQtd_pedidos($pregao);
+        $pregao = $this->pregaoRepository->addData_vencimento_color($pregao);
+        // $pregao = $this->pedidoPregaoRepository->addQtd_pedidos(); 
         $this->view->render("index", $pregao);
     }
     function download_index()
     {
-        $obj = $this->loadBasicStores("Pregao")->findBy(["ativo", "==", "true"]);
-        $file_path = $this->php_spreadsheet->saveFile($obj, 'pedido_pregao');
+        $pregao = $this->pregaoRepository->joinPedidos();
+        $pregao = $this->pregaoRepository->addQtd_pedidos($pregao);     
+        foreach($pregao as &$value) {
+            unset($value['pedidos']);
+        }
+        $file_path = $this->php_spreadsheet->saveFile($pregao, 'pedido_pregao');
         $this->view->download($file_path);
     }    
 
     /**
-     * Pregões disponíveis.
+     * 2 - Lista pedidos dispoíveis disponíveis.<br>
+     * Permite editar o pedido ou criar novo pedido.
      */
     function edit_pedido()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-        
+        $data['pregao'] = $this->pregaoRepository->addData_vencimento_color(null, ['_id', '==', $pregao_id])[0];
         $findByPedido = [["pregao_id", "==", $pregao_id], ["status", "!=", "EXCLUIDO" ]];
         if(isset($_SESSION['login']['admin']) && $_SESSION['login']['admin'] == true) {
             $findByPedido = ["pregao_id", "==", $pregao_id];
         }
-
-        $data['pedido'] = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy($findByPedido, ["create" => "DESC"]);
-        $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
+        $data['pedido'] = $this->pedidoPregaoRepository->findBy($findByPedido, ["create" => "DESC"]);
         $this->view->setTitle("Consultar Pedido");
         $this->view->render("edit_pedido", $data);
     }
     function download_edit_pedido()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-
-        $obj = $this->pedido_pregao->findBy(["pregao_id", "==", $pregao_id], ["hashCredito" => "DESC"]);
-
+        $obj = $this->pedidoPregaoRepository->findBy(["pregao_id", "==", $pregao_id], ["hashCredito" => "DESC"]);
         foreach($obj as &$values) {
-            unset($values->itens_pedido);
+            unset($values['itens_pedido']);
         }
-        $file_path = $this->php_spreadsheet->saveFile($obj, 'tmp_file');
+        $file_path = $this->php_spreadsheet->saveFile($obj, 'edit_pedido');
         $this->view->download($file_path);
     }    
 
+    /**
+     * 2.1 - Cria novo pedido
+     */
     function add_itens()
     {
         $pregao_id = $this->view->dataGet()['pregao_id'];
-        $item_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
-        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id]);
-       
-        $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-        $data['itens'] = $this->item_pregao_calculation->disponiveis($item_pregao, $pedidos);
-
-        $data['pedido'] = new PedidoPregaoDomain();
-        $data['pedido']->setor = $_SESSION['user']['setor'];
-        $data['pedido']->solicitante = $_SESSION['user']['nome'];
-        $data['pedido']->status = "RASCUNHO";
-        // pr($data,true);
+        $data['pregao'] = $this->pregaoRepository->findById($pregao_id);
+        $data['itens'] = $this->itemPregaoRepository->addQtd_disponivel($pregao_id);
+        $data['pedido']['setor'] = $_SESSION['user']['setor'];   
+        $data['pedido']['solicitante'] = $_SESSION['user']['nome'];
+        $data['pedido']['status'] = "RASCUNHO";
         $this->view->setTitle("Criar Pedido Pregão Itens");
         $this->view->render("edit_itens", $data);
     }
 
     /**
-     * Consultar itens solicitados.
+     * 2.2 - Editar pedido.
      */
     function edit_itens()
     {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        // Pedido selecionado.
-        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
-        $pregao_id = $pedido->pregao_id;
-        // Itens do pregão relacionado ao pedido.
-        $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
-        // Outros pedidos realizados exceto o atual.
-        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy(
-            [
-                ["pregao_id", "==", $pregao_id],
-                "AND",
-                [ "_id","<>",$pedido_pregao_id]
-            ]
-        );
-        $data['pregao'] = $this->pregao_map_pregao_head->component()->findById($pregao_id);
-
-        if($pedido->solicitante != $_SESSION['user']['nome'] && $pedido->status == 'RASCUNHO') {
-            $pedido->solicitante = $_SESSION['user']['nome'];
-        }
-
-        $data['pedido'] = $pedido;
-        // Calcula quantidade disponível.
-        $data['itens'] = $this->item_pregao_calculation->disponiveis($itens_pregao, $pedidos);
+        $data['pedido'] = $pedido = $this->pedidoPregaoRepository->findById($pedido_pregao_id);
+        $data['pregao'] = $this->pregaoRepository->findById($pedido['pregao_id']);
+        $data['itens'] = $this->itemPregaoRepository->addQtd_disponivel($pedido['pregao_id'], $pedido_pregao_id);
         $this->view->setTitle("Atualizar Pedido Pregão Itens");
-        $this->view->render("edit_itens", $data);
+        $this->view->render("edit_itens", $data);        
     }
     function download_edit_itens()
     {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
-        $pregao_id = $pedido->pregao_id;
-        // Itens do pregão relacionado ao pedido.
-        $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->component()->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
+        $pedido = $this->pedidoPregaoRepository->findById($pedido_pregao_id);
+        $itens_pregao = $this->itemPregaoRepository->addQtd_disponivel($pedido['pregao_id'], $pedido_pregao_id);
         $newTotalPedido = array();
         foreach($itens_pregao as $value) {
-            if(isset($pedido->itens_pedido[$value->_id])) {
-                $value->qtd_solicitada = $pedido->itens_pedido[$value->_id];
-                unset($value->qtd_disponivel);
+            if(isset($pedido['itens_pedido'][$value['_id']])) {
+                $value['qtd_solicitada'] = $pedido['itens_pedido'][$value['_id']];
+                unset($value['qtd_disponivel']);
                 $newTotalPedido[] = $value;
             } 
-        }
+        }        
         $file_path = $this->php_spreadsheet->saveFile($newTotalPedido, 'edit_itens');
         $this->view->download($file_path);
     }
 
     /**
-     * Altera o pedido do STATUS de solicitado até aprovado.
+     * 3 - Altera o pedido do STATUS de solicitado até aprovado.
      */
     function edit_solicitado() {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
-        $pregao_id = $pedido->pregao_id;
-
-        if(empty($pedido->aprovador)) {
-            $pedido->aprovador = $_SESSION['user']['nome'];
+        $pedido = $this->pedidoPregaoRepository->findById($pedido_pregao_id);
+        $data['status'] = $this->pedidoPregaoRepository->statusPedido("PEDIDO");
+        $data['pregao'] = $this->pregaoRepository->findById($pedido['pregao_id']);
+        $data['pedido'] = $this->pedidoPregaoRepository->joinItemPregao(['_id','==',$pedido_pregao_id])[0];
+        // verifica se já possui aprovador, se não utiliza o da seção.
+        if(empty($data['pedido']['aprovador'])) {
+            $data['pedido']['aprovador'] = $_SESSION['user']['nome'];
         }
-
-        $data['status'] = $this->pedido_pregao_map_pedido_pregao_list->domain()->getDomain()->statusPedido("PEDIDO");
-        $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
-        $data['pedido'] = $this->item_pregao_calculation->solicitados($pedido);
         $this->view->setTitle("Pedido SOLICITADOS");
         $this->view->render("edit_solicitado", $data);
     }
     function download_edit_solicitado() {
         $pedido_pregao_id = $this->view->dataGet()['pedido_pregao_id'];
-        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findById($pedido_pregao_id);
-        $itens_calc = $this->item_pregao_calculation->solicitados($pedido);
+        // $itens_calc = $this->pedidoPregaoRepository->solicitados($pedido_pregao_id);        
+        $itens_calc = $this->pedidoPregaoRepository->joinItemPregao(['_id','==',$pedido_pregao_id])[0];        
         $obj = array();
-        foreach($itens_calc->itens_pedido as $value) {
-            $value->setor = $itens_calc->setor;
-            $value->solicitante = $itens_calc->solicitante;
-            $value->hashCredito = $itens_calc->hashCredito;
+        foreach($itens_calc['itens_pedido'] as $value) {
+            $value['setor'] = $itens_calc['setor'];
+            $value['solicitante'] = $itens_calc['solicitante'];
+            $value['hashCredito'] = @$itens_calc['hashCredito'];
             $obj[] = $value;
         }
         $file_path = $this->php_spreadsheet->saveFile($obj, 'edit_solicitado');
@@ -194,101 +153,117 @@ class PedidoPregaoController extends BasicController
     }
 
     /**
-     * Altera o pedido do STATUS de aprovados até empenhado.<br>
+     * 4 - Altera o pedido do STATUS de aprovados até empenhado.<br>
      * Contabiliza pedidos em tela com o status de APROVADO.
      */
     function edit_aprovado() {
         $getPedido = $this->view->dataGet();
         $pregao_id = $getPedido['pregao_id'];
         $hashCredito = $getPedido['hash_credito'];
-        $status = $this->pedido_pregao_map_pedido_pregao_list->domain()->getDomain()->statusPedido("CREDITO");
-        $pedido = $this->pedido_pregao_map_pedido_pregao_list->component()->findBy([
-            ["pregao_id", "==", $pregao_id],
-            "AND",
-            ["status", "IN", $status],
-            "AND",
-            ["hashCredito", "==", $hashCredito]
-        ]);
         $data['pedido_status'] = $getPedido['pedido_status'];
-        $data['status'] = $status;
-        $data['pregao'] = $this->pregao_map_pregao_info->component()->findById($pregao_id);
-        $data['pedidos'] = $this->item_pregao_calculation->total_aprovados($pedido, $pregao_id);
-        $data['hash_credito'] = $hashCredito;
+        $data['status'] = $this->pedidoPregaoRepository->statusPedido("CREDITO");
+        $data['pregao'] = $this->pregaoRepository->findById($pregao_id);
+        $data['pedidos'] = $this->pedidoPregaoRepository->totalAprovados($pregao_id, $hashCredito);
+        $data['hash_credito'] = $hashCredito;  
         $this->view->setTitle("Pedidos APROVADOS");
         $this->view->render("edit_aprovado", $data);
     }
     function download_edit_aprovado()
     {
         $get = $this->view->dataGet();
-        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy([
-            ["pregao_id", "==", $get['pregao_id']],
-            "AND",
-            ["hashCredito", "==", $get['hash_credito']],
-            "AND",
-            ["status", "!==", "EXCLUIDO"]
-        ]);
-        
-        $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->domain()->findBy(["pregao_id", "==", $get['pregao_id']]);
+        // $export = $this->itemPregaoRepository->joinsPedidos([
+        //     ["hashCredito", "==", $get['hash_credito']],
+        //     "AND",
+        //     ["status", "!==", "EXCLUIDO"]
+        // ], ["pregao_id", "==", $get['pregao_id']] ); 
 
-        $export = $this->item_pregao_calculation->joins_itens_pedidos($pedidos, $itens_pregao);
-        // retira valores não utilizados.
-        foreach($export as &$value) {
-            unset($value->qtd_solicitada);
-            unset($value->unidade);
-            unset($value->qtd_minima);
-            unset($value->natureza_despesa);            
-            unset($value->pregao_id);            
-            unset($value->qtd_total);            
-        }
+        $export = $this->pedidoPregaoRepository->totalAprovados($get['pregao_id'], $get['hash_credito']);
+
+        $pedidoPregaoService = new PedidoPregaoService();
+
+        $export = $pedidoPregaoService->inLineTotalAprovados($export);
+
         $file_path = $this->php_spreadsheet->saveFile($export, 'edit_aprovado');
         $this->view->download($file_path, "Pregao", "index");
     }
 
 
-
+    /**
+     * Salva itens (cria ou atualiza)
+     */
     function save()
     {
         $post = $this->view->dataPost();
         if($post['status'] === "RASCUNHO") {
-            $post['aprovador'] = '';
+             $post['aprovador'] = '';
         }
-        // pr($post, true);
         $pregao_id = $post['pregao_id'];
-        // busca valores existentes
-        $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id]);
-        $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : 0;
-        $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
-            [
-                ["pregao_id", "==", $pregao_id],
-                "AND",
-                [ "_id","<>",$pedido_pregao_id]
-            ]
-        );
 
-        // verifica disponibilidade.
-        $this->item_pregao_calculation->disponiveis($itens_pregao, array_merge($pedidos,array( 'NEW_ITEM' => (Object) $post)));
-
-        $invalid = $this->item_pregao_calculation->getInvalidItem();
-
+        // $itens_pregao = $this->itemPregaoRepository->findBy(["pregao_id", "==", $pregao_id]);
+        $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : null;
+        $item_pregao_disponiveis = $this->itemPregaoRepository->addQtd_disponivel($pregao_id, $pedido_pregao_id);
+        $invalid = $this->itemPregaoRepository->getInvalidItem();
         // verifica se pedido é valido
         if(empty($invalid)) {
-            $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->save($post);
-            $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret->pregao_id));
+            $ret = $this->pedidoPregaoRepository->save($post);
+            $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret['pregao_id']));
         } else {
-            $data['pregao'] = $this->pregao_map_pregao_head->domain()->findById($pregao_id);
-            $data['pedido'] = (Object) $post;
+            $data['pregao'] = $this->pregaoRepository->findById($pregao_id);
+            $data['pedido'] = $post;
             // Calcula quantidade disponível.
-            $data['itens'] = $this->item_pregao_calculation->disponiveis($itens_pregao, $pedidos);
+            $data['itens'] = $item_pregao_disponiveis;
             $data['invalid_itens'] = $invalid;
 
             $this->view->setTitle("Corrigir Pedido Pregão Itens");
             $this->view->render("edit_itens", $data);
         }
+
+
+
+        // $post = $this->view->dataPost();
+        // if($post['status'] === "RASCUNHO") {
+        //     $post['aprovador'] = '';
+        // }
+        // // pr($post, true);
+        // $pregao_id = $post['pregao_id'];
+        // // busca valores existentes
+        // $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id]);
+        // $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : 0;
+        // $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
+        //     [
+        //         ["pregao_id", "==", $pregao_id],
+        //         "AND",
+        //         [ "_id","<>",$pedido_pregao_id]
+        //     ]
+        // );
+
+        // // verifica disponibilidade.
+        // $this->item_pregao_calculation->disponiveis($itens_pregao, array_merge($pedidos,array( 'NEW_ITEM' => (Object) $post)));
+
+        // $invalid = $this->item_pregao_calculation->getInvalidItem();
+
+        // // verifica se pedido é valido
+        // if(empty($invalid)) {
+        //     $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->save($post);
+        //     $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret->pregao_id));
+        // } else {
+        //     $data['pregao'] = $this->pregao_map_pregao_head->domain()->findById($pregao_id);
+        //     $data['pedido'] = (Object) $post;
+        //     // Calcula quantidade disponível.
+        //     $data['itens'] = $this->item_pregao_calculation->disponiveis($itens_pregao, $pedidos);
+        //     $data['invalid_itens'] = $invalid;
+
+        //     $this->view->setTitle("Corrigir Pedido Pregão Itens");
+        //     $this->view->render("edit_itens", $data);
+        // }
     }
 
     function saveMany()
     {
         $post = $this->view->dataPost();
+
+        pr($post);
+
         $idsPost = $post['_ids'];
         $statusPost = $post['status'];
         $hashCredito = $post['hash_credito'];
@@ -313,6 +288,7 @@ class PedidoPregaoController extends BasicController
         //     $new_pregao_itens = $this->item_pregao_calculation->disponiveis($pregao_itens, $pedidos);
         //     $ret = $this->item_pregao_map_item_pregao_update->domain()->saveAll($new_pregao_itens);
         // }
+        pr($idsPost);
         $postData = array();
         foreach(json_decode($idsPost) as $id) {
             $postData[] = array(
@@ -321,7 +297,9 @@ class PedidoPregaoController extends BasicController
                 "hashCredito" => $hashCredito
             );
         }
-        $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->saveAll($postData);
+        $ret = $this->pedidoPregaoRepository->saveAll($postData);
+        pr($ret);
+        die;
         $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret[0]->pregao_id));
     }
 

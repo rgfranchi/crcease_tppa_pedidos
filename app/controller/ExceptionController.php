@@ -16,4 +16,8 @@ class ExceptionController extends BasicController
     {
         $this->view->render("access_denied");
     }
+
+    function delete($message = "") {
+        $this->view->render("delete", $message);
+    }
 }

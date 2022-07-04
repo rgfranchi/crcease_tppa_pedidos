@@ -16,9 +16,9 @@ class ItemPregaoListComponent extends BasicComponent
     public $qtd_total;
     public $qtd_disponivel;
 
-    function convertField($name, $value, &$newObject){
+    function convertFieldRead($name, $value, &$newObject){
         $helper = new ItemPregaoHelper();
-        parent::convertField($name, $helper->convert($name, $value), $newObject);
+        parent::convertFieldRead($name, $helper->convert($name, $value), $newObject);
     }
 
 }

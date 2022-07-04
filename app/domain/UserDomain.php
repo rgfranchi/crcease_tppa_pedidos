@@ -6,7 +6,7 @@ use TPPA\CORE\domain\iBasicDomain;
 
 // include_once('BasicDomain.php');
 
-class UserDomain extends BasicDomain implements iBasicDomain {
+class UserDomain extends BasicDomain {
     public $_id;
     public $login;
     public $nome;

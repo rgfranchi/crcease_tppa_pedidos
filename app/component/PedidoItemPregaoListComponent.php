@@ -18,7 +18,7 @@ class PedidoItemPregaoListComponent extends BasicComponent
     public $qtd_total;
     public $qtd_disponivel; // campo calculado.
 
-    function convertField($name, $value, &$newObject){
+    function convertFieldRead($name, $value, &$newObject){
         $helper = new ItemPregaoHelper();
         $basicFunctions = new BasicFunctions();
         switch($name) {
@@ -28,7 +28,7 @@ class PedidoItemPregaoListComponent extends BasicComponent
         }
         $value = $helper->convert($name, $value, $newObject);
 
-        parent::convertField($name, $value, $newObject);
+        parent::convertFieldRead($name, $value, $newObject);
 
     }
 

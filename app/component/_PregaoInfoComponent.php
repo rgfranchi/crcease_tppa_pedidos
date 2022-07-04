@@ -20,9 +20,9 @@ class PregaoInfoComponent extends BasicComponent
     public $url_anexo;
     public $url_siasg_net;
 
-    function convertField($name, $value, &$newObject){
+    function convertFieldRead($name, $value, &$newObject){
         $pregaoHelper = new PregaoHelper();
         $value = $pregaoHelper->convert($name, $value, $newObject);
-        parent::convertField($name, $value, $newObject);
+        parent::convertFieldRead($name, $value, $newObject);
     }
 }

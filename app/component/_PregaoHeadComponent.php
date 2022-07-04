@@ -23,7 +23,7 @@ class PregaoHeadComponent extends BasicComponent
     // public $qtd_disponivel;    
     // public $valor_solicitado;
 
-    function convertField($name, $value, &$newObject){
+    function convertFieldRead($name, $value, &$newObject){
         $pregaoHelper = new PregaoHelper();
         $basicFunctions = new BasicFunctions();
         $value = $pregaoHelper->convert($name, $value, $newObject);
@@ -35,6 +35,6 @@ class PregaoHeadComponent extends BasicComponent
                 $value = $basicFunctions->convertToDateTimeBR($value, false);
                 break;                
         }        
-        parent::convertField($name, $value, $newObject);
+        parent::convertFieldRead($name, $value, $newObject);
     }
 }

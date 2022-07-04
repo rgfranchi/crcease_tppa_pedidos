@@ -17,7 +17,7 @@ class PregaoListComponent extends BasicComponent
     public $data_homologacao;
     public $ativo;
 
-    function convertField($name, $value, &$newObject = null){
+    function convertFieldRead($name, $value, &$newObject = null){
         $pregaoHelper = new PregaoHelper();
         $basicFunctions = new BasicFunctions();
         $value = $pregaoHelper->convert($name, $value, $newObject);
@@ -29,7 +29,7 @@ class PregaoListComponent extends BasicComponent
                 $value = $basicFunctions->convertToDateTimeBR($value, false);
                 break;                
         }
-        parent::convertField($name, $value, $newObject);
+        parent::convertFieldRead($name, $value, $newObject);
     }
 }
  

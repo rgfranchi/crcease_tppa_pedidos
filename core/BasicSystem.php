@@ -3,6 +3,8 @@ namespace TPPA\CORE;
 
 use ReflectionClass;
 
+use function TPPA\CORE\basic\pr;
+
 class BasicSystem
 {
 
@@ -40,6 +42,8 @@ class BasicSystem
         return $this->instantiateClass('Store', $store);
     }
 
+
+
     function loadService($service)
     {
         $this->instantiateClass('Service', $service);
@@ -70,7 +74,6 @@ class BasicSystem
         $ret = array();
 
         foreach ($loadClasses as $key => $value) {
-
             $className = $value . $typeClass;
             $instanceName = $this->basicFunctions->camelToSnakeCase($value);
 
@@ -83,18 +86,6 @@ class BasicSystem
                 $this->{$instanceName} = $newClass->newInstance();
             }
             $ret[] = $this->{$instanceName};
-                     
-            // $className = $value . $typeClass;
-            // include_once(__ROOT__ . "/" . $folderName . "/" . $className . ".php");
-            // $instanceName = $this->basicFunctions->camelToSnakeCase($value);
-            // $newClass = new ReflectionClass($className);
-
-            // if (!empty($loadParameters) && count($loadParameters[$key]) > 0) {
-            //     $this->{$instanceName} = $newClass->newInstanceArgs($loadParameters[$key]);
-            // } else {
-            //     $this->{$instanceName} = $newClass->newInstance();
-            // }
-            // $ret[] = $this->{$instanceName};
         }
         if (count($ret) == 1) {
             return $ret[0];
@@ -124,14 +115,10 @@ class BasicSystem
                 $ret[$key] = $this->arrayToObject($value, $object);
             } else {
                 if(property_exists($newObject,$key)) {
-                    // Valor newObject passado por referência.
-                    $object->convertField($key, $value, $newObject);
+                    // Retorna newObject preenchido.
+                    $object->convertFieldRead($key, $value, $newObject);
                     $object->validateField($key, $value);
                     $this->arrayToObject($value, $object);
-                    
-                    // $value = $newObject->convertField($key, $value);
-                    // $newObject->validateField($key, $value);
-                    // $newObject->{$key} = $this->arrayToObject($value, $object);
                 }
             }
         }

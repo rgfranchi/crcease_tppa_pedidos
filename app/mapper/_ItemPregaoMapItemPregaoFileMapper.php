@@ -9,7 +9,7 @@ class ItemPregaoMapItemPregaoFileMapper extends BasicMapper
 {
     /**
      * @param string nome da classe filha 
-     * @param string domainName -> dominio do objeto 
+     * @param string domainName -> domínio do objeto 
      */
     function __construct()
     {

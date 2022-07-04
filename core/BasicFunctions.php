@@ -154,6 +154,7 @@ class BasicFunctions {
         if(empty($value)) {
             return null;
         }
+
         $dateTime = str_replace('/', '-', $value); // considera '-' formato Europeu de data.
         $mask = 'Y-m-d';
         $mask .= $time ? ' H:i:s' : '';
