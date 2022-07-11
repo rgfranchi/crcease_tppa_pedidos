@@ -31,15 +31,15 @@
         <tbody>
           <?php foreach ($this->data as $row) : ?>
             <tr>
-              <td><?= $row->login ?></td>
-              <td><?= $row->nome ?></td>
-              <td><?= $row->setor ?></td>
-              <td><?= $row->grupo ?></td>
-              <td><?= $row->tipo_cadastro ?></td>
-              <td><?= $row->ativo === "true" ? "SIM" : "NÃO" ?></td>
+              <td><?= $row['login'] ?></td>
+              <td><?= $row['nome'] ?></td>
+              <td><?= $row['setor'] ?></td>
+              <td><?= $row['grupo'] ?></td>
+              <td><?= $row['tipo_cadastro'] ?></td>
+              <td><?= $row['ativo'] === "true" ? "SIM" : "NÃO" ?></td>
               <td class="table-action">
-                <a href="<?= $this->action("User", "edit", array('id' => $row->_id)); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
-                <a href="<?= $this->action("User", "delete", array('id' => $row->_id)); ?>" class="btn-sm btn-danger btn-circle delete" title="EXCLUIR"><i class="fas fa-trash"></i></a>
+                <a href="<?= $this->action("User", "edit", array('id' => $row['_id'])); ?>" class="btn-sm btn-primary btn-circle" title="EDITAR"><i class="fas fa-edit"></i></a>
+                <a href="<?= $this->action("User", "delete", array('id' => $row['_id'])); ?>" class="btn-sm btn-danger btn-circle delete" title="EXCLUIR"><i class="fas fa-trash"></i></a>
               </td>
             </tr>
           <?php endforeach; ?>

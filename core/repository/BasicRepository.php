@@ -163,6 +163,20 @@ die;
         return $ret;
     }
     /**
+     * Retorna primeira ocorrência da busca.
+     * @param $condition [field,param,value] ex.: ['nome', '==', 'James']
+     * @param array $orderBy [field => 'asc' ou 'desc'] ex.: ['nome' => 'asc']
+     */
+    function firstBy($condition, array $orderBy = null)
+    {
+        $ret = $this->store->findBy($condition, $orderBy);
+        foreach($ret as &$value) {
+            $value = $this->afterRead($value);
+        }
+        return empty($ret) ? [] : $ret[0];
+    }
+
+    /**
      * Busca por id específico.
      */
     function findById($id)

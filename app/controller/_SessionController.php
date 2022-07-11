@@ -9,7 +9,6 @@ class SessionController extends BasicController
     function __construct()
     {
         $this->loadView('user');
-        $this->userRepository = $this->loadRepository("User");
         // $this->loadBasicMapper("User","UserForm");
     }
 
@@ -25,18 +24,16 @@ class SessionController extends BasicController
         }         
         $postLogin = $this->view->dataPost();
         if($this->lpad_login($postLogin['login'],$postLogin['password'])) {
-            $data = $this->userRepository->firstBy(["login", "==", $postLogin['login']]);
-            pr($data);
+            $data = $this->user_map_user_form->domain()->findBy(["login", "==", $postLogin['login']]);
             if(empty($data)) {
                 $this->create_session("CREATE_USER", false);
                 return $this->view->redirect('User','add_lpad', array('login' => $postLogin['login'], 'cadastro' => "SISTEMA"));
             } else {
-                $this->dataLoad($data);
+                $this->dataLoad($data[0]);
             }
-            
         } else {
             $postLogin['password'] = $this->encryptPassword($postLogin['login'], $postLogin['password']);
-            $data = $this->userRepository->firstBy([["login", "==", $postLogin['login']],["password", "==", $postLogin['password']]]);
+            $data = $this->user_map_user_form->domain()->findBy([["login", "==", $postLogin['login']],["password", "==", $postLogin['password']]]);
             
             if(empty($data)) {
                 return $this->view->render("info_cadastro", 
@@ -46,16 +43,19 @@ class SessionController extends BasicController
                     )
                 );
             } else {
-                $this->dataLoad($data);
+                $this->dataLoad($data[0]);
             }
         }
     }
 
     function dataLoad($user) {
-        if($user['ativo']) {
+        if($user->ativo) {
             $this->user_session($user);
-            $this->create_session($user['grupo']);
+            $this->create_session($user->grupo);
         } else {
+            if(is_object($user)) {
+                $user = (array) $user;
+            }
             return $this->view->render("info_cadastro", 
                 array(
                     'Usuário inativo:',

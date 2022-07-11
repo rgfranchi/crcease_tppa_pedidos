@@ -12,6 +12,7 @@ class PregaoRepository extends BasicRepository
     function __construct() 
     {
         parent::__construct("Pregao");
+        $this->loadService("PesquisarPedidoPregao");
     }
 
     /**
@@ -32,33 +33,6 @@ class PregaoRepository extends BasicRepository
         $ret['item'] = $join;
         return $ret;
     }
-
-    // function addData_vencimento_color($pregao_id) {
-    //     $this->disableAfterRead(true);
-    //     $pregao = $this->findById($pregao_id);
-    //     $dateNow = new DateTime();
-    //     $dateVencimento = new DateTime($pregao['data_limite_solicitacao']); 
-    //     $diff = $dateNow->diff($dateVencimento);
-    //     $pregao['data_vencimento_color'] = "green";
-
-    //     pr($pregao);
-    //     pr($dateNow);
-    //     pr($dateVencimento);
-    //     pr($diff);
-    //     die;
-
-    //     if($diff->invert == 1) {
-    //         $pregao['data_vencimento_color'] = "red";
-    //     } else {
-    //         if($diff->m < 3) {
-    //             $pregao['data_vencimento_color'] = "#DAA520";
-    //         }
-    //     }
-    //     $this->disableAfterRead(false);
-    //     $pregao = $this->getDomain()->afterRead($pregao);
-
-    //     return $pregao;
-    // }
 
     /**
      * Realiza a junção do Pregao com PedidoPregao.
@@ -114,30 +88,6 @@ class PregaoRepository extends BasicRepository
             }
             $value = $this->getDomain()->afterRead($value);
         }
-
-        // $this->disableAfterRead(true);
-        // $pregao = $this->findById($pregao_id);
-        // $dateNow = new DateTime();
-        // $dateVencimento = new DateTime($pregao['data_limite_solicitacao']); 
-        // $diff = $dateNow->diff($dateVencimento);
-        // $pregao['data_vencimento_color'] = "green";
-
-        // pr($pregao);
-        // pr($dateNow);
-        // pr($dateVencimento);
-        // pr($diff);
-        // die;
-
-        // if($diff->invert == 1) {
-        //     $pregao['data_vencimento_color'] = "red";
-        // } else {
-        //     if($diff->m < 3) {
-        //         $pregao['data_vencimento_color'] = "#DAA520";
-        //     }
-        // }
-        // $this->disableAfterRead(false);
-        // $pregao = $this->getDomain()->afterRead($pregao);
-
         return $pregaoJoinPedidos;
     }
 
@@ -172,4 +122,125 @@ class PregaoRepository extends BasicRepository
         }
         return $pregaoJoinPedidos;
     }
+
+    /**
+     * busca por "find_value".
+     * PregaoDomain - nome / objeto / termo_referencia_origem / numero_processo_PAG
+     * ItemPregaoDomain - cod_item_pregao / descricao / fornecedor
+     * PedidoPregaoDomain - setor / solicitante
+     */
+    function findPregao($find,  $where_pregao = ['ativo', '==', 'true']) {
+        
+        if($this->pesquisar_pedido_pregao->findConvert($find) === false) {
+            return array();
+        }
+        $itemPregaoRepository = new ItemPregaoRepository();
+        $pedidoPregaoRepository = new PedidoPregaoRepository();
+        $res = $this->getStore()
+            ->createQueryBuilder()
+            ->join(function($pregao) use ($itemPregaoRepository) {
+                return $itemPregaoRepository->findBy(["pregao_id", "==", $pregao["_id"]]);
+            } ,"item_pregao")
+            ->join(function($pregao) use ($pedidoPregaoRepository) {
+                return $pedidoPregaoRepository->findBy([
+                    ["pregao_id", "==", $pregao["_id"]],
+                    ["status", "!=", "EXCLUIDO"]
+                ]);
+            },"pedido_pregao")
+            ->where([
+                ['nome', 'LIKE', $find],
+                'OR',
+                ['objeto', 'LIKE', $find],
+                'OR',
+                ['termo_referencia_origem', 'LIKE', $find],
+                'OR',
+                ['numero_processo_PAG', 'LIKE', $find],
+            ])
+            ->where($where_pregao)
+            ->getQuery()
+            ->fetch();
+        return $res;
+    }
+
+
+    function findItemPregao($find, $where_pregao = ['ativo', '==', 'true']) {
+        if($this->pesquisar_pedido_pregao->findConvert($find) === false) {
+            return array();
+        }
+        $itemPregaoRepository = new ItemPregaoRepository();
+        $pedidoPregaoRepository = new PedidoPregaoRepository();
+        $res = $this->getStore()
+            ->createQueryBuilder()
+            ->join(function($pregao) use ($itemPregaoRepository, $find) {
+                return $itemPregaoRepository->getStore()->createQueryBuilder()
+                    ->where(["pregao_id", "==", $pregao["_id"]])
+                    ->where([
+                        ['descricao', 'LIKE', $find],
+                        'OR',
+                        ['fornecedor', 'LIKE', $find],
+                        'OR',
+                        ['natureza_despesa', 'LIKE', $find]
+                    ])->getQuery()
+                    ->fetch();
+            } ,"item_pregao")
+            ->join(function($pregao) use ($pedidoPregaoRepository) {
+                return $pedidoPregaoRepository->findBy([
+                    ["pregao_id", "==", $pregao["_id"]], 
+                    ["status", "!=", "EXCLUIDO"]
+                ]);
+            },"pedido_pregao")
+            ->where($where_pregao)
+            ->getQuery()
+            ->fetch();
+        // Retira valor do resultado se não possuir item_pregao.
+        foreach($res as $key => $values) {
+            if(empty($values["item_pregao"])) {
+                unset($res[$key]);
+            }
+        }
+        return $res;
+    }    
+
+
+    function findPedidoPregao($find, $where_pregao = ['ativo', '==', 'true']) {
+        if($this->pesquisar_pedido_pregao->findConvert($find) === false) {
+            return array();
+        }
+        $itemPregaoRepository = new ItemPregaoRepository();
+        $pedidoPregaoRepository = new PedidoPregaoRepository();
+
+        $res = $this->getStore()
+            ->createQueryBuilder()
+            ->join(function($pregao) use ($itemPregaoRepository) {
+                return $itemPregaoRepository->findBy(["pregao_id", "==", $pregao["_id"]]);
+            } ,"item_pregao")
+            ->join(function($pregao) use ($pedidoPregaoRepository, $find) {
+                return $pedidoPregaoRepository->getStore()->createQueryBuilder()
+                    ->where(["pregao_id", "==", $pregao["_id"]])
+                    ->where(["status", "!=", "EXCLUIDO"])
+                    ->where([
+                        ['setor', 'LIKE', $find],
+                        'OR',
+                        ['solicitante', 'LIKE', $find],
+                        'OR',
+                        ['hashCredito', 'LIKE', $find],
+                        'OR',
+                        ['status', 'LIKE', $find],
+                    ])
+                    ->getQuery()
+                    ->fetch();
+            },"pedido_pregao")
+            ->where($where_pregao)
+            ->getQuery()
+            ->fetch();
+        // Retira valor do resultado se não possuir item_pregao.
+        foreach($res as $key => $values) {
+            if(empty($values["pedido_pregao"])) {
+                unset($res[$key]);
+            }
+        }
+        
+        return $res;
+    }
+
 }

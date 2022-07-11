@@ -202,4 +202,11 @@ class PedidoPregaoRepository extends BasicRepository
             ];
         return $ret;
     }
+
+
+
+
+
+
+
 }

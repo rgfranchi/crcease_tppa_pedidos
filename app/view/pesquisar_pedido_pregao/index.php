@@ -3,7 +3,7 @@
 <!-- DataTales Example -->
 <div class="card shadow mb-1">
   <div class="card-header py-2">
-    <form action="<?= $this->action("PedidoPregaoPesquisar", "index"); ?>" method="post">
+    <form action="<?= $this->action("PesquisarPedidoPregao", "index"); ?>" method="post">
         <div class="row" >
             <div class="col-8">
                 <div class="form-group">

@@ -1,7 +1,9 @@
 <?php
 namespace TPPA\APP\controller;
 
+use TPPA\APP\domain\UserDomain;
 use TPPA\CORE\controller\BasicController;
+
 use function TPPA\CORE\basic\pr;
 
 class UserController extends BasicController
@@ -11,14 +13,18 @@ class UserController extends BasicController
     function __construct()
     {
         $this->loadView('user');
-        $this->userRepository = $this->loadRepository("User");
+        $this->loadBasicMapper("User", "UserList");
+        $this->loadBasicMapper("User", "UserForm");
+        $this->loadService(array(
+            'PhpSpreadsheet',
+        ));        
         $this->session = new SessionController();
     }
 
     function index()
     {
         $this->view->setTitle("Usuários do Sistema");
-        $this->view->render("index", $this->userRepository->findAll(['login' => 'asc']));
+        $this->view->render("index", $this->user_map_user_list->component()->findAll(['login' => 'asc']));
     }
 
     function add_lpad()
@@ -79,20 +85,21 @@ class UserController extends BasicController
             if($data['ativo'] == true) {
                 $this->session->user_session($data);
             }    
-            $this->userRepository->save($data);
+            $this->user_map_user_form->domain()->save($data);
         }
     }
 
     private function exist_user($data) {
         $ret = false;
-        $user = $this->userRepository->firstBy(["login", "==", $data['login']]);
+        $resp = $this->user_map_user_form->domain()->findBy(["login", "==", $data['login']]);
         if(!empty($resp)) {
             $ret = true;     
+            $user = $resp[0];
             $this->view->render("info_cadastro", 
                 array(
                     'Usuário já cadastrado:',
-                    'Login > ' . $user['login'],
-                    'Usuário > ' . $user['nome'],
+                    'Login > ' . $user->login,
+                    'Usuário > ' . $user->nome,
                     'Contato > "Seção de Projetos e Aquisições" <_tppa.crcease@fab.mil.br>' 
                 )
             );       
@@ -102,8 +109,8 @@ class UserController extends BasicController
 
 
     function my_info() {
-        $data = $_SESSION['user'];
-        if(isset($data['password']) && !empty($data['password'])) {
+        $data = (Object) $_SESSION['user'];
+        if(isset($data->password) && !empty($data->password)) {
             $data->password = "";
         }
         $this->view->render("form_my_info", $data);
@@ -117,7 +124,7 @@ class UserController extends BasicController
     function edit()
     {
         $this->view->setTitle("Atualizar informações do usuário");
-        $data = $this->userRepository->findById($this->view->dataGet()['id']);
+        $data = $this->user_map_user_form->component()->findById($this->view->dataGet()['id']);
         $this->view->render("form", $data);
     }
 
@@ -136,13 +143,13 @@ class UserController extends BasicController
         } else {
             $data['password'] = $this->session->encryptPassword($data['login'], $data['password']);
         }
-        $this->userRepository->update($data);
+        $this->user_map_user_form->domain()->update($data);
         $update_session ? $this->session->user_session($data) : null;
     }
 
     function delete()
     {
-        $this->userRepository->delete($this->view->dataGet()['id']);
+        $this->user_map_user_form->domain()->delete($this->view->dataGet()['id']);
         $this->view->redirect("User", "index");
     }
 
