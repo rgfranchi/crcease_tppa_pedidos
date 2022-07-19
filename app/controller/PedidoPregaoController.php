@@ -200,24 +200,22 @@ class PedidoPregaoController extends BasicController
         $pregao_id = $post['pregao_id'];
 
         // $itens_pregao = $this->itemPregaoRepository->findBy(["pregao_id", "==", $pregao_id]);
-        $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : null;
-        $item_pregao_disponiveis = $this->itemPregaoRepository->addQtd_disponivel($pregao_id, $pedido_pregao_id);
-        $invalid = $this->itemPregaoRepository->getInvalidItem();
+        // $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : null;
+        $validatePedido = $this->pedidoPregaoRepository->validatePedido($post);
         // verifica se pedido é valido
-        if(empty($invalid)) {
+        if(empty($validatePedido['invalid_itens'])) {
             $ret = $this->pedidoPregaoRepository->save($post);
             $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret['pregao_id']));
         } else {
             $data['pregao'] = $this->pregaoRepository->findById($pregao_id);
             $data['pedido'] = $post;
             // Calcula quantidade disponível.
-            $data['itens'] = $item_pregao_disponiveis;
-            $data['invalid_itens'] = $invalid;
+            $data['itens'] = $validatePedido['item_pregao_disponiveis'];
+            $data['invalid_itens'] = $validatePedido['invalid_itens'];
 
             $this->view->setTitle("Corrigir Pedido Pregão Itens");
             $this->view->render("edit_itens", $data);
         }
-
 
 
         // $post = $this->view->dataPost();
@@ -264,10 +262,14 @@ class PedidoPregaoController extends BasicController
 
         pr($post);
 
+
+        $pregao_id = $post['pregao_id'];
+        $hashCredito = $post['hash_credito'];
+        
         $idsPost = $post['_ids'];
         $statusPost = $post['status'];
-        $hashCredito = $post['hash_credito'];
-        $pregao_id = $post['pregao_id'];
+        
+        
         if(empty($hashCredito)) {
             $date = new DateTime();
             $hashCredito = $date->format('YmdHis');
@@ -280,6 +282,15 @@ class PedidoPregaoController extends BasicController
             $hashCredito = "";
         }
         
+        // carrega pedido aprovado.
+        // $pregao_id = $getPedido['pregao_id'];
+        // $hashCredito = $getPedido['hash_credito'];
+        // $data['pedido_status'] = $getPedido['pedido_status'];
+        // $data['status'] = $this->pedidoPregaoRepository->statusPedido("CREDITO");
+        // $data['pregao'] = $this->pregaoRepository->findById($pregao_id);
+        // $data['pedidos'] = $this->pedidoPregaoRepository->totalAprovados($pregao_id, $hashCredito);
+        // $data['hash_credito'] = $hashCredito;  
+
         // if($statusPost === "EMPENHADO") {
         //     $pregao_itens = $this->item_pregao_map_item_pregao_update->component()->findBy(["pregao_id", "==", $pregao_id]);
         //     $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(

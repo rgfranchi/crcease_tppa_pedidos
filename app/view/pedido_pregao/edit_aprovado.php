@@ -1,6 +1,9 @@
 <?php
 use function TPPA\CORE\basic\pr;
-// pr($this->data);
+pr($this->data);
+
+corrigir data ao autializar estaus ..
+// die;
 // mantem relação de ID de PedidoPregao.
 $pedidos_id = [];
 ?>

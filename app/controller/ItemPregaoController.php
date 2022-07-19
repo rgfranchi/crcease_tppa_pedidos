@@ -1,6 +1,8 @@
 <?php
 namespace TPPA\APP\controller;
 
+use ItemPregaoService;
+use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\controller\BasicController;
 
 use function TPPA\CORE\basic\pr;
@@ -93,9 +95,16 @@ class ItemPregaoController extends BasicController
     }
 
     function file_save() {
+        $basicFunction = new BasicFunctions();
+        // $itemPregaoService = new ItemPregaoService();
         $post = $this->view->dataPost();
-        $save_all = $this->item_pregao_file->executeFunction('convertToData',$post);
-        $this->item_pregao->saveAll($save_all);
+        $saveAll = $this->itemPregaoRepository->uploadFileConvert($post);
+        if(empty($saveAll)) {
+            $basicFunction->loadException("Não foi possível carregar valores, verifique campos selecionados");
+        }
+        $this->itemPregaoRepository->saveAll($saveAll);
+        // $save_all = $this->item_pregao_file->executeFunction('convertToData',$post);
+        // $this->item_pregao->saveAll($save_all);
         $this->view->redirect("ItemPregao", "index", array('pregao_id' => $post['pregao_id']));
     }
 }

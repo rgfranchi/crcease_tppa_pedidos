@@ -111,7 +111,7 @@ class PedidoPregaoRepository extends BasicRepository
      * @param $pedidos itens pedidos do pregão.
      */
     function totalAprovados($pregao_id, $hash_credito) {
-        $itemPregaoRepository = $this->subRepository("ItemPregao");
+        $itemPregaoRepository = new ItemPregaoRepository();
         $status = $this->statusPedido("CREDITO");
         $header = array(
                     'cod_item_pregao' => "COD",
@@ -204,9 +204,27 @@ class PedidoPregaoRepository extends BasicRepository
     }
 
 
-
-
-
-
-
+    /**
+     * Verifica se os itens solicitado está disponível. <br>
+     * Se: invalid_itens não for empty() possui valores com quantidades inválidas. 
+     * @return ['item_pregao_disponiveis' => $itens_disponiveis, 'invalid_itens' => []]
+     */
+    function validatePedido($pedidoPregao) {
+        $itemPregaoRepository = new ItemPregaoRepository();
+        // busca a quantidade de itens diponíveis.
+        $itens_disponiveis = $itemPregaoRepository->addQtd_disponivel($pedidoPregao['pregao_id'], @$pedidoPregao['_id']);
+        // Apenas valores diferentes de zero.
+        $itens_pedido = array_filter($pedidoPregao['itens_pedido']);
+        $ret = [
+            'item_pregao_disponiveis' => $itens_disponiveis,
+            'invalid_itens' => [],
+        ];
+        foreach($itens_pedido as $key => $value) {
+            $iten_validade = $itens_disponiveis[array_search($key, array_column($itens_disponiveis, '_id'))];
+            if($iten_validade['qtd_disponivel'] < $value) {
+                $ret['invalid_itens'][] = $iten_validade;
+            }
+        }
+        return $ret;
+    }
 }

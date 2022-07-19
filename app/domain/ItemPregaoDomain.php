@@ -1,7 +1,7 @@
 <?php
 namespace TPPA\APP\domain;
 
-use TPPA\APP\component\helper\ParseFunctions;
+use TPPA\APP\service\ParseService;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\domain\BasicDomain;
 
@@ -37,9 +37,9 @@ class ItemPregaoDomain extends BasicDomain
     function afterRead($data)
     {
         $basicFunction = new BasicFunctions();
-        $parseFunctions = new ParseFunctions();
+        $parseService = new ParseService();
         $data['valor_unitario'] = $basicFunction->convertToMoneyBR($data['valor_unitario']);
-        $data['natureza_despesa'] = $parseFunctions->convertNaturezaDespesa($data['natureza_despesa']);
+        $data['natureza_despesa'] = $parseService->convertNaturezaDespesa($data['natureza_despesa']);
         return parent::afterRead($data);
     }
 
@@ -62,30 +62,25 @@ class ItemPregaoDomain extends BasicDomain
     //     parent::convertFieldRead($name, $value, $newObject);
     // }
 
-    function validateField($name, $value)
+    function validateSave($data)
     {
         $basicFunction = new BasicFunctions();
-        $validate = true;
-        switch($name) {
-            case 'valor_unitario' :
-                if($validate = !is_null($value)) 
-                break;
-            case 'cod_item_pregao' :
-            case 'descricao' :
-                $validate = !is_null($value);
-                break;
+        $fieldValidade = ['valor_unitario', 'cod_item_pregao', 'descricao'];
+        foreach ($fieldValidade as $value) {
+            if(!isset($data[$value]) || is_null($data[$value])){
+                $basicFunction->loadException("Campo '$value' com valor '". $data[$value]."' inválido");
+                return false;
+            }  
         }
-        if(!$validate) {
-            $basicFunction->loadException("Campo '$name' com valor '$value' inválido");
-        } 
+        return true;
     }
 
     function beforeSave($data)
     {
         $basicFunction = new BasicFunctions();
-        $parseFunctions = new ParseFunctions();
+        $parseFunctions = new ParseService();
         $data['valor_unitario'] = $basicFunction->convertCommaToDot($data['valor_unitario']);
-        $data['natureza_despesa'] = $parseFunctions->convertNaturezaDespesa($data['natureza_despesa']);
+        $data['natureza_despesa'] = $parseFunctions->convertNaturezaDespesa(@$data['natureza_despesa']);
         return parent::beforeSave($data);
     }
 }

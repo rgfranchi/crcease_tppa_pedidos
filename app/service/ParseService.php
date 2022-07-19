@@ -1,9 +1,9 @@
 <?php
-namespace TPPA\APP\component\helper;
+namespace TPPA\APP\service;
 
 use DateTime;
 
-class ParseFunctions {
+class ParseService {
     function convertNaturezaDespesa($value) {
         $value = strtolower($value);
         if($value == '30' || (strpos($value, 'material') && strpos($value, 'consumo')) || strpos($value, 'consumo') || $value == '339030') {
@@ -23,4 +23,4 @@ class ParseFunctions {
         }
         return $value;
     }
-}    
+} 

@@ -1,10 +1,9 @@
 <?php
 namespace TPPA\CORE\domain;
-use TPPA\CORE\BasicRawObject;
 
 use function TPPA\CORE\basic\pr;
 
-class BasicDomain implements BasicRawObject
+class BasicDomain
 {
     function getObject()
     {
@@ -74,65 +73,7 @@ class BasicDomain implements BasicRawObject
         return $data;
     }    
 
-
-    /**
-     * Save 2.1 
-     * Converte apenas para criação do registro
-     */
-    function convertFieldCreate($name, $value, &$newObject) {
-        $newObject->{$name} = $value;
-    }
-    /**
-     * Save 2.2
-     * Converte apenas para atualização registro
-     */
-    function convertFieldUpdate($name, $value, &$newObject) {
-        $newObject->{$name} = $value;
-    }
-
-    /**
-     * Save 3.1
-     * Valida apenas para criação registro
-     */    
-    function validateFieldCreate($name, $value) {
-        return true;
-    }
-    /**
-     * Save 3.2
-     * Valida apenas para atualização registro
-     */
-    function validateFieldUpdate($name, $value) {
-        return true;
-    }
-
-    /**
-     * Save 4.1
-     * Aplicar para classe instanciada a conversão do campo.
-     * Ação salvar ou atualizar
-     * Ação salvar.
-     */
-    function convertFieldSave($name, $value, &$newObject) {
-        $newObject->{$name} = $value;
-    }
-    /**
-     * Save 4.2
-     * Aplicar validação de conversão do campo.
-     * @return boolean true (valido) false (invalido)
-     */
-    function validateField($name, $value) {
-        return true;
-    }
-
-    /**
-     * Read 5
-     * Aplicar para classe instanciada a conversão do campo.
-     * Para leitura.
-     */
-    function convertFieldRead($name, $value, &$newObject) {
-        $newObject->{$name} = $value;
-    }
-
-    /**
+     /**
      * Delete 1
      * Verifica registro antes de excluir.
      * @return boolean (true) exclui registro.
@@ -140,6 +81,65 @@ class BasicDomain implements BasicRawObject
     function beforeDelete($data){
         return true;
     }
+
+    // /**
+    //  * Save 2.1 
+    //  * Converte apenas para criação do registro
+    //  */
+    // function convertFieldCreate($name, $value, &$newObject) {
+    //     $newObject->{$name} = $value;
+    // }
+    // /**
+    //  * Save 2.2
+    //  * Converte apenas para atualização registro
+    //  */
+    // function convertFieldUpdate($name, $value, &$newObject) {
+    //     $newObject->{$name} = $value;
+    // }
+
+    // /**
+    //  * Save 3.1
+    //  * Valida apenas para criação registro
+    //  */    
+    // function validateFieldCreate($name, $value) {
+    //     return true;
+    // }
+    // /**
+    //  * Save 3.2
+    //  * Valida apenas para atualização registro
+    //  */
+    // function validateFieldUpdate($name, $value) {
+    //     return true;
+    // }
+
+    // /**
+    //  * Save 4.1
+    //  * Aplicar para classe instanciada a conversão do campo.
+    //  * Ação salvar ou atualizar
+    //  * Ação salvar.
+    //  */
+    // function convertFieldSave($name, $value, &$newObject) {
+    //     $newObject->{$name} = $value;
+    // }
+    // /**
+    //  * Save 4.2
+    //  * Aplicar validação de conversão do campo.
+    //  * @return boolean true (valido) false (invalido)
+    //  */
+    // function validateField($name, $value) {
+    //     return true;
+    // }
+
+    // /**
+    //  * Read 5
+    //  * Aplicar para classe instanciada a conversão do campo.
+    //  * Para leitura.
+    //  */
+    // function convertFieldRead($name, $value, &$newObject) {
+    //     $newObject->{$name} = $value;
+    // }
+
+
 }
 
 

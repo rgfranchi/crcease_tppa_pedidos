@@ -4,6 +4,7 @@ namespace TPPA\APP\repository;
 use TPPA\CORE\BasicFunctions;
 use TPPA\CORE\repository\BasicRepository;
 
+use function PHPSTORM_META\type;
 use function TPPA\CORE\basic\pr;
 
 class ItemPregaoRepository extends BasicRepository
@@ -14,6 +15,7 @@ class ItemPregaoRepository extends BasicRepository
     function __construct() {
         parent::__construct("ItemPregao");
     }
+
 
     /**
      * Calcula quantidade de itens disponíveis<br>
@@ -27,11 +29,10 @@ class ItemPregaoRepository extends BasicRepository
      */
     function addQtd_disponivel($pregao_id, $pedido_pregao_id = null, $isConvert = true) {
         $basicFunctions = new BasicFunctions();
-        $this->pedidoPregaoRepository = $this->subRepository("PedidoPregao");
-
+        $this->pedidoPregaoRepository = new PedidoPregaoRepository();
         $pregao_itens = $this->findBy(["pregao_id", "==", $pregao_id],['cod_item_pregao' => 'asc']);
         $pedido_condition = ["pregao_id", "==", $pregao_id];
-        if(!is_null($pedido_pregao_id)) {
+        if(!empty($pedido_pregao_id)) {
             $pedido_condition = [
                 ["pregao_id", "==", $pregao_id],
                 "AND",
@@ -39,6 +40,9 @@ class ItemPregaoRepository extends BasicRepository
             ];
         } 
         $pedidos = $this->pedidoPregaoRepository->findBy($pedido_condition);
+
+        // teste insere 4 para cosumo de todos os itens.
+        // $pedidos[1]['itens_pedido'][293] = 4;
 
         $total_itens_pedido = array();
         // Calcula o total de itens dos pregão que já foi solicitado.
@@ -58,6 +62,7 @@ class ItemPregaoRepository extends BasicRepository
                 }
             }
         }
+      
         // se não tiver valores para subtrair.
         // cria coluna quantidade disponível igual a total.
         if(empty($total_itens_pedido)) {
@@ -71,10 +76,22 @@ class ItemPregaoRepository extends BasicRepository
         $ret = array();
         foreach($pregao_itens as $key => $values) {
             $values['qtd_disponivel'] = $values['qtd_total'];
-            // $values['qtd_disponivel'] = -1; teste invalido.... 
+
+            // teste
+            // if($values['_id'] === 293) {
+            //     pr($total_itens_pedido[$values['_id']]);
+            //     // $values['qtd_disponivel'] = 0;
+            // }
             if(isset($total_itens_pedido[$values['_id']])) {
                 $values['qtd_disponivel'] -= $total_itens_pedido[$values['_id']];
+                // if($values['_id'] === 293) {
+                //     pr($values['qtd_disponivel']);
+                //     // $values['qtd_disponivel'] = 0;
+                // }                
                 if($values['qtd_disponivel'] < 0) {
+
+                    // gerar excessão se ocorrer..... explicando a causa.
+
                     $this->invalidItem[$values['_id']] = $values;
                    // $values->qtd_disponivel = 0;
                 }
@@ -85,12 +102,42 @@ class ItemPregaoRepository extends BasicRepository
             }
             $ret[$key] = $values;
         }
+
+        // pr($this->invalidItem);
+        // pr($ret);
+        // pr($total_itens_pedido);
+        // pr($pregao_itens);
+        // pr($pedidos);
+
+        // pr($this->invalidItem);
+
         return $ret;
     }
 
-    function getInvalidItem() {
-        return $this->invalidItem;
-    }
+    /**
+     * Verifica se o item solicitado está disponível para pedido.
+     */
+    // function validatePedido($pedidoPregao) {
+
+    //     pr($pedidoPregao);
+    //     $itens_disponiveis = $this->addQtd_disponivel($pedidoPregao['pregao_id'], $pedidoPregao['_id']);
+    //     pr($itens_disponiveis);
+
+    //     $itens_pedido = array_filter($pedidoPregao['itens_pedido']);
+
+    //     pr($itens_pedido);
+
+    //     foreach($itens_pedido as $key => $value) {
+    //         $iten_validade = $itens_disponiveis[array_search($key, array_column($itens_disponiveis, '_id'))];
+
+    //         if($iten_validade['qtd_disponivel'] < $value) {
+    //             return false;
+    //         }
+
+    //         pr($iten_validade);
+    //     }
+    //     return true;
+    // }
 
     function optionsFields() {
 
@@ -166,6 +213,57 @@ class ItemPregaoRepository extends BasicRepository
     function deleteAll($pregao_id)
     {
         return $this->deleteBy(["pregao_id","==",$pregao_id]);
+    }
+
+    function uploadFileConvert($post) {
+        $pregao_id = $post['pregao_id'];
+        $typeField = $post['typeField'];
+        $load = $post['data_load'];
+        $tmpData = array();
+
+        foreach($load as $itens) {
+            // Recebe estrutura do objeto para o array.
+            // $newObject = new $this->domain;
+            $newData = (array) $this->getDomain();
+            $pos_id = array_search('_id', $typeField);
+            if($pos_id !== false) {
+                if(is_numeric($itens[$pos_id])) {
+                    $newData = $this->findById($itens[$pos_id]);    
+                } else {
+                    continue;
+                }
+            } 
+            $pos_qtd_total = array_search('qtd_total', $typeField);
+            if(!is_numeric($itens[$pos_qtd_total])) {
+                continue;  
+            } 
+            if($itens[$pos_qtd_total] < 0) {
+                continue;
+            }
+            foreach($itens as $key => $value) {
+                $type = $typeField[$key];
+                $value = trim($value);
+                if($type == 'null' || !$type) {
+                    continue;
+                }
+                switch($type) {
+                    case 'null':
+                        continue;
+                    case 'cnpj': // agrupa fornecedor com CNPJ.
+                        $newData['fornecedor'] = empty($newObject['fornecedor']) ? $value : $newObject['fornecedor']." - ".$value;
+                        break;
+                }
+                $newData[$type] = $value;
+            }
+            if(!empty($newData)) {
+                $newData['pregao_id'] = $pregao_id;
+                $tmpData[] = $newData;
+            }
+        }
+        if(!empty($tmpData)) {
+            return $tmpData;
+        }
+        return false;
     }
 
 }

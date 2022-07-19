@@ -33,28 +33,12 @@ $navbar = array(
                 'icon' => 'fas fa-folder-plus text-gray-300', // opcional
             ),
             array( // link de acesso direto
-                'type' => 'link',
-                'text' => 'Demanda',
-                'href' => array('controller' => "Demanda", 'action' => 'index'),
-                'icon' => 'far fa-play-circle text-gray-300', // opcional
-            ),   
-            array( // link de acesso direto
-                'type' => 'link',
-                'text' => 'Repositorio',
-                'href' => array('controller' => "Repositorio", 'action' => 'index'),
-                'icon' => 'far fa-folder text-gray-300', // opcional
-            ),   
-            array( // link de acesso direto
                 'type' => 'links',
                 'text' => 'Solicitação',
                 'icon' => 'fas fa-fw fa-cog', // opcional
                 'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
                 'icon' => 'fas fa-truck-moving text-gray-300', // opcional
                 'sub_itens' => array(
-                        // array(
-                        //     'type' => 'title',
-                        //     'text' => 'Pedidos:'
-                        // ),
                         array(
                             'type' => 'link',
                             'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
@@ -69,42 +53,19 @@ $navbar = array(
             ),                     
         )
     ),
-    // array( // link de acesso direto
-    //     'type' => 'link',
-    //     'text' => 'Cadastro',
-    //     'href' => array('controller' => "Pregao", 'action' => 'index'),
-
-    //     'icon' => 'fas fa-folder-plus text-gray-300', // opcional
-    // ),
-    // array( // link de acesso direto
-    //     'type' => 'link',
-    //     'text' => 'Demanda',
-    //     'href' => array('controller' => "Demanda", 'action' => 'index'),
-    //     'icon' => 'far fa-play-circle text-gray-300', // opcional
-    // ),    
-    // array( // link de acesso direto
-    //     'type' => 'links',
-    //     'text' => 'Solicitação',
-    //     'icon' => 'fas fa-fw fa-cog', // opcional
-    //     'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
-    //     'icon' => 'fas fa-truck-moving text-gray-300', // opcional
-    //     'sub_itens' => array(
-    //             // array(
-    //             //     'type' => 'title',
-    //             //     'text' => 'Pedidos:'
-    //             // ),
-    //             array(
-    //                 'type' => 'link',
-    //                 'href' => array('controller' => "PedidoPregao", 'action' => 'index'),
-    //                 'text' => 'Pedidos',
-    //             ),
-    //             array(
-    //                 'type' => 'link',
-    //                 'href' => array('controller' => "PedidoPregaoPesquisar", 'action' => 'index'),
-    //                 'text' => 'Pesquisar',
-    //             ),                        
-    //         )
-    // ),
+    array( // texto de cabeçalho de cada menu
+        'type' => 'heading',
+        'text' => 'Necessidade',
+        'itens' => array(
+            array( // link de acesso direto
+                'type' => 'link',
+                'text' => 'Necessiade',
+                'href' => array('controller' => "Necessidade", 'action' => 'index'),
+        
+                'icon' => 'far fa-play-circle text-gray-300', // opcional
+            ),
+        )
+    ),    
     array( // texto de cabeçalho de cada menu
         'type' => 'heading',
         'text' => 'Usuário',
@@ -123,19 +84,6 @@ $navbar = array(
             ),   
         )
     ),
-    // array( // link de acesso direto
-    //     'type' => 'link',
-    //     'text' => 'Usuários',
-    //     'href' => array('controller' => "User", 'action' => 'index'),
-    //     'icon' => 'fas fa-fw fa-users', // opcional
-    // ),    
-    // array( // link de acesso direto
-    //     'type' => 'link',
-    //     'text' => 'Minhas Informações',
-    //     'href' => array('controller' => "User", 'action' => 'my_info'),
-    //     'icon' => 'fas fa-fw fa-user-tag', // opcional
-    // ),    
-
 );
 
 /**

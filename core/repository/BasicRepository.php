@@ -98,7 +98,7 @@ class BasicRepository extends BasicStore {
         // verificar todos os valores.
         $data = $this->domain->beforeSave($data);
         if($this->domain->validateSave($data) !== true) {
-            $this->basicFunctions->loadException("ERRO AO VALIDAR CAMPO.");
+            $this->basicFunctions->loadException("ERRO AO SALVAR REGISTRO.");
         };
         // verifica cada um dos campos.
         foreach(array_keys($data) as $key) {
@@ -119,14 +119,10 @@ class BasicRepository extends BasicStore {
     function saveAll($array)
     {
         if(!is_array($array)) {
+            pr($array);
             $this->basicFunctions->loadException("Array inválido.");
         }
-pr($array);
-die;
         foreach($array as $key => $values) {
-            if(!is_array($values)) {
-                $this->basicFunctions->loadException("ARRAY como valor Esperado.");
-            }
             $ret[$key] = $this->save($values);
         }
         return $ret;
@@ -194,10 +190,4 @@ die;
         }
         return $this->domain->afterRead($data);
     }
-
-    function subRepository($repository)
-    {
-        return $this->instantiateClass('Repository', $repository);
-    }
-
 }
