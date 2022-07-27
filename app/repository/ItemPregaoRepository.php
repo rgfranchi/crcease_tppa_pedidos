@@ -200,6 +200,7 @@ class ItemPregaoRepository extends BasicRepository
                 }
                 return $ret;
             }, 'pedidos')
+            ->orderBy(['cod_item_pregao'=>'asc'])
             ->getQuery()
             ->fetch();
         return $item_pregao;     

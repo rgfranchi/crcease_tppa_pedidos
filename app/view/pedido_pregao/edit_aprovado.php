@@ -1,9 +1,6 @@
 <?php
 use function TPPA\CORE\basic\pr;
-pr($this->data);
-
-corrigir data ao autializar estaus ..
-// die;
+// pr($this->data);
 // mantem relação de ID de PedidoPregao.
 $pedidos_id = [];
 ?>
@@ -12,7 +9,7 @@ $pedidos_id = [];
     <?php if ($this->data['pedido_status'] != "EMPENHADO") : ?>        
         <form action="<?= $this->action("PedidoPregao", "saveMany"); ?>" method="post">
             <input type="hidden" id="pregao_id" name="pregao_id" value="<?= json_encode($this->data['pregao']['_id']) ?>">
-            <input type="hidden" id="_ids" name="_ids" value="<?= json_encode($this->data['pedidos']['pedidos_ids']) ?>">
+            <input type="hidden" id="_ids" name="_ids" value="<?= json_encode($this->data['pedidos']['BODY']['pedidos_ids']) ?>">
             <input type="hidden" id="hash_credito" name="hash_credito" value="<?= $this->data['hash_credito'] ?>">
             
             <div class="input-group">

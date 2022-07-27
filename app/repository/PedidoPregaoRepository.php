@@ -128,7 +128,6 @@ class PedidoPregaoRepository extends BasicRepository
             ], 
             ["pregao_id", "==", $pregao_id] 
         );
-
         $total_valor = 0.0;
         $total_quantidade = 0;    
         $pedidos_ids = [];
@@ -159,7 +158,6 @@ class PedidoPregaoRepository extends BasicRepository
         $item_pregao['total_valor'] = $total_valor;
         $item_pregao['total_quantidade'] = $total_quantidade;
         $item_pregao['pedidos_ids'] = array_keys($pedidos_ids);
-
         $res['BODY'] = $item_pregao;
         $res['HEADER'] = array_merge($header,$header_pedidos);
         // pr($res);

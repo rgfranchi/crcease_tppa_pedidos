@@ -9,8 +9,6 @@ use TPPA\CORE\controller\BasicController;
 
 use function TPPA\CORE\basic\pr;
 
-// use function TPPA\CORE\basic\pr;
-
 class PedidoPregaoController extends BasicController
 {
 
@@ -216,60 +214,16 @@ class PedidoPregaoController extends BasicController
             $this->view->setTitle("Corrigir Pedido Pregão Itens");
             $this->view->render("edit_itens", $data);
         }
-
-
-        // $post = $this->view->dataPost();
-        // if($post['status'] === "RASCUNHO") {
-        //     $post['aprovador'] = '';
-        // }
-        // // pr($post, true);
-        // $pregao_id = $post['pregao_id'];
-        // // busca valores existentes
-        // $itens_pregao = $this->item_pregao_map_pedido_item_pregao_list->domain()->findBy(["pregao_id", "==", $pregao_id]);
-        // $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : 0;
-        // $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
-        //     [
-        //         ["pregao_id", "==", $pregao_id],
-        //         "AND",
-        //         [ "_id","<>",$pedido_pregao_id]
-        //     ]
-        // );
-
-        // // verifica disponibilidade.
-        // $this->item_pregao_calculation->disponiveis($itens_pregao, array_merge($pedidos,array( 'NEW_ITEM' => (Object) $post)));
-
-        // $invalid = $this->item_pregao_calculation->getInvalidItem();
-
-        // // verifica se pedido é valido
-        // if(empty($invalid)) {
-        //     $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->save($post);
-        //     $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret->pregao_id));
-        // } else {
-        //     $data['pregao'] = $this->pregao_map_pregao_head->domain()->findById($pregao_id);
-        //     $data['pedido'] = (Object) $post;
-        //     // Calcula quantidade disponível.
-        //     $data['itens'] = $this->item_pregao_calculation->disponiveis($itens_pregao, $pedidos);
-        //     $data['invalid_itens'] = $invalid;
-
-        //     $this->view->setTitle("Corrigir Pedido Pregão Itens");
-        //     $this->view->render("edit_itens", $data);
-        // }
     }
 
     function saveMany()
     {
         $post = $this->view->dataPost();
-
-        pr($post);
-
-
-        $pregao_id = $post['pregao_id'];
+//        $pregao_id = $post['pregao_id'];
         $hashCredito = $post['hash_credito'];
         
         $idsPost = $post['_ids'];
         $statusPost = $post['status'];
-        
-        
         if(empty($hashCredito)) {
             $date = new DateTime();
             $hashCredito = $date->format('YmdHis');
@@ -281,25 +235,6 @@ class PedidoPregaoController extends BasicController
         if($statusPost === "AGUARDANDO APROVAÇÃO") {
             $hashCredito = "";
         }
-        
-        // carrega pedido aprovado.
-        // $pregao_id = $getPedido['pregao_id'];
-        // $hashCredito = $getPedido['hash_credito'];
-        // $data['pedido_status'] = $getPedido['pedido_status'];
-        // $data['status'] = $this->pedidoPregaoRepository->statusPedido("CREDITO");
-        // $data['pregao'] = $this->pregaoRepository->findById($pregao_id);
-        // $data['pedidos'] = $this->pedidoPregaoRepository->totalAprovados($pregao_id, $hashCredito);
-        // $data['hash_credito'] = $hashCredito;  
-
-        // if($statusPost === "EMPENHADO") {
-        //     $pregao_itens = $this->item_pregao_map_item_pregao_update->component()->findBy(["pregao_id", "==", $pregao_id]);
-        //     $pedidos = $this->pedido_pregao_map_pedido_pregao_list->domain()->findBy(
-        //         ["_id", "IN", json_decode($idsPost)]
-        //     );
-        //     $new_pregao_itens = $this->item_pregao_calculation->disponiveis($pregao_itens, $pedidos);
-        //     $ret = $this->item_pregao_map_item_pregao_update->domain()->saveAll($new_pregao_itens);
-        // }
-        pr($idsPost);
         $postData = array();
         foreach(json_decode($idsPost) as $id) {
             $postData[] = array(
@@ -309,27 +244,20 @@ class PedidoPregaoController extends BasicController
             );
         }
         $ret = $this->pedidoPregaoRepository->saveAll($postData);
-        pr($ret);
-        die;
-        $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret[0]->pregao_id));
+        $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret[0]['pregao_id']));
     }
 
     function delete()
     {
         $basicFunctions = new BasicFunctions();
         $get = $this->view->dataGet();
-
-
         if($get['pedido_status'] === "EMPENHADO" && isset($get['pedido_status'])) {
             $basicFunctions->loadException("PEDIDO NÃO PODE SER EXCLUÍDO");
         }
-
-
-        $pedido = $this->pedido_pregao_map_pedido_pregao_list->domain()->findById($get['pedido_pregao_id']);
-        
-        $pedido->status = "EXCLUIDO";    
-        $ret = $this->pedido_pregao_map_pedido_pregao_list->domain()->save((array) $pedido);
-
-        $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret->pregao_id));
+        $this->pedidoPregaoRepository->disableAfterRead(true);
+        $pedido = $this->pedidoPregaoRepository->findById($get['pedido_pregao_id']);
+        $pedido['status'] = "EXCLUIDO";    
+        $ret = $this->pedidoPregaoRepository->save($pedido);
+        $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret['pregao_id']));
     }
 }

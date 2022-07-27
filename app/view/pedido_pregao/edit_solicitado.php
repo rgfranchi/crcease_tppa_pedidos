@@ -39,22 +39,20 @@ $pedido = $this->data['pedido'];
                     <th>Descrição</th>
                     <th>Fornecedor</th>
                     <th>Valor Unitário</th>
-                    <th>Valor Solicitado</th>
                     <th>Qtd Total</th>
                     <th>Qtd Disponível</th>
                     <th>Qtd Solicitada</th>
-                    <th>Valor Pedido</th>
+                    <th>Valor Solicitado</th>
                 </thead>
                 <tfoot>
                     <th>COD</th>
                     <th>Descrição</th>
                     <th>Fornecedor</th>
                     <th>Valor Unitário</th>
-                    <th>Valor Solicitado</th>
                     <th>Qtd Total</th>
                     <th>Qtd Disponível</th>
                     <th>Qtd Solicitada</th>
-                    <th>Valor Pedido</th>
+                    <th>Valor Solicitado</th>
                 </tfoot>
                 <?php foreach ($pedido['itens_pedido'] as $row) : ?>
                     <tr>
@@ -62,7 +60,6 @@ $pedido = $this->data['pedido'];
                         <td><?= $row['descricao'] ?></td>
                         <td><?= $row['fornecedor'] ?></td>
                         <td><?= $row['valor_unitario'] ?></td>
-                        <td><?= $row['valor_solicitado'] ?></td>
                         <td><?= $row['qtd_total'] ?></td>
                         <td><?= $row['qtd_disponivel'] ?></td>
                         <td><?= $row['qtd_solicitada'] ?></td>
