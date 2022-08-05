@@ -169,20 +169,25 @@ class PedidoPregaoController extends BasicController
     function download_edit_aprovado()
     {
         $get = $this->view->dataGet();
-        // $export = $this->itemPregaoRepository->joinsPedidos([
-        //     ["hashCredito", "==", $get['hash_credito']],
-        //     "AND",
-        //     ["status", "!==", "EXCLUIDO"]
-        // ], ["pregao_id", "==", $get['pregao_id']] ); 
-
         $export = $this->pedidoPregaoRepository->totalAprovados($get['pregao_id'], $get['hash_credito']);
-
         $pedidoPregaoService = new PedidoPregaoService();
-
         $export = $pedidoPregaoService->inLineTotalAprovados($export);
-
         $file_path = $this->php_spreadsheet->saveFile($export, 'edit_aprovado');
         $this->view->download($file_path, "Pregao", "index");
+    }
+
+
+    /**
+     * Salva itens (cria ou atualiza)
+     */
+    function update_status()
+    {
+        $post = $this->view->dataPost();
+        if($post['status'] === "RASCUNHO") {
+             $post['aprovador'] = '';
+        }
+        $ret = $this->pedidoPregaoRepository->save($post);
+        $this->view->redirect("PedidoPregao", "edit_pedido", array('pregao_id' => $ret['pregao_id']));
     }
 
 
@@ -196,7 +201,6 @@ class PedidoPregaoController extends BasicController
              $post['aprovador'] = '';
         }
         $pregao_id = $post['pregao_id'];
-
         // $itens_pregao = $this->itemPregaoRepository->findBy(["pregao_id", "==", $pregao_id]);
         // $pedido_pregao_id = isset($post['_id']) ? $post['_id'] : null;
         $validatePedido = $this->pedidoPregaoRepository->validatePedido($post);
@@ -236,6 +240,7 @@ class PedidoPregaoController extends BasicController
             $hashCredito = "";
         }
         $postData = array();
+
         foreach(json_decode($idsPost) as $id) {
             $postData[] = array(
                 "_id" =>  $id,

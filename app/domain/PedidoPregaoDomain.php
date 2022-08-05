@@ -110,6 +110,14 @@ class PedidoPregaoDomain extends BasicDomain
         if(!isset($data['_id'])) {
             $data['create'] = $datetime->getTimestamp();
         }
+        // garantir valores numéricos par quantidade.
+        if(isset($data['itens_pedido'])) {
+            foreach($data['itens_pedido'] as &$value){
+                if(!is_numeric($value)){
+                    $value = 0;
+                }
+            }
+        }
         $data['update'] = $datetime->getTimestamp();
         return $data;
     }

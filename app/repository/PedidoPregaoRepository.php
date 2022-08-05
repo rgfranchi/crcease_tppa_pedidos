@@ -81,6 +81,9 @@ class PedidoPregaoRepository extends BasicRepository
                     $iten_id = $value['_id'];
                     $quantidade = $pedido['itens_pedido'][$iten_id];
                     // soma quantidades
+                    if(!is_numeric($quantidade)) {
+                        $quantidade = 0;
+                    }
                     $qtd_total_pedido += $value['qtd_solicitada'] = $quantidade;
                     $qtd_total += $value['qtd_solicitada'] = $quantidade;
 
@@ -121,7 +124,7 @@ class PedidoPregaoRepository extends BasicRepository
                     'sub_total_valor' => 'SUB TOTAL (R$)',
                     'sub_total_quantidade' => 'SUB TOTAL (UN)',
                 );
-        $item_pregao = $itemPregaoRepository->joinsPedidos(
+        $pedidos_item_pregao = $itemPregaoRepository->joinsPedidos(
             [
                 ["status", "IN", $status],
                 ["hashCredito", "==", $hash_credito]
@@ -132,11 +135,11 @@ class PedidoPregaoRepository extends BasicRepository
         $total_quantidade = 0;    
         $pedidos_ids = [];
         $header_pedidos = [];
-        foreach($item_pregao as $item_key => &$item) {
+        foreach($pedidos_item_pregao as $item_key => &$item) {
             // informações do item.
             $pedido_quantidade_total = 0.0;
             if(empty($item['pedidos'])) {
-                unset($item_pregao[$item_key]);
+                unset($pedidos_item_pregao[$item_key]);
                 continue;
             }
             // leitura dos pedidos.
@@ -155,12 +158,11 @@ class PedidoPregaoRepository extends BasicRepository
         }   
         ksort($header_pedidos);
 
-        $item_pregao['total_valor'] = $total_valor;
-        $item_pregao['total_quantidade'] = $total_quantidade;
-        $item_pregao['pedidos_ids'] = array_keys($pedidos_ids);
-        $res['BODY'] = $item_pregao;
+        $pedidos_item_pregao['total_valor'] = $total_valor;
+        $pedidos_item_pregao['total_quantidade'] = $total_quantidade;
+        $pedidos_item_pregao['pedidos_ids'] = array_keys($pedidos_ids);
+        $res['BODY'] = $pedidos_item_pregao;
         $res['HEADER'] = array_merge($header,$header_pedidos);
-        // pr($res);
         return $res;
     }    
 

@@ -2,6 +2,9 @@
 use function TPPA\CORE\basic\pr;
 $value = $this->data['value'];
 $update = @$this->data['update'];
+pr($value);
+pr($update);
+
 ?>
 
 <!-- Collapsable Card  -->
@@ -19,14 +22,16 @@ $update = @$this->data['update'];
             <?= $value['projeto'] ?>
             <div class="text-xs text-primary text-uppercase mb-1">JUSTIFICATIVA</div>
             <?= $value['justificativa_necessidade'] ?>
+            <div class="text-xs text-primary text-uppercase mb-1">INTEGRANTES</div>
+            TECNICO: <?= $value['integrante_tecnico'] ?> / REQUISITANTE: <?= $value['integrante_requisitante'] ?> 
         </div>    
     </div>    
 </div>
 
 
 <div class="card">
-    <form action="<?= $this->action("Necessidade", "save_item"); ?>" method="post">
-        <input type="hidden" id="_id" name="_id" value="<?= $value['_id'] ?>">
+    <form action="<?= $this->action("necessidade", "save_item"); ?>" method="post">
+        <input type="hidden" id="necessidade_id" name="necessidade_id" value="<?= $value['_id'] ?>">
         <div class="card-header">
             <button type="submit" class="btn btn-success btn-icon-split btn-sm" value="Enviar">
                 <span class="icon text-white-50">
@@ -50,28 +55,28 @@ $update = @$this->data['update'];
                 <div class="col">
                     <div class="form-group">
                         <label for="requisicaoMinima">Qtd. Min.:</label>
-                        <input type="number" id="requisicaoMinima" name="requisicaoMinima" class="form-control" aria-describedby="requisicaoMinimaHelp" value="<?= $update['requisicao_minima'] ?>">
+                        <input type="number" id="requisicaoMinima" name="requisicao_minima" class="form-control" aria-describedby="requisicaoMinimaHelp" value="<?= $update['requisicao_minima'] ?>">
                         <small id="requisicaoMinimaHelp" class="form-text text-muted">Requisição Mínima.</small>
                     </div>
                 </div>        
                 <div class="col">
                     <div class="form-group">
                         <label for="requisicaoMaxima">Qtd. Max.:</label>
-                        <input type="number" id="requisicaoMaxima" name="requisicaoMaxima" class="form-control" aria-describedby="requisicaoMaximaHelp" value="<?= $update['requisicao_maxima'] ?>">
+                        <input type="number" id="requisicaoMaxima" name="requisicao_maxima" class="form-control" aria-describedby="requisicaoMaximaHelp" value="<?= $update['requisicao_maxima'] ?>">
                         <small id="requisicaoMaximaHelp" class="form-text text-muted">Requisição Máxima.</small>
                     </div>
                 </div>       
                 <div class="col">
                     <div class="form-group">
                         <label for="valorMedio">Valor Médio:</label>
-                        <input type="text" id="valorMedio" name="valorMedio" class="form-control" aria-describedby="valorMedioHelp" value="<?= $update['valor_medio'] ?>">
+                        <input type="text" id="valorMedio" name="valor_medio" class="form-control" aria-describedby="valorMedioHelp" value="<?= $update['valor_medio'] ?>">
                         <small id="valorMedioHelp" class="form-text text-muted">Aproximado.</small>
                     </div>
                 </div>        
                 <div class="col">
                     <div class="form-group">
                         <label for="numeroCatalogo">CATMAT/CATSER:</label>
-                        <input type="text" id="numeroCatalogo" name="numeroCatalogo" class="form-control" aria-describedby="numeroCatalogoHelp" value="<?= $update['numero_catalogo'] ?>">
+                        <input type="text" id="numeroCatalogo" name="numero_catalogo" class="form-control" aria-describedby="numeroCatalogoHelp" value="<?= $update['numero_catalogo'] ?>">
                         <small id="numeroCatalogoHelp" class="form-text text-muted"><a href='https://www.gov.br/compras/pt-br/acesso-a-informacao/consulta-detalhada/planilha-catmat-catser' target="_blank" >CATMAT/CATSER</a></small>
                     </div>
                 </div>        
@@ -87,7 +92,7 @@ $update = @$this->data['update'];
                 <div class="col">
                     <div class="form-group">
                         <label for="justificativaQuantidade">Justificativa da Quantidade:</label>
-                        <textarea class="form-control" id="justificativa_quantidade" name="justificativaQuantidade" class="form-control" aria-describedby="justificativaQuantidadeHelp" rows="5"><?= $update['justificativa_quantidade'] ?></textarea>
+                        <textarea class="form-control" id="justificativaQuantidade" name="justificativa_quantidade" class="form-control" aria-describedby="justificativaQuantidadeHelp" rows="5"><?= $update['justificativa_quantidade'] ?></textarea>
                         <small id="justificativaQuantidadeHelp" class="form-text text-muted">Local de Aplicação.</small>
                     </div>
                 </div>
@@ -115,6 +120,7 @@ $update = @$this->data['update'];
                 </thead>
                 <tbody>
                     <?php foreach ($value['necessidade_itens'] as $row) : ?>
+                        <?php pr($row); ?>
                         <tr>
                             <td><?= $row['cod_item'] ?></td>
                             <td><?= $row['nome'] ?></td>

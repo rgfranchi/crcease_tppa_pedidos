@@ -27,6 +27,11 @@ class NecessidadeDomain extends BasicDomain {
     function beforeSave($data)
     {
         pr("Inserir necessidade_itens ordenado.");
+
+        if(!isset($data["necessidade_itens"])) {
+            $data["necessidade_itens"] = [];
+        }
+
         return $data;
     }
 

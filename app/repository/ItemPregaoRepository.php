@@ -175,6 +175,7 @@ class ItemPregaoRepository extends BasicRepository
         $pedidoPregaoRepository = new PedidoPregaoRepository();
         $item_pregao = $this->getStore()
             ->createQueryBuilder()
+            ->disableCache()
             ->where($conditions_item)
             ->join(function($item) use ($pedidoPregaoRepository, $conditions_pedido)  {
                 $query_pedido = ['pregao_id','==', $item['pregao_id']];
@@ -186,13 +187,15 @@ class ItemPregaoRepository extends BasicRepository
                 $pedidosPregao = $pedidoPregaoRepository->findBy($query_pedido);
                 $ret = array();
                 // realiza busca pela chave do array 'itens_pedido'
-                foreach($pedidosPregao as &$pedido) {
+                foreach($pedidosPregao as $key => &$pedido) {
+                    // pr($key);
                     // retira valores do array igual a zero.
                     $pedido['itens_pedido'] = array_filter($pedido['itens_pedido']);
                     // recebe id dos itens relacionados aos pedidos.
                     $itens_id = array_keys($pedido['itens_pedido']);
                     // se a chave do item está no pedido.
                     if (in_array($item['_id'], $itens_id)) {
+                        // pr($pedido['_id']);
                         $ret[$pedido['_id']] = $pedido;
                         $ret[$pedido['_id']]['quantidade'] = $pedido['itens_pedido'][$item['_id']];
                         unset($ret[$pedido['_id']]['itens_pedido']);

@@ -7,7 +7,7 @@ $pedido = $this->data['pedido'];
         <h6 class="m-0 font-weight-bold text-primary">
 
             <?php if($pedido['status'] == 'AGUARDANDO APROVAÇÃO') : ?>
-                <form action="<?= $this->action("PedidoPregao", "save"); ?>" method="post">
+                <form action="<?= $this->action("PedidoPregao", "update_status"); ?>" method="post">
                     <input type="hidden" id="_id" name="_id" value="<?= $pedido['_id'] ?>">
                     <input type="hidden" id="pregao_id" name="pregao_id" value="<?= $pedido['pregao_id'] ?>">
                     <input type="hidden" id="aprovador" name="aprovador" value="<?= $pedido['aprovador'] ?>">

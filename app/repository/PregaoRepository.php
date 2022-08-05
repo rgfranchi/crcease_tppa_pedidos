@@ -21,7 +21,7 @@ class PregaoRepository extends BasicRepository
      */
     function findPregaoByItemId($item_id)
     {
-        $itemPregaoRepository = $this->subRepository("ItemPregao");
+        $itemPregaoRepository = new ItemPregaoRepository();
         $domain = $this->getStore();
         $join = $itemPregaoRepository->getStore()->createQueryBuilder()->join(function ($pregao) use ($domain) {
             return $domain->findById($pregao['pregao_id']);
